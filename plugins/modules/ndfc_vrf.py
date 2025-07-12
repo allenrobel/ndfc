@@ -4,11 +4,21 @@
 # Copyright (c) 2024 Ansible Project
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
+"""
+Ansible module for managing VRFs on Nexus Dashboard Fabric Controller.
+
+This module provides comprehensive VRF management capabilities for NDFC including
+creation, updates, deletion, and querying with optimized caching support.
+"""
+
 from __future__ import absolute_import, division, print_function
 
-__metaclass__ = type
+__metaclass__ = type  # pylint: disable=invalid-name
 
-DOCUMENTATION = r'''
+from typing import Any
+from ansible.module_utils.basic import AnsibleModule
+
+DOCUMENTATION = r"""
 ---
 module: nexus_vrf
 short_description: Manage VRFs on Nexus Dashboard Fabric Controller
@@ -75,9 +85,9 @@ notes:
   - The connection details (hostname, username, password) should be configured in the Ansible inventory.
   - VRF attachments are handled by a separate module.
   - The module uses composition-based caching for optimal performance and loose coupling.
-'''
+"""
 
-EXAMPLES = r'''
+EXAMPLES = r"""
 # Create or update a VRF
 - name: Create VRF
   nexus_vrf:
@@ -180,9 +190,9 @@ EXAMPLES = r'''
           vrfSegmentId: 2002
           vrfVlanId: 202
     state: merged
-'''
+"""
 
-RETURN = r'''
+RETURN = r"""
 changed:
   description: Whether the module made any changes
   type: bool
@@ -213,145 +223,138 @@ response:
   type: list
   returned: when state is query
   sample: [{"vrfName": "test_vrf", "vrfId": 12345, "fabric": "fabric1"}]
-'''
-
-from typing import Any
-from ansible.module_utils.basic import AnsibleModule
+"""
 
 # Import our custom modules
 try:
     from ansible_collections.cisco.ndfc.plugins.module_utils.common.enums.ansible_states import AnsibleStates
-    from ansible_collections.cisco.ndfc.plugins.module_utils.common.cache.cache_manager import CacheManager
-    from ansible_collections.cisco.ndfc.plugins.module_utils.common.cache.cached_resource_service import CachedResourceService
-    from ansible_collections.cisco.ndfc.plugins.module_utils.vrf.validators.vrf_validator import VrfValidator
-    from ansible_collections.cisco.ndfc.plugins.module_utils.vrf.api.vrf_api import VrfApi
-    from ansible_collections.cisco.ndfc.plugins.module_utils.vrf.states.state_factory import StateFactory
-    from ansible_collections.cisco.ndfc.plugins.module_utils.vrf.models.module_result import ModuleResult
-except ImportError as e:
+    from ..module_utils.common.cache.cache_manager import CacheManager
+    from ..module_utils.common.cache.cached_resource_service import CachedResourceService
+    from ..module_utils.vrf.validators.vrf_validator import VrfValidator
+    from ..module_utils.vrf.api.vrf_api import VrfApi
+    from ..module_utils.vrf.states.state_factory import StateFactory
+
+    # from ansible_collections.cisco.ndfc.plugins.module_utils.vrf.models.module_result import ModuleResult
+except ImportError:
     # This will be caught by the module and reported as an error
     pass
 
 
 def validate_parameters(module: AnsibleModule) -> tuple[list[Any], AnsibleStates]:
     """Validate and process module parameters."""
-    config = module.params.get('config', [])
-    state = module.params.get('state', 'merged')
-    
+    config = module.params.get("config", [])
+    state = module.params.get("state", "merged")
+
     if not config:
         module.fail_json(msg="config parameter is required")
-    
+
     try:
         # Validate state
         ansible_state = AnsibleStates(state)
-        
+
         # Validate configurations
         validated_configs = VrfValidator.validate_config_list(config)
-        
+
         return validated_configs, ansible_state
-        
+
     except ValueError as e:
         module.fail_json(msg=f"Parameter validation failed: {e}")
-    except Exception as e:
+        return [], AnsibleStates.MERGED  # This line will never execute but satisfies pylint
+    except Exception as e:  # pylint: disable=broad-exception-caught
         module.fail_json(msg=f"Unexpected error during validation: {e}")
+        return [], AnsibleStates.MERGED  # This line will never execute but satisfies pylint
 
 
 def main():
     """Main module execution."""
-    
+
     # Define module arguments
     module_args = {
-        'config': {
-            'type': 'list',
-            'elements': 'dict',
-            'required': True,
-            'options': {
-                'fabric': {
-                    'type': 'str',
-                    'required': True,
+        "config": {
+            "type": "list",
+            "elements": "dict",
+            "required": True,
+            "options": {
+                "fabric": {
+                    "type": "str",
+                    "required": True,
                 },
-                'vrf_name': {
-                    'type': 'str',
-                    'required': True,
+                "vrf_name": {
+                    "type": "str",
+                    "required": True,
                 },
-                'vrf_id': {
-                    'type': 'int',
-                    'required': True,
+                "vrf_id": {
+                    "type": "int",
+                    "required": True,
                 },
-                'vrf_template': {
-                    'type': 'str',
-                    'default': 'Default_VRF_Universal',
+                "vrf_template": {
+                    "type": "str",
+                    "default": "Default_VRF_Universal",
                 },
-                'vrf_template_config': {
-                    'type': 'dict',
-                    'required': True,
+                "vrf_template_config": {
+                    "type": "dict",
+                    "required": True,
                 },
-                'vrf_extension_template': {
-                    'type': 'str',
-                    'default': 'Default_VRF_Extension_Universal',
+                "vrf_extension_template": {
+                    "type": "str",
+                    "default": "Default_VRF_Extension_Universal",
                 },
-                'service_vrf_template': {
-                    'type': 'dict',
-                    'required': False,
-                }
-            }
+                "service_vrf_template": {
+                    "type": "dict",
+                    "required": False,
+                },
+            },
         },
-        'state': {
-            'type': 'str',
-            'choices': ['deleted', 'merged', 'overridden', 'query', 'replaced'],
-            'default': 'merged',
-        }
+        "state": {
+            "type": "str",
+            "choices": ["deleted", "merged", "overridden", "query", "replaced"],
+            "default": "merged",
+        },
     }
-    
+
     # Create module instance
-    module = AnsibleModule(
-        argument_spec=module_args,
-        supports_check_mode=True
-    )
-    
+    module = AnsibleModule(argument_spec=module_args, supports_check_mode=True)
+
     # Validate parameters
     try:
         validated_configs, state = validate_parameters(module)
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-exception-caught
         module.fail_json(msg=f"Failed to validate parameters: {e}")
-    
+
     # Initialize cache service and API client using composition
     try:
         # Create cache manager with 5-minute default TTL for VRF data
         cache_manager = CacheManager(default_ttl_seconds=300)
-        
+
         # Create cached resource service for VRF resources
         cached_service = CachedResourceService[dict[str, Any]](cache_manager, "vrf")
-        
+
         # Initialize VRF API with injected caching service
-        api_client = VrfApi(
-            ansible_module=module, 
-            check_mode=module.check_mode, 
-            cached_service=cached_service
-        )
-    except Exception as e:
+        api_client = VrfApi(ansible_module=module, check_mode=module.check_mode, cached_service=cached_service)
+    except Exception as e:  # pylint: disable=broad-exception-caught
         module.fail_json(msg=f"Failed to initialize API client: {e}")
-    
+
     # Create and execute state handler
     try:
         state_handler = StateFactory.create_state(state, api_client)
         result = state_handler.execute(validated_configs)
-        
+
         # Convert Pydantic result to dict for Ansible
         result_dict = result.model_dump()
-        
+
         # Handle check mode
-        if module.check_mode and result_dict['changed']:
-            result_dict['msg'] = f"Would have executed {state} operation"
-        
+        if module.check_mode and result_dict["changed"]:
+            result_dict["msg"] = f"Would have executed {state} operation"
+
         # Exit with results
-        if result_dict['failed']:
+        if result_dict["failed"]:
             module.fail_json(**result_dict)
         else:
             module.exit_json(**result_dict)
-            
-    except Exception as e:
+
+    except Exception as e:  # pylint: disable=broad-exception-caught
         module.fail_json(msg=f"Module execution failed: {e}")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
