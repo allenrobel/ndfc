@@ -23,7 +23,7 @@ import inspect
 import json
 import logging
 
-from ..network.dcnm.dcnm import dcnm_send
+from ...network.dcnm.dcnm import dcnm_send
 
 
 class Sender:
