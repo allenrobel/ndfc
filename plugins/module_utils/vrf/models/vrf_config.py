@@ -16,9 +16,9 @@ class VrfConfig(BaseModel):
 
     fabric: str = Field(..., min_length=1, max_length=64)
     vrf_name: str = Field(..., min_length=1, max_length=32)
-    vrf_id: int
+    vrf_id: int = Field(default=0)
     vrf_template: str = Field(default=VrfTemplates.DEFAULT_VRF_UNIVERSAL.value)
-    vrf_template_config: dict[str, Any] = Field(...)
+    vrf_template_config: dict[str, Any] = Field(default_factory=dict)
     vrf_extension_template: str = Field(default=VrfTemplates.DEFAULT_VRF_EXTENSION_UNIVERSAL.value)
     service_vrf_template: Optional[dict[str, Any]] = Field(default=None)
 

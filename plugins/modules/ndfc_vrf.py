@@ -85,6 +85,12 @@ notes:
   - The connection details (hostname, username, password) should be configured in the Ansible inventory.
   - VRF attachments are handled by a separate module.
   - The module uses composition-based caching for optimal performance and loose coupling.
+  - |
+    Required fields vary by state:
+    - deleted: fabric, vrf_name
+    - query: fabric (others optional for filtering)  
+    - merged: fabric, vrf_name, vrf_template_config (vrf_id optional, auto-assigned)
+    - replaced/overridden: fabric, vrf_name, vrf_id, vrf_template_config
 """
 
 EXAMPLES = r"""
@@ -101,26 +107,27 @@ EXAMPLES = r"""
           mtu: 9216
     state: merged
 
-# Delete VRF
+# Delete VRF (only fabric and vrf_name required)
 - name: Delete VRF
   nexus_vrf:
     config:
       - fabric: "fabric1"
         vrf_name: "test_vrf"
-        vrf_id: 12345
-        vrf_template_config:
-          vrfSegmentId: 12345
     state: deleted
 
-# Query VRFs
-- name: Query VRFs
+# Query all VRFs in fabric (only fabric required)
+- name: Query all VRFs in fabric
+  nexus_vrf:
+    config:
+      - fabric: "fabric1"
+    state: query
+
+# Query specific VRF (fabric required, others optional for filtering)
+- name: Query specific VRF
   nexus_vrf:
     config:
       - fabric: "fabric1"
         vrf_name: "test_vrf"
-        vrf_id: 12345
-        vrf_template_config:
-          vrfSegmentId: 12345
     state: query
 
 # Replace VRF
@@ -256,7 +263,7 @@ def validate_parameters(module: AnsibleModule) -> tuple[list[Any], AnsibleStates
         # Validate configurations if provided
         validated_configs = []
         if config:
-            validated_configs = VrfValidator.validate_config_list(config)
+            validated_configs = VrfValidator.validate_config_list_by_state(config, ansible_state.value)
 
         return validated_configs, ansible_state
 
@@ -288,7 +295,7 @@ def main():
                 },
                 "vrf_id": {
                     "type": "int",
-                    "required": True,
+                    "required": False,
                 },
                 "vrf_template": {
                     "type": "str",
@@ -296,7 +303,7 @@ def main():
                 },
                 "vrf_template_config": {
                     "type": "dict",
-                    "required": True,
+                    "required": False,
                 },
                 "vrf_extension_template": {
                     "type": "str",

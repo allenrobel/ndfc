@@ -10,6 +10,7 @@ from pydantic import ValidationError
 from ..models.vrf_config import VrfConfig
 from ..models.vrf_payload import VrfPayload
 from ..models.vrf_response import VrfResponse
+from ..models.state_configs import DeletedVrfConfig, QueryVrfConfig, MergedVrfConfig, ReplacedVrfConfig, OverriddenVrfConfig
 
 
 class VrfValidator:
@@ -41,11 +42,40 @@ class VrfValidator:
 
     @staticmethod
     def validate_config_list(config_list: list[dict[str, Any]]) -> list[VrfConfig]:
-        """Validate a list of VRF configurations."""
+        """Validate a list of VRF configurations (legacy method for backward compatibility)."""
         validated_configs = []
         for i, config in enumerate(config_list):
             try:
                 validated_configs.append(VrfValidator.validate_config(config))
+            except ValueError as error:
+                raise ValueError(f"Invalid VRF configuration at index {i}: {error}") from error
+        return validated_configs
+
+    @staticmethod
+    def validate_config_list_by_state(config_list: list[dict[str, Any]], state: str) -> list[VrfConfig]:
+        """Validate a list of VRF configurations using state-specific models."""
+        validated_configs = []
+        for i, config in enumerate(config_list):
+            try:
+                if state == "deleted":
+                    state_config = DeletedVrfConfig(**config)
+                    validated_configs.append(state_config.to_vrf_config())
+                elif state == "query":
+                    state_config = QueryVrfConfig(**config)
+                    validated_configs.append(state_config.to_vrf_config())
+                elif state == "merged":
+                    state_config = MergedVrfConfig(**config)
+                    validated_configs.append(state_config.to_vrf_config())
+                elif state == "replaced":
+                    state_config = ReplacedVrfConfig(**config)
+                    validated_configs.append(state_config.to_vrf_config())
+                elif state == "overridden":
+                    state_config = OverriddenVrfConfig(**config)
+                    validated_configs.append(state_config.to_vrf_config())
+                else:
+                    raise ValueError(f"Unknown state: {state}")
+            except ValidationError as error:
+                raise ValueError(f"Invalid VRF configuration at index {i} for state '{state}': {error}") from error
             except ValueError as error:
                 raise ValueError(f"Invalid VRF configuration at index {i}: {error}") from error
         return validated_configs
