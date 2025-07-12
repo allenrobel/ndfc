@@ -69,7 +69,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: deleted
   register: result_setup_2
@@ -88,7 +88,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: merged
     config:
@@ -104,7 +104,7 @@
   register: result_setup_3
 
 - name: SETUP.4 - DELETED - [query] Wait for vrfStatus == DEPLOYED
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: query
   register: result_setup_4
@@ -144,7 +144,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.dcnm.dcnm_vrf: &conf1
+  cisco.ndfc.ndfc_vrf: &conf1
     fabric: "{{ fabric_1 }}"
     state: deleted
     config:
@@ -185,7 +185,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.dcnm.dcnm_vrf: *conf1
+  cisco.ndfc.ndfc_vrf: *conf1
   register: result_1c
 
 - name: TEST.1d - DELETED - [debug] print result_1c
@@ -207,7 +207,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: merged
     config:
@@ -239,7 +239,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: query
   register: result_2a
@@ -275,7 +275,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.dcnm.dcnm_vrf: &conf2
+  cisco.ndfc.ndfc_vrf: &conf2
     fabric: "{{ fabric_1 }}"
     state: deleted
     config:
@@ -332,7 +332,7 @@
     msg: "{{ task_name }}"
 
 - name: TEST.2e - DELETED - [deleted] conf2 - Idempotence
-  cisco.dcnm.dcnm_vrf: *conf2
+  cisco.ndfc.ndfc_vrf: *conf2
   register: result_2e
 
 - name: TEST.2f - DELETED - [debug] print result_2e
@@ -354,7 +354,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: merged
     config:
@@ -386,7 +386,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: query
   register: result_3a
@@ -422,7 +422,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.dcnm.dcnm_vrf: &conf3
+  cisco.ndfc.ndfc_vrf: &conf3
     fabric: "{{ fabric_1 }}"
     state: deleted
     config:
@@ -462,7 +462,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.dcnm.dcnm_vrf: *conf3
+  cisco.ndfc.ndfc_vrf: *conf3
   register: result_3e
 
 - name: TEST.3f - DELETED - [debug] print result_3e
@@ -488,7 +488,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: deleted
 

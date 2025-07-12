@@ -36,7 +36,7 @@
     - 'setup_result_1.response.DATA != None'
 
 - name: SETUP.2 - SCALE - [deleted] Delete all VRFs
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: deleted
   register: setup_result_2
@@ -58,7 +58,7 @@
   loop: '{{ range(0, 800) | list }}'
 
 - name: TEST.1 - SCALE - [merged] Push all VRFs to the controller
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: '{{ fabric_1 }}'
     state: merged
     config: '{{ vrfs_list }}'
@@ -70,7 +70,7 @@
   tags: sanity
 
 - name: TEST.2 - SCALE - [deleted] Delete all VRFs
-  cisco.dcnm.dcnm_vrf: &conf2
+  cisco.ndfc.ndfc_vrf: &conf2
     fabric: "{{ fabric_1 }}"
     state: deleted
   register: result_2
@@ -84,7 +84,7 @@
     - 'result_2.changed == true'
 
 - name: TEST.2b - SCALE - [deleted] conf2 - Idempotence
-  cisco.dcnm.dcnm_vrf: *conf2
+  cisco.ndfc.ndfc_vrf: *conf2
   register: result_2b
 
 - name: TEST.2c - SCALE - [debug] print result_2b

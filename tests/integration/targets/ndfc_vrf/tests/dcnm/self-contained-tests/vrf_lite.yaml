@@ -54,7 +54,7 @@
     - 'result.response.DATA != None'
 
 - name: MERGED - Clean up any existing vrfs
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: deleted
 
@@ -70,7 +70,7 @@
 ###############################################
 
 - name: VRF LITE- Create, Attach and Deploy new VRF - VLAN/VRF LITE EXTENSION Provided by the User in one switch
-  cisco.dcnm.dcnm_vrf: &conf1
+  cisco.ndfc.ndfc_vrf: &conf1
     fabric: "{{ fabric_1 }}"
     state: merged
     config:
@@ -94,7 +94,7 @@
   register: result
 
 - name: Query fabric state until vrfStatus transitions to DEPLOYED state
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: query
   register: query_result
@@ -121,7 +121,7 @@
     - '"10.33.0.2/24" in query_result.response[0].attach[1].switchDetailsList[0].extensionValues'
 
 - name: MERGED - conf1 - Idempotence
-  cisco.dcnm.dcnm_vrf: *conf1
+  cisco.ndfc.ndfc_vrf: *conf1
   register: result
 
 - assert:
@@ -130,7 +130,7 @@
     - 'result.response|length == 0'
 
 - name: VRF LITE- Attach and Deploy second VRF LITE EXTENSION Provided by the User in one switch
-  cisco.dcnm.dcnm_vrf: &conf2
+  cisco.ndfc.ndfc_vrf: &conf2
     fabric: "{{ fabric_1 }}"
     state: merged
     config:
@@ -161,7 +161,7 @@
   register: result
 
 - name: Query fabric state until vrfStatus transitions to DEPLOYED state
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: query
   register: query_result
@@ -186,7 +186,7 @@
     - '"20.33.0.2/24" in query_result.response[0].attach[1].switchDetailsList[0].extensionValues'
 
 - name: VRF LITE - conf2 - Idempotence
-  cisco.dcnm.dcnm_vrf: *conf2
+  cisco.ndfc.ndfc_vrf: *conf2
   register: result
 
 - assert:
@@ -195,7 +195,7 @@
     - 'result.response|length == 0'
 
 - name: VRF LITE- Replace VRF LITE Attachment and Deploy by the User in one switch
-  cisco.dcnm.dcnm_vrf: &conf3
+  cisco.ndfc.ndfc_vrf: &conf3
     fabric: "{{ fabric_1 }}"
     state: replaced 
     config:
@@ -219,7 +219,7 @@
   register: result
 
 - name: Query fabric state until vrfStatus transitions to DEPLOYED state
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: query
   register: query_result
@@ -242,7 +242,7 @@
     - '"10.33.0.2/24" in query_result.response[0].attach[1].switchDetailsList[0].extensionValues'
 
 - name: MERGED - conf3 - Idempotence
-  cisco.dcnm.dcnm_vrf: *conf3
+  cisco.ndfc.ndfc_vrf: *conf3
   register: result
 
 - assert:
@@ -251,7 +251,7 @@
     - 'result.response|length == 0'
 
 - name: VRF LITE- Override VRF and VRF LITE EXTENSION Provided by the User
-  cisco.dcnm.dcnm_vrf: &conf4
+  cisco.ndfc.ndfc_vrf: &conf4
     fabric: "{{ fabric_1 }}"
     state: overridden
     config:
@@ -281,7 +281,7 @@
   register: result
 
 - name: Query fabric state until vrfStatus transitions to DEPLOYED state
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: query
   register: query_result
@@ -316,7 +316,7 @@
     - '"20.33.0.2/24" in query_result.response[0].attach[0].switchDetailsList[0].extensionValues'
 
 - name: VRF LITE - conf4 - Idempotence
-  cisco.dcnm.dcnm_vrf: *conf4
+  cisco.ndfc.ndfc_vrf: *conf4
   register: result
 
 - assert:
@@ -325,7 +325,7 @@
     - 'result.response|length == 0'
 
 - name: VRF LITE - Clean up any existing vrfs
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: deleted
 
@@ -337,7 +337,7 @@
     timeout: 40
 
 - name: VRF LITE- Create, Attach and Deploy new VRF - VLAN/VRF LITE EXTENSION Provided by the User in multiple switch
-  cisco.dcnm.dcnm_vrf: &conf5
+  cisco.ndfc.ndfc_vrf: &conf5
     fabric: "{{ fabric_1 }}"
     state: merged
     config:
@@ -376,7 +376,7 @@
   register: result
 
 - name: Query fabric state until vrfStatus transitions to DEPLOYED state
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: query
   register: query_result
@@ -408,7 +408,7 @@
     - '"20.33.0.2/24" in query_result.response[0].attach[1].switchDetailsList[0].extensionValues'
 
 - name: VRF LITE - conf5 - Idempotence
-  cisco.dcnm.dcnm_vrf: *conf5
+  cisco.ndfc.ndfc_vrf: *conf5
   register: result
 
 - assert:
@@ -421,6 +421,6 @@
 ###############################################
 
 - name: VRF LITE - Clean up any existing vrfs
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: deleted

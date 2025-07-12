@@ -29,7 +29,7 @@
     rest_path: "/appcenter/cisco/ndfc/api/v1/lan-fabric/rest/control/fabrics/{{ fabric_1 }}"
   when: controller_version >= "12"
 
-- name: MERGED_ALL - Verify if fabric is deployed.
+- name: DELETE_ALL - Verify if fabric is deployed.
   cisco.dcnm.dcnm_rest:
     method: GET
     path: "{{ rest_path }}"
@@ -39,8 +39,8 @@
     that:
     - 'result.response.DATA != None'
 
-- name: MERGED_ALL - Clean up any existing vrfs
-  cisco.dcnm.dcnm_vrf:
+- name: DELETE_ALL - Clean up any existing vrfs
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: deleted
 
@@ -48,8 +48,8 @@
 ###                MERGED                    ##
 ###############################################
 
-- name: MERGED_ALL - Create, Attach and Deploy new VRF with all values
-  cisco.dcnm.dcnm_vrf: &conf
+- name: DELETE_ALL - Create, Attach and Deploy new VRF with all values
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: merged
     config:
@@ -80,7 +80,7 @@
   register: result
 
 - name: Query fabric state until vrfStatus transitions to DEPLOYED state
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: query
   register: query_result
@@ -103,8 +103,26 @@
     - '"{{ switch_2 }}" or "{{ switch_1 }}" in result.diff[0].attach[1].ip_address'
     - 'result.diff[0].vrf_name == "ansible-vrf-int1"'
 
-- name: MERGED_ALL - conf - Idempotence
-  cisco.dcnm.dcnm_vrf: *conf
+- name: DELETE_ALL - Clean existing vrfs
+  cisco.ndfc.ndfc_vrf: &conf
+    fabric: "{{ fabric_1 }}"
+    state: deleted
+  register: result
+
+- assert:
+    that:
+    - 'result.changed == true'
+    - 'result.response[0].RETURN_CODE == 200'
+    - 'result.response[1].RETURN_CODE == 200'
+    - 'result.response[2].RETURN_CODE == 200'
+    - '(result.response[0].DATA|dict2items)[0].value == "SUCCESS"'
+    - '(result.response[0].DATA|dict2items)[1].value == "SUCCESS"'
+    - '"{{ switch_1 }}" or "{{ switch_2 }}" in result.diff[0].attach[0].ip_address'
+    - '"{{ switch_2 }}" or "{{ switch_1 }}" in result.diff[0].attach[1].ip_address'
+    - 'result.diff[0].vrf_name == "ansible-vrf-int1"'
+
+- name: DELETE_ALL - conf - Idempotence
+  cisco.ndfc.ndfc_vrf: *conf
   register: result
 
 - assert:
@@ -116,7 +134,7 @@
 ###                 CLEAN-UP                 ##
 ###############################################
 
-- name: MERGED_ALL - Clean up any existing vrfs
-  cisco.dcnm.dcnm_vrf:
+- name: DELETE_ALL - Clean up any existing vrfs
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: deleted

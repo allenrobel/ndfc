@@ -53,7 +53,7 @@ Name | Description
 [cisco.dcnm.dcnm_service_route_peering](https://github.com/CiscoDevNet/ansible-dcnm/blob/main/docs/cisco.dcnm.dcnm_service_route_peering_module.rst)|DCNM Ansible Module for managing Service Route Peerings.
 [cisco.dcnm.dcnm_template](https://github.com/CiscoDevNet/ansible-dcnm/blob/main/docs/cisco.dcnm.dcnm_template_module.rst)|DCNM Ansible Module for managing templates.
 [cisco.dcnm.dcnm_vpc_pair](https://github.com/CiscoDevNet/ansible-dcnm/blob/main/docs/cisco.dcnm.dcnm_vpc_pair_module.rst)|DCNM Ansible Module for managing VPC switch pairs required for VPC interfaces.
-[cisco.dcnm.dcnm_vrf](https://github.com/CiscoDevNet/ansible-dcnm/blob/main/docs/cisco.dcnm.dcnm_vrf_module.rst)|Add and remove VRFs from a DCNM managed VXLAN fabric.
+[cisco.ndfc.ndfc_vrf](https://github.com/CiscoDevNet/ansible-dcnm/blob/main/docs/cisco.ndfc.ndfc_vrf_module.rst)|Add and remove VRFs from a DCNM managed VXLAN fabric.
 
 <!--end collection content-->
 

@@ -76,7 +76,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: deleted
   register: result_setup_2
@@ -106,7 +106,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: merged
     config:
@@ -130,7 +130,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: query
   register: result_setup_3a
@@ -162,7 +162,7 @@
 # ###############################################
 
 - name: TEST.1 - QUERY - [query] Query VRF ansible-vrf-int1
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: query
     config:
@@ -195,7 +195,7 @@
     - result_1.response[0].parent.vrfStatus == "DEPLOYED"
 
 - name: TEST.2 - QUERY - [deleted] Delete all VRFs
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: deleted
   register: result_2
@@ -223,7 +223,7 @@
     timeout: 60
 
 - name: TEST.3 - QUERY - [merged] Create, Attach, Deploy VLAN+VRF ansible-vrf-int2
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: merged
     config:
@@ -239,7 +239,7 @@
   register: result_3
 
 - name: TEST.3a - QUERY - [query] Wait for vrfStatus == DEPLOYED
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: query
   register: result_3a
@@ -265,7 +265,7 @@
     - switch_2 in result_3.diff[0].attach[1].ip_address
 
 - name: TEST.4 - QUERY - [merged] Create, Attach, Deploy VRF+LITE EXTENSION ansible-vrf-int2 on switch_2
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: merged
     config:
@@ -289,7 +289,7 @@
   register: result_4
 
 - name: TEST.4a - QUERY - [query] Wait for vrfStatus == DEPLOYED
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: query
   register: result_4a
@@ -313,7 +313,7 @@
     - switch_2 in result_4.diff[0].attach[0].ip_address
 
 - name: TEST.5 - QUERY - [query] Query VRF+LITE EXTENSION ansible-vrf-int2 switch_2
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: query
     config:
@@ -354,7 +354,7 @@
     - result_5.response[0].attach[1].switchDetailsList[0].vlan == 1500
 
 - name: TEST.6 - QUERY - [query] Query without the config element
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: query
   register: result_6
@@ -377,7 +377,7 @@
     - result_6.response[0].attach[1].switchDetailsList[0].vlan == 1500
 
 - name: TEST.7 - QUERY - [query] Query non-existent VRF ansible-vrf-int1
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: query
     config:
@@ -406,7 +406,7 @@
 ###############################################
 
 - name: CLEANUP.1 - QUERY - [deleted] Delete all VRFs
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: deleted
 

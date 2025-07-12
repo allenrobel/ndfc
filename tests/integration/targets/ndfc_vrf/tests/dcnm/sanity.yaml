@@ -54,7 +54,7 @@
   tags: sanity
 
 - name: SETUP.2 - SANITY - [deleted] Delete all VRFs
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: deleted
   tags: sanity
@@ -69,7 +69,7 @@
 ###############################################
 
 - name: TEST.1 - SANITY MERGED - [merged] Create, Attach, Deploy VLAN+VRF - VLAN Provided by the User
-  cisco.dcnm.dcnm_vrf: &conf1
+  cisco.ndfc.ndfc_vrf: &conf1
     fabric: "{{ fabric_1 }}"
     state: merged
     config:
@@ -86,7 +86,7 @@
   tags: sanity
 
 - name: TEST.1a - SANITY MERGED - [query] Wait for vrfStatus == DEPLOYED
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: query
   register: result_1a
@@ -117,7 +117,7 @@
   tags: sanity
 
 - name: TEST.1c - SANITY MERGED - conf1 - Idempotence
-  cisco.dcnm.dcnm_vrf: *conf1
+  cisco.ndfc.ndfc_vrf: *conf1
   register: result_1c
   tags: sanity
 
@@ -133,7 +133,7 @@
   tags: sanity
 
 - name: TEST.1e - SANITY MERGED - [deleted] Delete all VRFs
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: deleted
   tags: sanity
@@ -148,7 +148,7 @@
 ###############################################
 
 - name: TEST.2 - SANITY REPLACED - [merged] Create, Attach, Deploy VLAN+VRF Provided by the User
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: merged
     config:
@@ -165,7 +165,7 @@
   tags: sanity
 
 - name: TEST.2a - SANITY REPLACED - [query] Wait for vrfStatus == DEPLOYED
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: query
   register: result_2a
@@ -194,7 +194,7 @@
   tags: sanity
 
 - name: TEST.2c - SANITY REPLACED - [replaced] Update existing VRF - delete attachments
-  cisco.dcnm.dcnm_vrf: &conf2c
+  cisco.ndfc.ndfc_vrf: &conf2c
     fabric: "{{ fabric_1 }}"
     state: replaced
     config:
@@ -212,7 +212,7 @@
   tags: sanity
 
 - name: TEST.2e - SANITY REPLACED - [query] Wait for vrfStatus == DEPLOYED
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: query
   register: result_2e
@@ -240,7 +240,7 @@
   tags: sanity
 
 - name: TEST.2g - SANITY REPLACED - conf2c - Idempotence
-  cisco.dcnm.dcnm_vrf: *conf2c
+  cisco.ndfc.ndfc_vrf: *conf2c
   register: result_2g
   tags: sanity
 
@@ -255,7 +255,7 @@
   tags: sanity
 
 - name: TEST.2i - SANITY REPLACED - [replaced] Update existing VRF - create attachments
-  cisco.dcnm.dcnm_vrf: &conf2i
+  cisco.ndfc.ndfc_vrf: &conf2i
     fabric: "{{ fabric_1 }}"
     state: replaced
     config:
@@ -277,7 +277,7 @@
   tags: sanity
 
 - name: TEST.2k - SANITY REPLACED - [query] Wait for vrfStatus == DEPLOYED
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: query
   register: result_2k
@@ -307,7 +307,7 @@
   tags: sanity
 
 - name: TEST.2m - SANITY REPLACED - [replaced] conf2i - Idempotence
-  cisco.dcnm.dcnm_vrf: *conf2i
+  cisco.ndfc.ndfc_vrf: *conf2i
   register: result_2m
   tags: sanity
 
@@ -322,7 +322,7 @@
   tags: sanity
 
 - name: TEST.2o - SANITY REPLACED - [deleted] Delete all VRFs
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: deleted
   tags: sanity
@@ -337,7 +337,7 @@
 ###############################################
 
 - name: TEST.3 - SANITY OVERRIDDEN - [merged] Create, Attach, Deploy VLAN+VRF - Provided by the User
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: merged
     config:
@@ -354,7 +354,7 @@
   tags: sanity
 
 - name: TEST.3a - SANITY OVERRIDDEN - [query] Wait for vrfStatus == DEPLOYED
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: query
   register: result_3a
@@ -385,7 +385,7 @@
   tags: sanity
 
 - name: TEST.3c - SANITY OVERRIDDEN - [overridden] Update existing VRF - delete and create
-  cisco.dcnm.dcnm_vrf: &conf3c
+  cisco.ndfc.ndfc_vrf: &conf3c
     fabric: "{{ fabric_1 }}"
     state: overridden
     config:
@@ -402,7 +402,7 @@
   tags: sanity
 
 - name: TEST.3d - SANITY OVERRIDDEN - [query] Wait for vrfStatus == DEPLOYED
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: query
   register: result_3d
@@ -439,7 +439,7 @@
   tags: sanity
 
 - name: TEST.3f - SANITY OVERRIDDEN - [overridden] conf3c - Idempotence
-  cisco.dcnm.dcnm_vrf: *conf3c
+  cisco.ndfc.ndfc_vrf: *conf3c
   register: result_3f
   tags: sanity
 
@@ -455,7 +455,7 @@
   tags: sanity
 
 - name: TEST.3h - SANITY OVERRIDDEN - [deleted] Delete all VRFs
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: deleted
   tags: sanity
@@ -470,7 +470,7 @@
 ###############################################
 
 - name: TEST.4 - SANITY QUERY - [merged] Create, Attach, Deploy VLAN+VRF - Provided by the User
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: merged
     config:
@@ -487,7 +487,7 @@
   tags: sanity
 
 - name: TEST.4a - SANITY QUERY - [query] Wait for vrfStatus == DEPLOYED
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: query
   register: result_4a
@@ -518,7 +518,7 @@
   tags: sanity
 
 - name: TEST.4c - SANITY QUERY - [query] Query the VRF
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: query
     config:
@@ -554,7 +554,7 @@
   tags: sanity
 
 - name: TEST.4e - SANITY QUERY - [deleted] Delete all VRFs
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: deleted
   tags: sanity
@@ -569,7 +569,7 @@
 ###############################################
 
 - name: TEST.5 - SANITY DELETED - Create, Attach, Deploy VLAN+VRF - Provided by the User
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: merged
     config:
@@ -586,7 +586,7 @@
   tags: sanity
 
 - name: TEST.5a - SANITY DELETED - [query] Wait for vrfStatus == DEPLOYED
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: query
   register: result_5a
@@ -617,7 +617,7 @@
   tags: sanity
 
 - name: TEST.5c - SANITY DELETED - [deleted] Delete the VRF
-  cisco.dcnm.dcnm_vrf: &conf5c
+  cisco.ndfc.ndfc_vrf: &conf5c
     fabric: "{{ fabric_1 }}"
     state: deleted
     config:
@@ -649,7 +649,7 @@
   tags: sanity
 
 - name: TEST.5e - SANITY DELETED - conf5c - Idempotence
-  cisco.dcnm.dcnm_vrf: *conf5c
+  cisco.ndfc.ndfc_vrf: *conf5c
   register: result_5e
   tags: sanity
 

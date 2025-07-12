@@ -64,7 +64,7 @@
     - result.response.DATA != None
 
 - name: SETUP.2 - MERGED - [deleted] Delete all VRFs
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: deleted
   register: result_setup_2
@@ -93,7 +93,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.dcnm.dcnm_vrf: &conf1
+  cisco.ndfc.ndfc_vrf: &conf1
     fabric: "{{ fabric_1 }}"
     state: merged
     config:
@@ -117,7 +117,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: query
   register: result_1a
@@ -157,7 +157,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.dcnm.dcnm_vrf: *conf1
+  cisco.ndfc.ndfc_vrf: *conf1
   register: result_1c
 
 - name: TEST.1d - MERGED - [debug] print result_1c
@@ -178,7 +178,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: deleted
   register: result_1e
@@ -200,7 +200,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.dcnm.dcnm_vrf: &conf2
+  cisco.ndfc.ndfc_vrf: &conf2
     fabric: "{{ fabric_1 }}"
     state: merged
     config:
@@ -223,7 +223,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: query
   register: result_2a
@@ -260,7 +260,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.dcnm.dcnm_vrf: *conf2
+  cisco.ndfc.ndfc_vrf: *conf2
   register: result_2c
 
 - name: TEST.2d - MERGED - [debug] print result_2c
@@ -281,7 +281,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: deleted
 
@@ -300,7 +300,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.dcnm.dcnm_vrf: &conf3
+  cisco.ndfc.ndfc_vrf: &conf3
     fabric: "{{ fabric_1 }}"
     state: merged
     config:
@@ -332,7 +332,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: query
   register: result_3a
@@ -372,7 +372,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.dcnm.dcnm_vrf: *conf3
+  cisco.ndfc.ndfc_vrf: *conf3
   register: result_3c
 
 - name: TEST.3d - MERGED - [debug] print result_3c
@@ -393,7 +393,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: deleted
 
@@ -413,7 +413,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: merged
     config:
@@ -439,7 +439,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: query
   register: result_4a
@@ -479,7 +479,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: merged
     config:
@@ -516,7 +516,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: merged
     config:
@@ -555,7 +555,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: merged
     config:
@@ -597,7 +597,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: merged
     config:
@@ -647,7 +647,7 @@
 
 
 - name: "{{ task_name }}"
-  cisco.dcnm.dcnm_vrf:
+  cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: deleted
 
