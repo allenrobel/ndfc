@@ -21,15 +21,15 @@ class BaseVrfConfig(BaseModel):
 
 
 class DeletedVrfConfig(BaseVrfConfig):
-    """VRF configuration model for deleted state (fabric + vrf_name only)."""
+    """VRF configuration model for deleted state (fabric required, vrf_name optional)."""
 
-    vrf_name: str = Field(..., min_length=1, max_length=32)
+    vrf_name: Optional[str] = Field(default=None, min_length=1, max_length=32)
 
     def to_vrf_config(self) -> VrfConfig:
         """Convert to main VrfConfig model with sensible defaults."""
         return VrfConfig(
             fabric=self.fabric,
-            vrf_name=self.vrf_name,
+            vrf_name=self.vrf_name or "",  # Empty string when deleting all VRFs in fabric
             vrf_id=0,  # Default for deleted operations
             vrf_template_config={},  # Default empty config for deleted operations
         )

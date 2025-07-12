@@ -23,18 +23,12 @@ class Deleted(BaseState):
         errors = []
 
         for config in configs:
-            exists, _ = self._vrf_exists(config.fabric, config.vrf_name)
-
-            if exists:
-                success, response = self.api_client.delete_vrf(config.fabric, config.vrf_name)
-
-                if success:
-                    deleted_vrfs.append(config.vrf_name)
-                    self.result.changed = True
-                    # Cache is automatically updated in VrfApi.delete_vrf()
-                else:
-                    errors.append(f"Failed to delete VRF {config.vrf_name}: {response.get('error', 'Unknown error')}")
-            # If VRF doesn't exist, no action needed (idempotent)
+            if not config.vrf_name:
+                # Delete all VRFs in fabric when vrf_name is empty
+                self._delete_all_vrfs_in_fabric(config.fabric, deleted_vrfs, errors)
+            else:
+                # Delete specific VRF
+                self._delete_specific_vrf(config, deleted_vrfs, errors)
 
         if errors:
             self.result.failed = True
@@ -48,3 +42,37 @@ class Deleted(BaseState):
             self.result.stdout = self.result.msg
 
         return self.result
+
+    def _delete_specific_vrf(self, config: VrfConfig, deleted_vrfs: list[str], errors: list[str]) -> None:
+        """Delete a specific VRF."""
+        exists, _ = self._vrf_exists(config.fabric, config.vrf_name)
+
+        if exists:
+            success, response = self.api_client.delete_vrf(config.fabric, config.vrf_name)
+
+            if success:
+                deleted_vrfs.append(config.vrf_name)
+                self.result.changed = True
+                # Cache is automatically updated in VrfApi.delete_vrf()
+            else:
+                errors.append(f"Failed to delete VRF {config.vrf_name}: {response.get('error', 'Unknown error')}")
+        # If VRF doesn't exist, no action needed (idempotent)
+
+    def _delete_all_vrfs_in_fabric(self, fabric: str, deleted_vrfs: list[str], errors: list[str]) -> None:
+        """Delete all VRFs in a fabric."""
+        # Get all VRFs in the fabric
+        all_vrfs = self._get_all_fabric_vrfs(fabric)
+
+        if not all_vrfs:
+            # No VRFs to delete in this fabric
+            return
+
+        for vrf_name in all_vrfs:
+            success, response = self.api_client.delete_vrf(fabric, vrf_name)
+
+            if success:
+                deleted_vrfs.append(vrf_name)
+                self.result.changed = True
+                # Cache is automatically updated in VrfApi.delete_vrf()
+            else:
+                errors.append(f"Failed to delete VRF {vrf_name}: {response.get('error', 'Unknown error')}")

@@ -87,8 +87,8 @@ notes:
   - The module uses composition-based caching for optimal performance and loose coupling.
   - |
     Required fields vary by state:
-    - deleted: fabric, vrf_name
-    - query: fabric (others optional for filtering)  
+    - deleted: fabric (vrf_name optional - if omitted, deletes all VRFs in fabric)
+    - query: fabric (others optional for filtering)
     - merged: fabric, vrf_name, vrf_template_config (vrf_id optional, auto-assigned)
     - replaced/overridden: fabric, vrf_name, vrf_id, vrf_template_config
 """
@@ -107,12 +107,19 @@ EXAMPLES = r"""
           mtu: 9216
     state: merged
 
-# Delete VRF (only fabric and vrf_name required)
-- name: Delete VRF
+# Delete specific VRF
+- name: Delete specific VRF
   nexus_vrf:
     config:
       - fabric: "fabric1"
         vrf_name: "test_vrf"
+    state: deleted
+
+# Delete all VRFs in fabric (only fabric required)
+- name: Delete all VRFs in fabric
+  nexus_vrf:
+    config:
+      - fabric: "fabric1"
     state: deleted
 
 # Query all VRFs in fabric (only fabric required)
