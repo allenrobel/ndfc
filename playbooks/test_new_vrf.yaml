@@ -1,0 +1,15 @@
+---
+-   hosts: ndfc
+    check_mode: false
+    gather_facts: false
+    vars:
+        fabric_name: f1
+        vrf_name: ansible-vrf-1
+    tasks:
+    - name: Query VRFs
+      nexus_dashboard_vrfs:
+        config:
+          - fabric: "{{ fabric_name }}"
+            vrf_name: "{{ vrf_name }}"
+        state: query
+
