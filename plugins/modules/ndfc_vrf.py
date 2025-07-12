@@ -245,15 +245,18 @@ def validate_parameters(module: AnsibleModule) -> tuple[list[Any], AnsibleStates
     config = module.params.get("config", [])
     state = module.params.get("state", "merged")
 
-    if not config:
-        module.fail_json(msg="config parameter is required")
-
     try:
         # Validate state
         ansible_state = AnsibleStates(state)
 
-        # Validate configurations
-        validated_configs = VrfValidator.validate_config_list(config)
+        # For most states, config is required
+        if not config and ansible_state not in [AnsibleStates.QUERY, AnsibleStates.DELETED]:
+            module.fail_json(msg="config parameter is required for this state")
+
+        # Validate configurations if provided
+        validated_configs = []
+        if config:
+            validated_configs = VrfValidator.validate_config_list(config)
 
         return validated_configs, ansible_state
 
@@ -273,7 +276,7 @@ def main():
         "config": {
             "type": "list",
             "elements": "dict",
-            "required": True,
+            "required": False,
             "options": {
                 "fabric": {
                     "type": "str",
