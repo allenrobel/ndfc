@@ -260,11 +260,11 @@ response:
 # Import our custom modules
 try:
     from ansible_collections.cisco.ndfc.plugins.module_utils.common.enums.ansible_states import AnsibleStates
-    from ..module_utils.common.cache.cache_manager import CacheManager
-    from ..module_utils.common.cache.cached_resource_service import CachedResourceService
-    from ..module_utils.vrf.validators.vrf_validator import VrfValidator
-    from ..module_utils.vrf.api.vrf_api import VrfApi
-    from ..module_utils.vrf.states.state_factory import StateFactory
+    from ansible_collections.cisco.ndfc.plugins.module_utils.common.cache.cache_manager import CacheManager
+    from ansible_collections.cisco.ndfc.plugins.module_utils.common.cache.cached_resource_service import CachedResourceService
+    from ansible_collections.cisco.ndfc.plugins.module_utils.vrf.validators.vrf_validator import VrfValidator
+    from ansible_collections.cisco.ndfc.plugins.module_utils.vrf.api.vrf_api import VrfApi
+    from ansible_collections.cisco.ndfc.plugins.module_utils.vrf.states.state_factory import StateFactory
 
     # from ansible_collections.cisco.ndfc.plugins.module_utils.vrf.models.module_result import ModuleResult
 except ImportError:

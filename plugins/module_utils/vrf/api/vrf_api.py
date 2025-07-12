@@ -7,7 +7,7 @@ including creation, deletion, updates, and querying with caching support.
 """
 from typing import Any, Optional
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.cisco.dcnm.plugins.module_utils.common.rest_send import RestSend
+from ...common.classes.rest_send_v2 import RestSend
 from ...common.cache.cached_resource_service import CachedResourceService
 from ...common.cache.cache_manager import CacheManager
 from .vrf_sender import VrfSender
