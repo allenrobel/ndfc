@@ -40,38 +40,40 @@ options:
       fabric:
         description:
           - Name of the fabric where the VRF resides
+          - This is the only field validated by Ansible
+          - All other fields are validated by state-specific Pydantic models
         type: str
         required: true
       vrf_name:
         description:
           - Name of the VRF
+          - Validation handled by state-specific models
         type: str
-        required: true
       vrf_id:
         description:
           - Numerical ID of the VRF
+          - Validation handled by state-specific models
         type: int
-        required: true
       vrf_template:
         description:
           - Template name for VRF configuration
+          - Validation handled by state-specific models
         type: str
-        default: Default_VRF_Universal
       vrf_template_config:
         description:
           - Dictionary containing VRF template configuration
+          - Validation handled by state-specific models
         type: dict
-        required: true
       vrf_extension_template:
         description:
           - Template name for VRF extension configuration
+          - Validation handled by state-specific models
         type: str
-        default: Default_VRF_Extension_Universal
       service_vrf_template:
         description:
           - Dictionary containing service VRF template configuration
+          - Validation handled by state-specific models
         type: dict
-        required: false
   state:
     description:
       - The state of the VRF configuration
@@ -85,6 +87,11 @@ notes:
   - The connection details (hostname, username, password) should be configured in the Ansible inventory.
   - VRF attachments are handled by a separate module.
   - The module uses composition-based caching for optimal performance and loose coupling.
+  - |
+    Validation approach:
+    - Ansible validates only basic structure and the 'fabric' field
+    - State-specific Pydantic models handle all other validation with detailed error messages
+    - This provides better validation feedback and cleaner module interface
   - |
     Required fields vary by state:
     - deleted: fabric (vrf_name optional - if omitted, deletes all VRFs in fabric)
@@ -204,6 +211,17 @@ EXAMPLES = r"""
           vrfSegmentId: 2002
           vrfVlanId: 202
     state: merged
+
+# Example showing Pydantic validation catching errors
+# This would fail with detailed error message about missing vrf_name
+- name: Invalid merged config (missing vrf_name)
+  nexus_vrf:
+    config:
+      - fabric: "fabric1"
+        vrf_template_config:
+          vrfSegmentId: 1001
+    state: merged
+  # Error: "Invalid VRF configuration at index 0 for state 'merged': Field required [type=missing, input={'fabric': 'fabric1', 'vrf_template_config': {...}}]"
 """
 
 RETURN = r"""
@@ -295,30 +313,6 @@ def main():
                 "fabric": {
                     "type": "str",
                     "required": True,
-                },
-                "vrf_name": {
-                    "type": "str",
-                    "required": True,
-                },
-                "vrf_id": {
-                    "type": "int",
-                    "required": False,
-                },
-                "vrf_template": {
-                    "type": "str",
-                    "default": "Default_VRF_Universal",
-                },
-                "vrf_template_config": {
-                    "type": "dict",
-                    "required": False,
-                },
-                "vrf_extension_template": {
-                    "type": "str",
-                    "default": "Default_VRF_Extension_Universal",
-                },
-                "service_vrf_template": {
-                    "type": "dict",
-                    "required": False,
                 },
             },
         },
