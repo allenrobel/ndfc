@@ -20,6 +20,7 @@ class VrfPayload(BaseModel):
     vrf_extension_template: str = Field(default="Default_VRF_Extension_Universal", alias="vrfExtensionTemplate")
     service_vrf_template: Optional[str] = Field(default=None, alias="serviceVrfTemplate")
     source: Optional[str] = Field(default=None)
+    deploy: bool = Field(default=True)
 
     @field_validator("vrf_template_config")
     @classmethod
