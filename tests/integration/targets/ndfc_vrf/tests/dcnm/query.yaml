@@ -321,7 +321,7 @@
     that:
     - result_8.changed == false
     - result_8.response|length == 1
-    - result_8.response[0].vrf_Name == "ansible-vrf-int2"
+    - result_8.response[0].vrf_name == "ansible-vrf-int2"
 
 ###############################################
 ###                 CLEAN-UP                 ##

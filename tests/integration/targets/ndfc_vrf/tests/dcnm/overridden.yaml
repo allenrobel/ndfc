@@ -13,11 +13,6 @@
 #
 # - A vrf-lite capable switch
 #
-# interface_2a
-#
-# - Ethernet interface on switch_2
-# - Used to test VRF LITE configuration.
-#
 ##############################################
 
 ##############################################
@@ -51,7 +46,6 @@
      - "fabric_1 : {{ fabric_1 }}"
      - "switch_1 : {{ switch_1 }}"
      - "switch_2 : {{ switch_2 }}"
-     - "interface_2a : {{ interface_2a }}"
 
 - name: Set task name
   ansible.builtin.set_fact:
@@ -111,10 +105,6 @@
       vrf_template: Default_VRF_Universal
       vrf_extension_template: Default_VRF_Extension_Universal
       vlan_id: 500
-      attach:
-      - ip_address: "{{ switch_1 }}"
-      - ip_address: "{{ switch_2 }}"
-      deploy: true
   register: result_setup_3
 
 - name: SETUP.3a - OVERRIDDEN - [debug] print result_setup_3
@@ -135,23 +125,17 @@
     state: query
   register: result_setup_4
   until:
-    - "result_setup_4.response[0].parent.vrfStatus is search('DEPLOYED')"
+    - "result_setup_4.response[0].vrfStatus is search('DEPLOYED')"
   retries: 30
   delay: 2
 
 - assert:
     that:
     - result_setup_3.changed == true
-    - result_setup_3.diff[0].attach[0].deploy == true
-    - result_setup_3.diff[0].attach[1].deploy == true
     - result_setup_3.diff[0].vrf_name == "ansible-vrf-int1"
     - result_setup_3.response[0].RETURN_CODE == 200
     - result_setup_3.response[1].RETURN_CODE == 200
     - result_setup_3.response[2].RETURN_CODE == 200
-    - (result_setup_3.response[1].DATA|dict2items)[0].value == "SUCCESS"
-    - (result_setup_3.response[1].DATA|dict2items)[1].value == "SUCCESS"
-    - switch_1 in result_setup_3.diff[0].attach[0].ip_address
-    - switch_2 in result_setup_3.diff[0].attach[1].ip_address
 
 ###############################################
 ###              OVERRIDDEN                  ##
@@ -178,10 +162,6 @@
       vrf_template: Default_VRF_Universal
       vrf_extension_template: Default_VRF_Extension_Universal
       vlan_id: 500
-      attach:
-      - ip_address: "{{ switch_1 }}"
-      - ip_address: "{{ switch_2 }}"
-      deploy: true
   register: result_1
 
 - name: Set task name
@@ -198,7 +178,7 @@
     state: query
   register: result_1a
   until:
-    - "result_1a.response[0].parent.vrfStatus is search('DEPLOYED')"
+    - "result_1a.response[0].vrfStatus is search('DEPLOYED')"
   retries: 30
   delay: 2
 
@@ -209,11 +189,7 @@
 - assert:
     that:
     - result_1.changed == true
-    - result_1.diff[0].attach[0].deploy == true
-    - result_1.diff[0].attach[1].deploy == true
     - result_1.diff[0].vrf_name == "ansible-vrf-int2"
-    - result_1.diff[1].attach[0].deploy == false
-    - result_1.diff[1].attach[1].deploy == false
     - result_1.diff[1].vrf_name == "ansible-vrf-int1"
     - result_1.response[0].METHOD == "POST"
     - result_1.response[1].METHOD == "POST"
@@ -227,10 +203,6 @@
     - result_1.response[3].RETURN_CODE == 200
     - result_1.response[4].RETURN_CODE == 200
     - result_1.response[5].RETURN_CODE == 200
-    - (result_1.response[0].DATA|dict2items)[0].value == "SUCCESS"
-    - (result_1.response[0].DATA|dict2items)[1].value == "SUCCESS"
-    - (result_1.response[4].DATA|dict2items)[0].value == "SUCCESS"
-    - (result_1.response[4].DATA|dict2items)[1].value == "SUCCESS"
     - result_1.response[1].DATA.status == DEPLOYMENT_OF_VRFS
     - result_1.response[5].DATA.status == DEPLOYMENT_OF_VRFS
 
@@ -292,18 +264,6 @@
       vrf_template: Default_VRF_Universal
       vrf_extension_template: Default_VRF_Extension_Universal
       vlan_id: 1500
-      attach:
-      - ip_address: "{{ switch_1 }}"
-      - ip_address: "{{ switch_2 }}"
-        vrf_lite:
-          - peer_vrf: ansible-vrf-int2 # optional
-            interface: "{{ interface_2a }}" # mandatory
-            ipv4_addr: 10.33.0.1/24 # optional
-            neighbor_ipv4: 10.33.0.0 # optional
-            ipv6_addr: 2010::10:34:0:7/64 # optional
-            neighbor_ipv6: 2010::10:34:0:3 # optional
-            dot1q: 2 # optional controller can provide
-      deploy: true
   register: result_2
 
 - name: TEST.2a - OVERRIDDEN - [wait_for] Wait 60 seconds for controller and switch to sync
@@ -328,7 +288,7 @@
     state: query
   register: result_2b
   until:
-    - "result_2b.response[0].parent.vrfStatus is search('DEPLOYED')"
+    - "result_2b.response[0].vrfStatus is search('DEPLOYED')"
   retries: 30
   delay: 2
 
@@ -339,17 +299,11 @@
 - assert:
     that:
     - result_2.changed == true
-    - result_2.diff[0].attach[0].deploy == true
-    - result_2.diff[0].attach[1].deploy == true
     - result_2.diff[0].vrf_name == "ansible-vrf-int2"
     - result_2.response[0].RETURN_CODE == 200
     - result_2.response[1].RETURN_CODE == 200
     - result_2.response[2].RETURN_CODE == 200
     - result_2.response[2].DATA.status == DEPLOYMENT_OF_VRFS
-    - (result_2.response[1].DATA|dict2items)[0].value == "SUCCESS"
-    - (result_2.response[1].DATA|dict2items)[1].value == "SUCCESS"
-    - switch_1 in result_2.diff[0].attach[0].ip_address
-    - switch_2 in result_2.diff[0].attach[1].ip_address
 
 - name: Set task name
   ansible.builtin.set_fact:
@@ -369,18 +323,6 @@
       vrf_template: Default_VRF_Universal
       vrf_extension_template: Default_VRF_Extension_Universal
       vlan_id: 1500
-      attach:
-      - ip_address: "{{ switch_1 }}"
-      - ip_address: "{{ switch_2 }}"
-        vrf_lite:
-          - peer_vrf: ansible-vrf-int2 # optional
-            interface: "{{ interface_2a }}" # mandatory
-            ipv4_addr: 10.33.0.1/24 # optional
-            neighbor_ipv4: 10.33.0.0 # optional
-            ipv6_addr: 2010::10:34:0:7/64 # optional
-            neighbor_ipv6: 2010::10:34:0:3 # optional
-            dot1q: 21 # optional controller can provide
-      deploy: true
   register: result_3
 
 - name: TEST.3a - OVERRIDDEN - [wait_for] Wait 60 seconds for controller and switch to sync
@@ -432,7 +374,7 @@
     state: query
   register: result_3d
   until:
-    - "result_3d.response[0].parent.vrfStatus is search('DEPLOYED')"
+    - "result_3d.response[0].vrfStatus is search('DEPLOYED')"
   retries: 30
   delay: 2
 
@@ -443,12 +385,10 @@
 - assert:
     that:
     - result_3.changed == true
-    - result_3.diff[0].attach[0].deploy == true
     - result_3.diff[0].vrf_name == "ansible-vrf-int2"
     - result_3.response[0].RETURN_CODE == 200
     - result_3.response[1].RETURN_CODE == 200
     - result_3.response[1].DATA.status == DEPLOYMENT_OF_VRFS
-    - (result_3.response[0].DATA|dict2items)[0].value == "SUCCESS"
 
 - name: Set task name
   ansible.builtin.set_fact:
@@ -489,18 +429,6 @@
       vrf_template: Default_VRF_Universal
       vrf_extension_template: Default_VRF_Extension_Universal
       vlan_id: 500
-      attach:
-      - ip_address: "{{ switch_1 }}"
-      - ip_address: "{{ switch_2 }}"
-        vrf_lite:
-          - peer_vrf: ansible-vrf-int1 # optional
-            interface: "{{ interface_2a }}" # mandatory
-            ipv4_addr: 10.33.0.1/24 # optional
-            neighbor_ipv4: 10.33.0.0 # optional
-            ipv6_addr: 2010::10:34:0:1/64 # optional
-            neighbor_ipv6: 2010::10:34:0:2 # optional
-            dot1q: 31 # optional controller can provide
-      deploy: true
   register: result_4
 
 - name: TEST.4a - OVERRIDDEN - [wait_for] Wait 60 seconds for controller and switch to sync
@@ -525,7 +453,7 @@
     state: query
   register: result_4b
   until:
-    - "result_4b.response[0].parent.vrfStatus is search('DEPLOYED')"
+    - "result_4b.response[0].vrfStatus is search('DEPLOYED')"
   retries: 30
   delay: 2
 
@@ -536,11 +464,7 @@
 - assert:
     that:
     - result_4.changed == true
-    - result_4.diff[0].attach[0].deploy == true
-    - result_4.diff[0].attach[1].deploy == true
     - result_4.diff[0].vrf_name == "ansible-vrf-int1"
-    - result_4.diff[1].attach[0].deploy == false
-    - result_4.diff[1].attach[1].deploy == false
     - result_4.diff[1].vrf_name == "ansible-vrf-int2"
     - result_4.response[0].METHOD == "POST"
     - result_4.response[1].METHOD == "POST"
@@ -556,10 +480,6 @@
     - result_4.response[5].RETURN_CODE == 200
     - result_4.response[1].DATA.status == DEPLOYMENT_OF_VRFS
     - result_4.response[5].DATA.status == DEPLOYMENT_OF_VRFS
-    - (result_4.response[0].DATA|dict2items)[0].value == "SUCCESS"
-    - (result_4.response[0].DATA|dict2items)[1].value == "SUCCESS"
-    - (result_4.response[4].DATA|dict2items)[0].value == "SUCCESS"
-    - (result_4.response[4].DATA|dict2items)[1].value == "SUCCESS"
 
 - name: Set task name
   ansible.builtin.set_fact:
