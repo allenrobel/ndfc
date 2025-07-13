@@ -20,14 +20,6 @@
 ##                 SETUP                    ##
 ##############################################
 
-- set_fact:
-    rest_path: "/rest/control/fabrics/{{ fabric_1 }}"
-  when: controller_version == "11"
-
-- set_fact:
-    rest_path: "/appcenter/cisco/ndfc/api/v1/lan-fabric/rest/control/fabrics/{{ fabric_1 }}"
-  when: controller_version >= "12"
-
 - name: SETUP.0a - REPLACED - [with_items] print vars
   ansible.builtin.debug:
     var: item
@@ -55,7 +47,7 @@
 - name: "{{ task_name }}"
   cisco.dcnm.dcnm_rest:
     method: GET
-    path: "{{ rest_path }}"
+    path: "/appcenter/cisco/ndfc/api/v1/lan-fabric/rest/control/fabrics/{{ fabric_1 }}"
   register: result
 
 - assert:
