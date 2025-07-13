@@ -101,10 +101,10 @@
 
 - name: "{{ task_name }}"
   cisco.ndfc.ndfc_vrf:
-    fabric: "{{ fabric_1 }}"
     state: merged
     config:
-    - vrf_name: ansible-vrf-int1
+    - fabric: "{{ fabric_1 }}"
+      vrf_name: ansible-vrf-int1
       vrf_id: 9008011
       vrf_template: Default_VRF_Universal
       vrf_extension_template: Default_VRF_Extension_Universal
@@ -123,10 +123,10 @@
 
 - name: TEST.1 - QUERY - [query] Query specific VRF ansible-vrf-int1
   cisco.ndfc.ndfc_vrf:
-    fabric: "{{ fabric_1 }}"
     state: query
     config:
-      - vrf_name: ansible-vrf-int1
+      - fabric: "{{ fabric_1 }}"
+        vrf_name: ansible-vrf-int1
   register: result_1
 
 - name: TEST.1b - QUERY - [debug] print result_1
@@ -160,10 +160,10 @@
 
 - name: TEST.3 - QUERY - [merged] Create second VRF ansible-vrf-int2
   cisco.ndfc.ndfc_vrf:
-    fabric: "{{ fabric_1 }}"
     state: merged
     config:
-    - vrf_name: ansible-vrf-int2
+    - fabric: "{{ fabric_1 }}"
+      vrf_name: ansible-vrf-int2
       vrf_id: 9008012
       vrf_template: Default_VRF_Universal
       vrf_extension_template: Default_VRF_Extension_Universal
