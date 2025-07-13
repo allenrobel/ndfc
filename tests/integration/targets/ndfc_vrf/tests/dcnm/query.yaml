@@ -70,8 +70,9 @@
 
 - name: "{{ task_name }}"
   cisco.ndfc.ndfc_vrf:
-    fabric: "{{ fabric_1 }}"
     state: deleted
+    config:
+      - fabric: "{{ fabric_1 }}"
   register: result_setup_2
 
 - name: Set task name
@@ -248,10 +249,10 @@
 
 - name: TEST.7 - QUERY - [deleted] Delete specific VRF
   cisco.ndfc.ndfc_vrf:
-    fabric: "{{ fabric_1 }}"
     state: deleted
     config:
-      - vrf_name: ansible-vrf-int1
+      - fabric: "{{ fabric_1 }}"
+        vrf_name: ansible-vrf-int1
   register: result_7
 
 - name: TEST.7a - QUERY - [debug] print result_7
@@ -289,8 +290,9 @@
 
 - name: CLEANUP.1 - QUERY - [deleted] Delete all VRFs
   cisco.ndfc.ndfc_vrf:
-    fabric: "{{ fabric_1 }}"
     state: deleted
+    config:
+      - fabric: "{{ fabric_1 }}"
 
 - name: CLEANUP.2 - QUERY - [wait_for] Wait 60 seconds for controller and switch to sync
   wait_for:

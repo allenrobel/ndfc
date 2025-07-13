@@ -137,10 +137,10 @@ notes:
     - This provides better validation feedback and cleaner module interface
   - |
     Required fields vary by state:
-    - deleted: fabric (vrf_name optional - if omitted, deletes all VRFs in fabric)
-    - query: fabric (others optional for filtering)
-    - merged: fabric, vrf_name, vrf_template_config (vrf_id optional, auto-assigned)
-    - replaced/overridden: fabric, vrf_name, vrf_id, vrf_template_config
+    - deleted: config with fabric required (vrf_name optional - if omitted, deletes all VRFs in fabric)
+    - query: no config required (returns all VRFs), or config with fabric (others optional for filtering)
+    - merged: config with fabric, vrf_name, vrf_template_config (vrf_id optional, auto-assigned)
+    - replaced/overridden: config with fabric, vrf_name, vrf_id, vrf_template_config
 """
 
 EXAMPLES = r"""
@@ -167,17 +167,17 @@ EXAMPLES = r"""
 # Delete specific VRF
 - name: Delete specific VRF
   nexus_vrf:
+    state: deleted
     config:
       - fabric: "fabric1"
         vrf_name: "test_vrf"
-    state: deleted
 
 # Delete all VRFs in fabric (only fabric required)
 - name: Delete all VRFs in fabric
   nexus_vrf:
+    state: deleted
     config:
       - fabric: "fabric1"
-    state: deleted
 
 # Query all VRFs in fabric (only fabric required)
 - name: Query all VRFs in fabric
@@ -352,7 +352,7 @@ def validate_parameters(module: AnsibleModule) -> tuple[list[Any], AnsibleStates
         ansible_state = AnsibleStates(state)
 
         # For most states, config is required
-        if not config and ansible_state not in [AnsibleStates.QUERY, AnsibleStates.DELETED]:
+        if not config and ansible_state not in [AnsibleStates.QUERY]:
             module.fail_json(msg="config parameter is required for this state")
 
         # Validate configurations if provided
