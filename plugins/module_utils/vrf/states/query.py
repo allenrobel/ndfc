@@ -24,11 +24,16 @@ class Query(BaseState):
         errors: list[str] = []
 
         for config in configs:
-            exists, current_vrf = self._vrf_exists(config.fabric, config.vrf_name)
-
-            if exists and current_vrf:
-                queried_vrfs.append(current_vrf)
-            # If VRF doesn't exist, we don't add it to the results
+            if config.vrf_name:
+                # Query specific VRF
+                exists, current_vrf = self._vrf_exists(config.fabric, config.vrf_name)
+                if exists and current_vrf:
+                    queried_vrfs.append(current_vrf)
+                # If VRF doesn't exist, we don't add it to the results
+            else:
+                # Query all VRFs in fabric
+                fabric_vrfs = self._get_all_fabric_vrfs(config.fabric)
+                queried_vrfs.extend(fabric_vrfs.values())
 
         if errors:
             self.result.failed = True
