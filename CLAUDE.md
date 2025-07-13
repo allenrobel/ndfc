@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-This repository contains the Cisco DCNM (Data Center Network Manager) / NDFC (Nexus Dashboard Fabric Controller) Ansible collection. It provides modules to automate day-2 operations for VXLAN EVPN fabrics.
+This repository contains the Cisco NDFC (Nexus Dashboard Fabric Controller) Ansible collection. It provides modules to automate day-2 operations for VXLAN EVPN fabrics.
 
 ## Common Commands
 
@@ -68,15 +68,17 @@ tox -e venv -- <command>
 #### Module Utils Architecture
 
 - `plugins/module_utils/common/` - Shared utilities (API clients, logging, validation)
+- `plugins/module_utils/common/cache` - Caching service
 - `plugins/module_utils/vrf/` - VRF-specific utilities and models
 - `plugins/module_utils/fabric/` - Fabric management utilities
-- `plugins/module_utils/image_*` - Image/software management utilities
 
 #### API Layer
 
 - `plugins/module_utils/common/api/` - Hierarchical API structure matching DCNM/NDFC REST endpoints
-- `plugins/module_utils/common/rest_send*.py` - HTTP request handling
-- `plugins/module_utils/common/sender_*.py` - Request sender implementations
+- `plugins/module_utils/common/classes/log_v2.py` - Logger for the project
+- `plugins/module_utils/common/classes/rest_send_v2.py` - HTTP request handling
+- `plugins/module_utils/common/classes/results.py` - HTTP request results handler
+- `plugins/module_utils/common/classes/sender_*.py` - Request sender implementations
 
 #### VRF Module (Active Development)
 
@@ -112,9 +114,7 @@ Modules follow Ansible's declarative state patterns:
 
 #### Error Handling
 
-- Consistent error handling through `common/exceptions.py`
 - Response validation and error reporting
-- Rollback capabilities for failed operations
 
 ## Development Guidelines
 
@@ -124,6 +124,11 @@ Modules follow Ansible's declarative state patterns:
 - Black formatting enforced
 - Type hints encouraged (mypy configuration in mypy.ini)
 - Pydantic models for data validation (preferred for new code)
+- Favor composition over inheritance
+- Dependency injection
+- Single responsibility
+- Modularity
+- SOLID principles
 
 ### Testing Requirements
 
@@ -138,11 +143,11 @@ Modules follow Ansible's declarative state patterns:
 - Use `RequestVerb` enum from `plugins/module_utils/common/enums/http_requests.py` for HTTP methods
 - Implement proper logging using `plugins/module_utils/common/log_v2.py`
 - Follow existing module structure in `plugins/modules/`
-- Use dataclasses or Pydantic models for structured data
+- Use Pydantic models for structured data
 
 ### Version Compatibility
 
-- Support DCNM 11.4(1)+ and NDFC 12.0+
+- Support NDFC 12.0+
 - Ansible 2.15.0+ compatibility required
 - Python 3.x support
 
@@ -150,7 +155,6 @@ Modules follow Ansible's declarative state patterns:
 
 ### Current Focus Areas
 
-- VRF module Pydantic integration is in progress
 - Pay attention to `plugins/module_utils/vrf/` for latest patterns
 - Follow the model-based validation approach being implemented
 - **AVOID**: Do not reference or modify `dcnm_vrf_v11.py` - it is dead code
@@ -163,8 +167,6 @@ Modules follow Ansible's declarative state patterns:
 
 ### Common Issues
 
-- Long query strings in URLs may need special handling (see `vrf_utils.py`)
-- Controller API versioning differences between DCNM/NDFC
 - Pydantic validation errors need proper error message formatting
 
 ## Code Memory
