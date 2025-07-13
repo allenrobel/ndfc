@@ -5,26 +5,10 @@
 #
 # - A VXLAN_EVPN fabric
 #
-# switch_1
-#
-# - A vrf-lite capable switch
-#
-# switch_2
-#
-# - A vrf-lite capable switch
+# No switches are required
 #
 ##############################################
 
-##############################################
-##            OTHER REQUIREMENTS            ##
-##############################################
-#
-# 1. A SUBNET pool for 10.33.0.0/24 must be
-# allocated for the fabric_1.
-# THIS REQUIREMENT HAS BEEN TEMPORARILY
-# REMOVED BY NOT CHANGING THE ipv4_addr and
-# neighbor_ipv4 values in the VRF LITE payload.
-# TODO: Discuss with Mike.
 ##############################################
 
 ##############################################
@@ -36,8 +20,6 @@
     var: item
   with_items:
      - "fabric_1 : {{ fabric_1 }}"
-     - "switch_1 : {{ switch_1 }}"
-     - "switch_2 : {{ switch_2 }}"
 
 - name: Set task name
   ansible.builtin.set_fact:
@@ -71,17 +53,10 @@
     state: deleted
   register: result_setup_2
 
-- name: SETUP.2a - OVERRIDDEN - [wait_for] Wait 60 seconds for controller and switch to sync
-  # The vrf lite profile removal returns ok for deployment, but the switch
-  # takes time to remove the profile so wait for some time before creating
-  # a new vrf, else the switch goes into OUT-OF-SYNC state
-  wait_for:
-    timeout: 60
-  when: result_setup_2.changed == true
 
 - name: Set task name
   ansible.builtin.set_fact:
-    task_name: "SETUP.3 OVERRIDDEN - [merged] Create, Attach, Deploy VLAN+VRF ansible-vrf-int1"
+    task_name: "SETUP.3 OVERRIDDEN - [merged] Create VRF ansible-vrf-int1"
 
 - name: Log task
   cisco.dcnm.dcnm_log:
@@ -240,7 +215,7 @@
 
 - name: Set task name
   ansible.builtin.set_fact:
-    task_name: "TEST.2 - OVERRIDDEN - [merged] ansible-vrf-int2 to add vrf_lite extension to switch_2"
+    task_name: "TEST.2 - OVERRIDDEN - [merged] Create VRF ansible-vrf-int2"
 
 - name: Log task
   cisco.dcnm.dcnm_log:
@@ -258,13 +233,6 @@
       vlan_id: 1500
   register: result_2
 
-- name: TEST.2a - OVERRIDDEN - [wait_for] Wait 60 seconds for controller and switch to sync
-  # The vrf lite profile removal returns ok for deployment, but the switch
-  # takes time to remove the profile so wait for some time before creating
-  # a new vrf, else the switch goes into OUT-OF-SYNC state
-  wait_for:
-    timeout: 60
-  when: result_2.changed == true
 
 - name: Set task name
   ansible.builtin.set_fact:
@@ -299,7 +267,7 @@
 
 - name: Set task name
   ansible.builtin.set_fact:
-    task_name: "TEST.3 - OVERRIDDEN - [overridden] Override vrf_lite extension with new dot1q value"
+    task_name: "TEST.3 - OVERRIDDEN - [overridden] Override VRF ansible-vrf-int2"
 
 - name: Log task
   cisco.dcnm.dcnm_log:
@@ -317,40 +285,7 @@
       vlan_id: 1500
   register: result_3
 
-- name: TEST.3a - OVERRIDDEN - [wait_for] Wait 60 seconds for controller and switch to sync
-  # The vrf lite profile removal returns ok for deployment, but the switch
-  # takes time to remove the profile so wait for some time before creating
-  # a new vrf, else the switch goes into OUT-OF-SYNC state
-  wait_for:
-    timeout: 60
-  when: result_3.changed == true
 
-# In step TEST.3, NDFC issues an NX-OS CLI that immediately switches
-# from configure profile mode, to configure terminal; vrf context <vrf>.
-# This command results in FAILURE (switch accounting log).  Adding a
-# wait_for will not help since this all happens within step TEST.6.
-# A config-deploy resolves the OUT-OF-SYNC VRF status.
-# NOTE: this happens ONLY when Fabric Settings -> Advanced -> Overlay Mode
-# is set to "config-profile" (which is the default).  It does not happen
-# if Overlay Mode is set to "cli".
-- name: Set task name
-  ansible.builtin.set_fact:
-    task_name: "TEST.3b - OVERRIDDEN - [dcnm_rest.POST] - config-deploy to workaround FAILED/OUT-OF-SYNC VRF status"
-
-- name: Log task
-  cisco.dcnm.dcnm_log:
-    msg: "{{ task_name }}"
-
-- name: "{{ task_name }}"
-  cisco.dcnm.dcnm_rest:
-    method: POST
-    path: "/appcenter/cisco/ndfc/api/v1/lan-fabric/rest/control/fabrics/{{ fabric_1 }}/config-deploy?forceShowRun=false"
-  when: result_3.changed == true
-
-- name: TEST.3c - OVERRIDDEN - [wait_for] Wait 60 for vrfStatus == NA
-  wait_for:
-    timeout: 60
-  when: result_3.changed == true
 
 - name: Set task name
   ansible.builtin.set_fact:
@@ -405,7 +340,7 @@
 
 - name: Set task name
   ansible.builtin.set_fact:
-    task_name: "TEST.4 - OVERRIDDEN - [overridden] Override ansible-vrf-int2 to create ansible-vrf-int1 with LITE Extension"
+    task_name: "TEST.4 - OVERRIDDEN - [overridden] Override ansible-vrf-int2 to create ansible-vrf-int1"
 
 - name: Log task
   cisco.dcnm.dcnm_log:
@@ -423,13 +358,6 @@
       vlan_id: 500
   register: result_4
 
-- name: TEST.4a - OVERRIDDEN - [wait_for] Wait 60 seconds for controller and switch to sync
-  # The vrf lite profile removal returns ok for deployment, but the switch
-  # takes time to remove the profile so wait for some time before creating
-  # a new vrf, else the switch goes into OUT-OF-SYNC state
-  wait_for:
-    timeout: 60
-  when: result_4.changed == true
 
 - name: Set task name
   ansible.builtin.set_fact:
@@ -511,6 +439,3 @@
     fabric: "{{ fabric_1 }}"
     state: deleted
 
-- name: CLEANUP.2 - OVERRIDDEN - [wait_for] Wait 60 seconds for controller and switch to sync
-  wait_for:
-    timeout: 60

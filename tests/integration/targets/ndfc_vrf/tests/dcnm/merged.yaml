@@ -4,18 +4,7 @@
 # fabric_1
 # A VXLAN_EVPN fabric
 #
-# switch_1
-#
-# - A vrf-lite capable switch
-# - Does not require an interface.
-#
-# switch_2
-#
-# - A vrf-lite capable switch
-#
-# switch_3
-#
-# A NON-vrf-lite capable switch
+# No switches are required
 #
 ##############################################
 
@@ -36,9 +25,6 @@
     var: item
   with_items:
      - "fabric_1 : {{ fabric_1 }}"
-     - "switch_1 : {{ switch_1 }}"
-     - "switch_2 : {{ switch_2 }}"
-     - "switch_3 : {{ switch_3 }}"
 
 - name: SETUP.1 - MERGED - [dcnm_rest.GET] Verify fabric is deployed.
   cisco.dcnm.dcnm_rest:
@@ -66,7 +52,7 @@
 
 - name: Set task name
   ansible.builtin.set_fact:
-    task_name: "TEST.1 - MERGED - [merged] Create, Attach, Deploy VLAN(600)+VRF ansible-vrf-int1"
+    task_name: "TEST.1 - MERGED - [merged] Create VRF ansible-vrf-int1 with VLAN 600"
 
 - name: Log task
   cisco.dcnm.dcnm_log:
@@ -148,17 +134,10 @@
     state: deleted
   register: result_1e
 
-- name: TEST.1f - MERGED - [wait_for] Wait 60 seconds for controller and switch to sync
-  # The vrf lite profile removal returns ok for deployment, but the switch
-  # takes time to remove the profile so wait for some time before creating
-  # a new vrf, else the switch goes into OUT-OF-SYNC state
-  wait_for:
-    timeout: 60
-  when: result_1e.changed == true
 
 - name: Set task name
   ansible.builtin.set_fact:
-    task_name: "TEST.2 - MERGED - [merged] Create, Attach, Deploy VLAN+VRF (controller provided VLAN)"
+    task_name: "TEST.2 - MERGED - [merged] Create VRF with controller provided VLAN"
 
 - name: Log task
   cisco.dcnm.dcnm_log:
@@ -237,11 +216,6 @@
     fabric: "{{ fabric_1 }}"
     state: deleted
 
-- name: TEST.2f - MERGED - [wait_for] Wait 60 seconds for controller and switch to sync
-  # While vrf-lite extension was not configured above, we still hit VRF
-  # OUT-OF-SYNC. Let's see if waiting helps here too.
-  wait_for:
-    timeout: 60
 
 - name: Set task name
   ansible.builtin.set_fact:
@@ -326,12 +300,6 @@
     fabric: "{{ fabric_1 }}"
     state: deleted
 
-- name: TEST.3f - MERGED - Wait 60 seconds for controller and switch to sync
-  # The vrf lite profile removal returns ok for deployment, but the switch
-  # takes time to remove the profile so wait for some time before creating
-  # a new vrf, else the switch goes into OUT-OF-SYNC state
-  wait_for:
-    timeout: 60
 
 
 - name: Set task name

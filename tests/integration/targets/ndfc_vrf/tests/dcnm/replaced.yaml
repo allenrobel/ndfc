@@ -5,14 +5,7 @@
 #
 # - A VXLAN_EVPN fabric
 #
-# switch_1
-#
-# - A vrf-lite capable switch
-# - Does not require an interface
-#
-# switch_2
-#
-# - A vrf-lite capable switch
+# No switches are required
 #
 ##############################################
 
@@ -25,16 +18,12 @@
     var: item
   with_items:
      - "fabric_1 : {{ fabric_1 }}"
-     - "switch_1 : {{ switch_1 }}"
-     - "switch_2 : {{ switch_2 }}"
 
 - name: SETUP.0b - REPLACED - [with_items] log vars
   cisco.dcnm.dcnm_log:
     msg: "{{ item }}"
   with_items:
      - "fabric_1 : {{ fabric_1 }}"
-     - "switch_1 : {{ switch_1 }}"
-     - "switch_2 : {{ switch_2 }}"
 
 - name: Set task name
   ansible.builtin.set_fact:
