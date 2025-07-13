@@ -49,7 +49,7 @@
   cisco.ndfc.ndfc_vrf:
     state: deleted
     config:
-      fabric: "{{ fabric_1 }}"
+    - fabric: "{{ fabric_1 }}"
   register: result_setup_2
 
 
@@ -63,10 +63,10 @@
 
 - name: "{{ task_name }}"
   cisco.ndfc.ndfc_vrf:
-    fabric: "{{ fabric_1 }}"
     state: merged
     config:
-    - vrf_name: vrf1
+    - fabric: "{{ fabric_1 }}"
+      vrf_name: vrf1
       vrf_id: 9008011
       vrf_template: Default_VRF_Universal
       vrf_extension_template: Default_VRF_Extension_Universal
@@ -187,7 +187,7 @@
   cisco.ndfc.ndfc_vrf:
     state: query
     config:
-      fabric: "{{ fabric_1 }}"
+    - fabric: "{{ fabric_1 }}"
   register: result_2a
   until:
     - "result_2a.response[0].vrfStatus is search('NA')"
@@ -304,5 +304,5 @@
   cisco.ndfc.ndfc_vrf:
     state: deleted
     config:
-      fabric: "{{ fabric_1 }}"
+    - fabric: "{{ fabric_1 }}"
 
