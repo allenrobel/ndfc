@@ -42,6 +42,12 @@ class VrfApi:
         self.rest_send.sender = self.sender
         self.rest_send.response_handler = self.response_handler
 
+        # Configure non-retryable response codes for VRF operations
+        # 400: Bad Request - Invalid parameters won't improve with retries
+        # 404: Not Found - Definitive response for existence checks
+        # 409: Conflict - Resource already exists or conflicts with current state
+        self.rest_send.non_retryable_codes = {400, 404, 409}
+
     def _execute_request(self, verb: str, path: str, payload: Optional[dict[str, Any]] = None) -> tuple[bool, dict[str, Any]]:
         """Execute a REST request using RestSend."""
         try:

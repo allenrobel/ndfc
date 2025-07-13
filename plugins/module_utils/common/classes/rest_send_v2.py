@@ -133,6 +133,7 @@ class RestSend:
         self._timeout = 300
         self._unit_test = False
         self._verb = None
+        self._non_retryable_codes = set()
 
         # See save_settings() and restore_settings()
         self.saved_timeout = None
@@ -411,6 +412,16 @@ class RestSend:
             self.log.debug(msg)
 
             success = self.result_current["success"]
+
+            # Check if response code is non-retryable
+            response_code = self.response_current.get("RETURN_CODE")
+            if response_code in self.non_retryable_codes:
+                msg = f"{self.class_name}.{method_name}: "
+                msg += f"caller: {caller}. "
+                msg += f"Response code {response_code} is non-retryable. Exiting retry loop."
+                self.log.debug(msg)
+                break
+
             if success is False and self.unit_test is False:
                 sleep(self.send_interval)
 
@@ -841,3 +852,59 @@ class RestSend:
         if value not in self._valid_verbs:
             raise ValueError(msg)
         self._verb = value
+
+    @property
+    def non_retryable_codes(self):
+        """
+        ### Summary
+        Set of HTTP response codes that should not be retried.
+
+        When the controller returns one of these response codes, the retry loop
+        will exit immediately instead of retrying until timeout.
+
+        This is useful for responses that are definitive (e.g., 404 "Not Found",
+        400 "Bad Request") where retrying won't change the outcome.
+
+        ### Raises
+        -   setter: ``TypeError`` if value is not a set, list, or tuple
+        -   setter: ``TypeError`` if any code in the collection is not an integer
+
+        ### Default
+        Empty set (no codes are non-retryable by default)
+
+        ### getter
+        Returns a copy of the non-retryable codes set
+
+        ### setter
+        Sets the non-retryable codes. Accepts set, list, or tuple of integers.
+
+        ### Example Usage
+        ```python
+        rest_send = RestSend(params)
+        # Make 404 and 400 responses non-retryable for existence checks
+        rest_send.non_retryable_codes = {400, 404}
+        ```
+        """
+        return self._non_retryable_codes.copy()
+
+    @non_retryable_codes.setter
+    def non_retryable_codes(self, value):
+        method_name = inspect.stack()[0][3]
+
+        # Accept set, list, or tuple
+        if not isinstance(value, (set, list, tuple)):
+            msg = f"{self.class_name}.{method_name}: "
+            msg += f"{method_name} must be a set, list, or tuple. "
+            msg += f"Got type {type(value).__name__}, value {value}."
+            raise TypeError(msg)
+
+        # Validate all codes are integers
+        for code in value:
+            if not isinstance(code, int) or isinstance(code, bool):
+                msg = f"{self.class_name}.{method_name}: "
+                msg += "All response codes must be integers. "
+                msg += f"Got type {type(code).__name__}, value {code}."
+                raise TypeError(msg)
+
+        # Convert to set for efficient lookup
+        self._non_retryable_codes = set(value)
