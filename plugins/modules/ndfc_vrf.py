@@ -34,8 +34,10 @@ options:
   config:
     description:
       - List of VRF configurations
+      - Required for all states to specify at least the fabric
     type: list
     elements: dict
+    required: true
     suboptions:
       fabric:
         description:
@@ -138,7 +140,7 @@ notes:
   - |
     Required fields vary by state:
     - deleted: config with fabric required (vrf_name optional - if omitted, deletes all VRFs in fabric)
-    - query: no config required (returns all VRFs), or config with fabric (others optional for filtering)
+    - query: config with fabric required (vrf_name optional for filtering specific VRF)
     - merged: config with fabric, vrf_name, vrf_template_config (vrf_id optional, auto-assigned)
     - replaced/overridden: config with fabric, vrf_name, vrf_id, vrf_template_config
 """
@@ -179,20 +181,20 @@ EXAMPLES = r"""
     config:
       - fabric: "fabric1"
 
-# Query all VRFs in fabric (only fabric required)
+# Query all VRFs in fabric (fabric required)
 - name: Query all VRFs in fabric
   nexus_vrf:
+    state: query
     config:
       - fabric: "fabric1"
-    state: query
 
-# Query specific VRF (fabric required, others optional for filtering)
+# Query specific VRF (fabric required, vrf_name optional for filtering)
 - name: Query specific VRF
   nexus_vrf:
+    state: query
     config:
       - fabric: "fabric1"
         vrf_name: "test_vrf"
-    state: query
 
 # Replace VRF with updated configuration
 - name: Replace VRF with updated template config
@@ -351,9 +353,9 @@ def validate_parameters(module: AnsibleModule) -> tuple[list[Any], AnsibleStates
         # Validate state
         ansible_state = AnsibleStates(state)
 
-        # For most states, config is required
-        if not config and ansible_state not in [AnsibleStates.QUERY]:
-            module.fail_json(msg="config parameter is required for this state")
+        # Config is required for all states
+        if not config:
+            module.fail_json(msg="config parameter is required for all states")
 
         # Validate configurations if provided
         validated_configs = []
@@ -378,7 +380,7 @@ def main():
         "config": {
             "type": "list",
             "elements": "dict",
-            "required": False,
+            "required": True,
             "options": {
                 "fabric": {
                     "type": "str",

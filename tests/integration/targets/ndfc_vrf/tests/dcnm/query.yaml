@@ -140,10 +140,11 @@
     - result_1.response[0].parent.vrfName == "ansible-vrf-int1"
     - result_1.response[0].parent.vrfStatus == "DEPLOYED"
 
-- name: TEST.2 - QUERY - [query] Query all VRFs in fabric (no config)
+- name: TEST.2 - QUERY - [query] Query all VRFs in fabric
   cisco.ndfc.ndfc_vrf:
-    fabric: "{{ fabric_1 }}"
     state: query
+    config:
+      - fabric: "{{ fabric_1 }}"
   register: result_2
 
 - name: TEST.2a - QUERY - [debug] print result_2
@@ -186,8 +187,9 @@
 
 - name: TEST.4 - QUERY - [query] Query all VRFs - should return both VRFs
   cisco.ndfc.ndfc_vrf:
-    fabric: "{{ fabric_1 }}"
     state: query
+    config:
+      - fabric: "{{ fabric_1 }}"
   register: result_4
 
 - name: TEST.4a - QUERY - [debug] print result_4
@@ -203,10 +205,10 @@
 
 - name: TEST.5 - QUERY - [query] Query specific VRF with filtering parameters
   cisco.ndfc.ndfc_vrf:
-    fabric: "{{ fabric_1 }}"
     state: query
     config:
-    - vrf_name: ansible-vrf-int2
+    - fabric: "{{ fabric_1 }}"
+      vrf_name: ansible-vrf-int2
       vrf_id: 9008012
       vrf_template: Default_VRF_Universal
       vrf_extension_template: Default_VRF_Extension_Universal
@@ -232,10 +234,10 @@
 
 - name: TEST.6 - QUERY - [query] Query non-existent VRF
   cisco.ndfc.ndfc_vrf:
-    fabric: "{{ fabric_1 }}"
     state: query
     config:
-      - vrf_name: non-existent-vrf
+      - fabric: "{{ fabric_1 }}"
+        vrf_name: non-existent-vrf
   register: result_6
 
 - name: TEST.6a - QUERY - [debug] print result_6
@@ -270,8 +272,9 @@
 
 - name: TEST.8 - QUERY - [query] Verify only one VRF remains
   cisco.ndfc.ndfc_vrf:
-    fabric: "{{ fabric_1 }}"
     state: query
+    config:
+      - fabric: "{{ fabric_1 }}"
   register: result_8
 
 - name: TEST.8a - QUERY - [debug] print result_8
