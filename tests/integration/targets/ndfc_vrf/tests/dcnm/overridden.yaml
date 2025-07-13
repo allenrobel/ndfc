@@ -113,7 +113,7 @@
 
 - name: Set task name
   ansible.builtin.set_fact:
-    task_name: "SETUP.4 OVERRIDDEN - [query] Wait for vrfStatus == DEPLOYED"
+    task_name: "SETUP.4 OVERRIDDEN - [query] Wait for vrfStatus == NA"
 
 - name: Log task
   cisco.dcnm.dcnm_log:
@@ -125,7 +125,7 @@
     state: query
   register: result_setup_4
   until:
-    - "result_setup_4.response[0].vrfStatus is search('DEPLOYED')"
+    - "result_setup_4.response[0].vrfStatus is search('NA')"
   retries: 30
   delay: 2
 
@@ -166,7 +166,7 @@
 
 - name: Set task name
   ansible.builtin.set_fact:
-    task_name: "TEST.1a - OVERRIDDEN - [query] Wait for vrfStatus == DEPLOYED"
+    task_name: "TEST.1a - OVERRIDDEN - [query] Wait for vrfStatus == NA"
 
 - name: Log task
   cisco.dcnm.dcnm_log:
@@ -178,7 +178,7 @@
     state: query
   register: result_1a
   until:
-    - "result_1a.response[0].vrfStatus is search('DEPLOYED')"
+    - "result_1a.response[0].vrfStatus is search('NA')"
   retries: 30
   delay: 2
 
@@ -276,7 +276,7 @@
 
 - name: Set task name
   ansible.builtin.set_fact:
-    task_name: "TEST.2b - OVERRIDDEN - [query] Wait for vrfStatus == DEPLOYED"
+    task_name: "TEST.2b - OVERRIDDEN - [query] Wait for vrfStatus == NA"
 
 - name: Log task
   cisco.dcnm.dcnm_log:
@@ -288,7 +288,7 @@
     state: query
   register: result_2b
   until:
-    - "result_2b.response[0].vrfStatus is search('DEPLOYED')"
+    - "result_2b.response[0].vrfStatus is search('NA')"
   retries: 30
   delay: 2
 
@@ -355,14 +355,14 @@
     path: "/appcenter/cisco/ndfc/api/v1/lan-fabric/rest/control/fabrics/{{ fabric_1 }}/config-deploy?forceShowRun=false"
   when: result_3.changed == true
 
-- name: TEST.3c - OVERRIDDEN - [wait_for] Wait 60 for vrfStatus == DEPLOYED
+- name: TEST.3c - OVERRIDDEN - [wait_for] Wait 60 for vrfStatus == NA
   wait_for:
     timeout: 60
   when: result_3.changed == true
 
 - name: Set task name
   ansible.builtin.set_fact:
-    task_name: "TEST.3d - OVERRIDDEN - [query] Wait for vrfStatus == DEPLOYED"
+    task_name: "TEST.3d - OVERRIDDEN - [query] Wait for vrfStatus == NA"
 
 - name: Log task
   cisco.dcnm.dcnm_log:
@@ -374,7 +374,7 @@
     state: query
   register: result_3d
   until:
-    - "result_3d.response[0].vrfStatus is search('DEPLOYED')"
+    - "result_3d.response[0].vrfStatus is search('NA')"
   retries: 30
   delay: 2
 
@@ -441,7 +441,7 @@
 
 - name: Set task name
   ansible.builtin.set_fact:
-    task_name: "TEST.4b - OVERRIDDEN - [query] Wait for vrfStatus == DEPLOYED"
+    task_name: "TEST.4b - OVERRIDDEN - [query] Wait for vrfStatus == NA"
 
 - name: Log task
   cisco.dcnm.dcnm_log:
@@ -453,7 +453,7 @@
     state: query
   register: result_4b
   until:
-    - "result_4b.response[0].vrfStatus is search('DEPLOYED')"
+    - "result_4b.response[0].vrfStatus is search('NA')"
   retries: 30
   delay: 2
 

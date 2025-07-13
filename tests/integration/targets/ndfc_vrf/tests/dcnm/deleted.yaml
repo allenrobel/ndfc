@@ -89,13 +89,13 @@
       vlan_id: 500
   register: result_setup_3
 
-- name: SETUP.4 - DELETED - [query] Wait for vrfStatus == DEPLOYED
+- name: SETUP.4 - DELETED - [query] Wait for vrfStatus == NA
   cisco.ndfc.ndfc_vrf:
     fabric: "{{ fabric_1 }}"
     state: query
   register: result_setup_4
   until:
-    - "result_setup_4.response[0].vrfStatus is search('DEPLOYED')"
+    - "result_setup_4.response[0].vrfStatus is search('NA')"
   retries: 30
   delay: 2
 
@@ -193,7 +193,7 @@
 
 - name: Set task name
   ansible.builtin.set_fact:
-    task_name: "TEST.2a - DELETED - [query] Wait for vrfStatus == DEPLOYED"
+    task_name: "TEST.2a - DELETED - [query] Wait for vrfStatus == NA"
 
 - name: Log task
   cisco.dcnm.dcnm_log:
@@ -205,7 +205,7 @@
     state: query
   register: result_2a
   until:
-    - "result_2a.response[0].vrfStatus is search('DEPLOYED')"
+    - "result_2a.response[0].vrfStatus is search('NA')"
   retries: 30
   delay: 2
 
@@ -302,7 +302,7 @@
 
 - name: Set task name
   ansible.builtin.set_fact:
-    task_name: "TEST.3a - DELETED - [query] Wait for vrfStatus == DEPLOYED"
+    task_name: "TEST.3a - DELETED - [query] Wait for vrfStatus == NA"
 
 - name: Log task
   cisco.dcnm.dcnm_log:
@@ -314,7 +314,7 @@
     state: query
   register: result_3a
   until:
-    - "result_3a.response[0].vrfStatus is search('DEPLOYED')"
+    - "result_3a.response[0].vrfStatus is search('NA')"
   retries: 30
   delay: 2
 
