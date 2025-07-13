@@ -25,7 +25,6 @@ class DeletedVrfConfig(BaseVrfConfig):
     """VRF configuration model for deleted state (fabric required, vrf_name optional)."""
 
     vrf_name: Optional[str] = Field(default=None, min_length=1, max_length=32)
-    deploy: bool = Field(default=True)
 
     def to_vrf_config(self) -> VrfConfig:
         """Convert to main VrfConfig model with sensible defaults."""
@@ -34,7 +33,6 @@ class DeletedVrfConfig(BaseVrfConfig):
             vrf_name=self.vrf_name or "",  # Empty string when deleting all VRFs in fabric
             vrf_id=0,  # Default for deleted operations
             vrf_template_config=VrfTemplateConfig(),  # Default empty config for deleted operations
-            deploy=self.deploy,
         )
 
 
@@ -70,7 +68,6 @@ class MergedVrfConfig(BaseVrfConfig):
     vrf_template_config: VrfTemplateConfig = Field(...)
     vrf_extension_template: str = Field(default=VrfTemplates.DEFAULT_VRF_EXTENSION_UNIVERSAL.value)
     service_vrf_template: Optional[ServiceVrfTemplateConfig] = Field(default=None)
-    deploy: bool = Field(default=True)
 
     def to_vrf_config(self) -> VrfConfig:
         """Convert to main VrfConfig model."""
@@ -82,7 +79,6 @@ class MergedVrfConfig(BaseVrfConfig):
             vrf_template_config=self.vrf_template_config,
             vrf_extension_template=self.vrf_extension_template,
             service_vrf_template=self.service_vrf_template,
-            deploy=self.deploy,
         )
 
 
@@ -95,7 +91,6 @@ class ReplacedVrfConfig(BaseVrfConfig):
     vrf_template_config: VrfTemplateConfig = Field(...)
     vrf_extension_template: str = Field(default=VrfTemplates.DEFAULT_VRF_EXTENSION_UNIVERSAL.value)
     service_vrf_template: Optional[ServiceVrfTemplateConfig] = Field(default=None)
-    deploy: bool = Field(default=True)
 
     def to_vrf_config(self) -> VrfConfig:
         """Convert to main VrfConfig model."""
@@ -107,7 +102,6 @@ class ReplacedVrfConfig(BaseVrfConfig):
             vrf_template_config=self.vrf_template_config,
             vrf_extension_template=self.vrf_extension_template,
             service_vrf_template=self.service_vrf_template,
-            deploy=self.deploy,
         )
 
 

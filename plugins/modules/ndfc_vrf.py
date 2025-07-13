@@ -74,14 +74,6 @@ options:
           - Dictionary containing service VRF template configuration
           - Validation handled by state-specific models
         type: dict
-      deploy:
-        description:
-          - Whether to deploy the configuration to switches immediately
-          - If true, configuration is deployed to switches
-          - If false, configuration is saved but not deployed
-          - Not used for query state
-        type: bool
-        default: true
   state:
     description:
       - The state of the VRF configuration
@@ -109,7 +101,7 @@ notes:
 """
 
 EXAMPLES = r"""
-# Create or update a VRF (deploys immediately by default)
+# Create or update a VRF
 - name: Create VRF
   nexus_vrf:
     config:
@@ -120,20 +112,6 @@ EXAMPLES = r"""
           vrfSegmentId: 12345
           vrfVlanId: 100
           mtu: 9216
-    state: merged
-
-# Create VRF but don't deploy to switches yet
-- name: Create VRF without deployment
-  nexus_vrf:
-    config:
-      - fabric: "fabric1"
-        vrf_name: "staging_vrf"
-        vrf_id: 12346
-        vrf_template_config:
-          vrfSegmentId: 12346
-          vrfVlanId: 101
-          mtu: 9216
-        deploy: false
     state: merged
 
 # Delete specific VRF
@@ -149,15 +127,6 @@ EXAMPLES = r"""
   nexus_vrf:
     config:
       - fabric: "fabric1"
-    state: deleted
-
-# Delete VRF without deploying changes immediately
-- name: Delete VRF staged
-  nexus_vrf:
-    config:
-      - fabric: "fabric1"
-        vrf_name: "test_vrf"
-        deploy: false
     state: deleted
 
 # Query all VRFs in fabric (only fabric required)
