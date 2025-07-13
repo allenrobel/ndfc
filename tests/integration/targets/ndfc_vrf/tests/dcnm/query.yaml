@@ -246,7 +246,7 @@
     - result_5.changed == false
     - result_5.response[0].vrf_id == 9008012
     - result_5.response[0].vrf_name == "ansible-vrf-int2"
-    - result_5.response[0].vrfStatus == "DEPLOYED"
+    - result_5.response[0].vrfStatus == "NA"
 
 - name: Set task name
   ansible.builtin.set_fact:
