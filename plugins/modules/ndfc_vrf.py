@@ -314,6 +314,47 @@ def main():
                     "type": "str",
                     "required": True,
                 },
+                "vrf_name": {
+                    "type": "str",
+                    "required": False,
+                },
+                "vrf_id": {
+                    "type": "int",
+                    "required": False,
+                },
+                "vrf_template": {
+                    "type": "str",
+                    "required": False,
+                },
+                "vrf_template_config": {
+                    "type": "dict",
+                    "required": False,
+                },
+                "vrf_extension_template": {
+                    "type": "str",
+                    "required": False,
+                },
+                "service_vrf_template": {
+                    "type": "dict",
+                    "required": False,
+                },
+                # Allow additional fields that might be in template configs
+                "vlan_id": {
+                    "type": "int",
+                    "required": False,
+                },
+                "vrfSegmentId": {
+                    "type": "int",
+                    "required": False,
+                },
+                "vrfVlanId": {
+                    "type": "int",
+                    "required": False,
+                },
+                "mtu": {
+                    "type": "int",
+                    "required": False,
+                },
             },
         },
         "state": {
