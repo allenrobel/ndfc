@@ -208,8 +208,8 @@
     that:
     - result_4.changed == false
     - result_4.response|length == 2
-    - '"ansible-vrf-int1" in (result_4.response | map(attribute="parent.vrfName") | list)'
-    - '"ansible-vrf-int2" in (result_4.response | map(attribute="parent.vrfName") | list)'
+    - '"ansible-vrf-int1" in (result_4.response | map(attribute="vrf_name") | list)'
+    - '"ansible-vrf-int2" in (result_4.response | map(attribute="vrf_name") | list)'
 
 - name: Set task name
   ansible.builtin.set_fact:
@@ -244,9 +244,9 @@
 - assert:
     that:
     - result_5.changed == false
-    - result_5.response[0].parent.vrfId == 9008012
-    - result_5.response[0].parent.vrfName == "ansible-vrf-int2"
-    - result_5.response[0].parent.vrfStatus == "DEPLOYED"
+    - result_5.response[0].vrf_id == 9008012
+    - result_5.response[0].vrf_name == "ansible-vrf-int2"
+    - result_5.response[0].vrfStatus == "DEPLOYED"
 
 - name: Set task name
   ansible.builtin.set_fact:
@@ -321,7 +321,7 @@
     that:
     - result_8.changed == false
     - result_8.response|length == 1
-    - result_8.response[0].parent.vrfName == "ansible-vrf-int2"
+    - result_8.response[0].vrf_Name == "ansible-vrf-int2"
 
 ###############################################
 ###                 CLEAN-UP                 ##
@@ -341,14 +341,14 @@
     config:
       - fabric: "{{ fabric_1 }}"
 
-- name: Set task name
-  ansible.builtin.set_fact:
-    task_name: "CLEANUP.2 - QUERY - [wait_for] Wait 60 seconds for controller and switch to sync."
+# - name: Set task name
+#   ansible.builtin.set_fact:
+#     task_name: "CLEANUP.2 - QUERY - [wait_for] Wait 60 seconds for controller and switch to sync."
 
-- name: Log task
-  cisco.dcnm.dcnm_log:
-    msg: "{{ task_name }}"
+# - name: Log task
+#   cisco.dcnm.dcnm_log:
+#     msg: "{{ task_name }}"
 
-- name: "{{ task_name }}"
-  wait_for:
-    timeout: 60
+# - name: "{{ task_name }}"
+#   wait_for:
+#     timeout: 60
