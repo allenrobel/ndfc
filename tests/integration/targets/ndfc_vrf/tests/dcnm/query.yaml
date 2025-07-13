@@ -296,7 +296,7 @@
 - assert:
     that:
     - result_7.changed == true
-    - result_7.response[1].MESSAGE == "OK"
+    - result_7.response[0].MESSAGE == "OK"
 
 - name: Set task name
   ansible.builtin.set_fact:
@@ -340,15 +340,3 @@
     state: deleted
     config:
       - fabric: "{{ fabric_1 }}"
-
-# - name: Set task name
-#   ansible.builtin.set_fact:
-#     task_name: "CLEANUP.2 - QUERY - [wait_for] Wait 60 seconds for controller and switch to sync."
-
-# - name: Log task
-#   cisco.dcnm.dcnm_log:
-#     msg: "{{ task_name }}"
-
-# - name: "{{ task_name }}"
-#   wait_for:
-#     timeout: 60
