@@ -70,7 +70,7 @@
       vrf_id: 9008011
       vrf_template: Default_VRF_Universal
       vrf_extension_template: Default_VRF_Extension_Universal
-      vrf_config_template:
+      vrf_template_config:
         vrf_segment_id: 9008011
         vrf_vlan_id: 500
         mtu: 9216
@@ -172,7 +172,7 @@
       vrf_id: 9008011
       vrf_template: Default_VRF_Universal
       vrf_extension_template: Default_VRF_Extension_Universal
-      vrf_config_template:
+      vrf_template_config:
         vrf_segment_id: 9008011
         vrf_vlan_id: 501
         mtu: 9216
@@ -184,7 +184,7 @@
       vrf_id: 9008012
       vrf_template: Default_VRF_Universal
       vrf_extension_template: Default_VRF_Extension_Universal
-      vrf_config_template:
+      vrf_template_config:
         vrf_segment_id: 9008012
         vrf_vlan_id: 502
         mtu: 9216
