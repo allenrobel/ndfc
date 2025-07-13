@@ -52,7 +52,6 @@
     - fabric: "{{ fabric_1 }}"
   register: result_setup_2
 
-
 - name: Set task name
   ansible.builtin.set_fact:
     task_name: "SETUP.3 - DELETED - [merged] Create VRF vrf1"
@@ -79,7 +78,15 @@
         tag: 12345
   register: result_setup_3
 
-- name: SETUP.4 - DELETED - [query] Wait for vrfStatus == NA
+- name: Set task name
+  ansible.builtin.set_fact:
+    task_name: "SETUP.4 - DELETED - [query] Wait for vrfStatus == NA."
+
+- name: Log task
+  cisco.dcnm.dcnm_log:
+    msg: "{{ task_name }}"
+
+- name: "{{ task_name }}"
   cisco.ndfc.ndfc_vrf:
     state: query
     config:
