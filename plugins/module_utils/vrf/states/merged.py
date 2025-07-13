@@ -22,6 +22,7 @@ class Merged(BaseState):
         created_vrfs = []
         updated_vrfs = []
         errors = []
+        api_responses = []
 
         for config in configs:
             exists, current_vrf = self._vrf_exists(config.fabric, config.vrf_name)
@@ -31,13 +32,21 @@ class Merged(BaseState):
             if exists:
                 # Update if different
                 if not self._vrfs_equal(current_vrf, config):
-                    self._execute_vrf_operation(config, "update", created_vrfs, updated_vrfs, errors)
+                    response_data = self._execute_vrf_operation_with_response(config, "update", created_vrfs, updated_vrfs, errors)
+                    if response_data:
+                        api_responses.append(response_data)
                 # If VRF exists and is identical, no action needed (idempotent)
             else:
                 # Create new VRF
-                self._execute_vrf_operation(config, "create", created_vrfs, updated_vrfs, errors)
+                response_data = self._execute_vrf_operation_with_response(config, "create", created_vrfs, updated_vrfs, errors)
+                if response_data:
+                    api_responses.append(response_data)
 
-        # Finalize result
+        # Finalize result with API responses
         self._finalize_result(created_vrfs, updated_vrfs, [], errors)
+
+        # Set response data for successful operations
+        if api_responses:
+            self.result.response = api_responses
 
         return self.result

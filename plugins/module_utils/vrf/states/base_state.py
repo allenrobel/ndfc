@@ -163,3 +163,30 @@ class BaseState(ABC):
         elif operation_type == "update":
             success, response = self.api_client.update_vrf(config.to_payload())
             self._handle_api_response(success, response, config.vrf_name, "update", updated_vrfs, errors)
+
+    # pylint: disable=too-many-arguments,too-many-positional-arguments
+    def _execute_vrf_operation_with_response(
+        self, config: VrfConfig, operation_type: str, created_vrfs: list[str], updated_vrfs: list[str], errors: list[str]
+    ) -> Optional[dict[str, Any]]:
+        """
+        Execute create or update operation for a VRF and return the API response.
+
+        Args:
+            config: VRF configuration
+            operation_type: 'create' or 'update'
+            created_vrfs: List to append created VRF names to
+            updated_vrfs: List to append updated VRF names to
+            errors: List to append error messages to
+
+        Returns:
+            API response data if successful, None if failed
+        """
+        if operation_type == "create":
+            success, response = self.api_client.create_vrf(config.to_payload())
+            if self._handle_api_response(success, response, config.vrf_name, "create", created_vrfs, errors):
+                return response
+        elif operation_type == "update":
+            success, response = self.api_client.update_vrf(config.to_payload())
+            if self._handle_api_response(success, response, config.vrf_name, "update", updated_vrfs, errors):
+                return response
+        return None

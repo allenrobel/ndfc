@@ -60,10 +60,14 @@ class VrfApi:
             self.rest_send.commit()
             result = self.rest_send.result_current
 
+            # Include raw controller response for modules that need RETURN_CODE, etc.
+            raw_response = self.rest_send.response_current
+
             if result.get("success", False):
-                return True, result
+                # Return both processed result and raw controller response
+                return True, {"result": result, "response": raw_response}
             else:
-                return False, {"error": result.get("error", "Request failed")}
+                return False, {"error": result.get("error", "Request failed"), "response": raw_response}
 
         except (TypeError, ValueError) as e:
             return False, {"error": f"Request error: {str(e)}"}
@@ -75,12 +79,12 @@ class VrfApi:
         path = f"{self.base_path}/{fabric}/vrfs/{vrf_name}"
         success, response = self._execute_request("GET", path)
 
-        if success and response.get("response"):
+        if success and response.get("result", {}).get("response"):
             try:
-                validated_response = VrfValidator.validate_response(response["response"])
+                validated_response = VrfValidator.validate_response(response["result"]["response"])
                 return validated_response.model_dump()
             except ValueError:
-                return response["response"]
+                return response["result"]["response"]
         return None
 
     def _fetch_all_vrfs(self, fabric: str) -> dict[str, dict[str, Any]]:
@@ -89,8 +93,8 @@ class VrfApi:
         success, response = self._execute_request("GET", path)
 
         result = {}
-        if success and response.get("response"):
-            response_data = response["response"]
+        if success and response.get("result", {}).get("response"):
+            response_data = response["result"]["response"]
 
             if isinstance(response_data, list):
                 for vrf_data in response_data:
@@ -136,17 +140,12 @@ class VrfApi:
 
         if success:
             # Update cache after successful creation
-            response_data = response.get("response", payload)
-            self._cached_service.update_cache_after_create(vrf_payload.fabric, vrf_payload.vrf_name, response_data)
+            if response.get("result", {}).get("response"):
+                response_data = response["result"]["response"]
+                self._cached_service.update_cache_after_create(vrf_payload.fabric, vrf_payload.vrf_name, response_data)
 
-            if response.get("response"):
-                try:
-                    validated_response = VrfValidator.validate_response(response["response"])
-                    return True, {"response": validated_response.model_dump()}
-                except ValueError:
-                    return True, {"response": response["response"]}
-            else:
-                return True, {"response": "VRF created successfully"}
+            # Return the raw controller response with RETURN_CODE for module tests
+            return True, response.get("response", {})
         else:
             return False, response
 
@@ -159,7 +158,8 @@ class VrfApi:
         if success:
             # Update cache after successful deletion
             self._cached_service.update_cache_after_delete(fabric, vrf_name)
-            return True, {"response": "VRF deleted successfully"}
+            # Return the raw controller response with RETURN_CODE for module tests
+            return True, response.get("response", {})
         else:
             return False, response
 
@@ -172,17 +172,12 @@ class VrfApi:
 
         if success:
             # Update cache after successful update
-            response_data = response.get("response", payload)
-            self._cached_service.update_cache_after_update(vrf_payload.fabric, vrf_payload.vrf_name, response_data)
+            if response.get("result", {}).get("response"):
+                response_data = response["result"]["response"]
+                self._cached_service.update_cache_after_update(vrf_payload.fabric, vrf_payload.vrf_name, response_data)
 
-            if response.get("response"):
-                try:
-                    validated_response = VrfValidator.validate_response(response["response"])
-                    return True, {"response": validated_response.model_dump()}
-                except ValueError:
-                    return True, {"response": response["response"]}
-            else:
-                return True, {"response": "VRF updated successfully"}
+            # Return the raw controller response with RETURN_CODE for module tests
+            return True, response.get("response", {})
         else:
             return False, response
 
