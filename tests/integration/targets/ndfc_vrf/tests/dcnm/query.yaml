@@ -136,9 +136,9 @@
 - assert:
     that:
     - result_1.changed == false
-    - result_1.response[0].parent.vrfId == 9008011
-    - result_1.response[0].parent.vrfName == "ansible-vrf-int1"
-    - result_1.response[0].parent.vrfStatus == "DEPLOYED"
+    - result_1.response[0].vrf_id == 9008011
+    - result_1.response[0].vrf_name == "ansible-vrf-int1"
+    - result_1.response[0].vrfStatus == "NA"
 
 - name: TEST.2 - QUERY - [query] Query all VRFs in fabric
   cisco.ndfc.ndfc_vrf:
@@ -154,9 +154,9 @@
 - assert:
     that:
     - result_2.changed == false
-    - result_2.response[0].parent.vrfId == 9008011
-    - result_2.response[0].parent.vrfName == "ansible-vrf-int1"
-    - result_2.response[0].parent.vrfStatus == "DEPLOYED"
+    - result_2.response[0].vrf_id == 9008011
+    - result_2.response[0].vrf_name == "ansible-vrf-int1"
+    - result_2.response[0].vrfStatus == "NA"
 
 - name: TEST.3 - QUERY - [merged] Create second VRF ansible-vrf-int2
   cisco.ndfc.ndfc_vrf:
