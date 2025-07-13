@@ -22,20 +22,28 @@ class Overridden(BaseState):
         updated_vrfs = []
         deleted_vrfs = []
         errors = []
+        api_responses = []
 
         # Delete VRFs not in desired configuration
-        self._delete_unwanted_vrfs(configs, deleted_vrfs, errors)
+        delete_responses = self._delete_unwanted_vrfs(configs, deleted_vrfs, errors)
+        api_responses.extend(delete_responses)
 
         # Create/update desired VRFs
-        self._process_desired_vrfs(configs, created_vrfs, updated_vrfs, errors)
+        process_responses = self._process_desired_vrfs(configs, created_vrfs, updated_vrfs, errors)
+        api_responses.extend(process_responses)
 
         # Finalize result
         self._finalize_result(created_vrfs, updated_vrfs, deleted_vrfs, errors)
 
+        # Set response data for successful operations
+        if api_responses:
+            self.result.response = api_responses
+
         return self.result
 
-    def _delete_unwanted_vrfs(self, configs: list[VrfConfig], deleted_vrfs: list[str], errors: list[str]) -> None:
-        """Delete VRFs that are not in the desired configuration."""
+    def _delete_unwanted_vrfs(self, configs: list[VrfConfig], deleted_vrfs: list[str], errors: list[str]) -> list[dict]:
+        """Delete VRFs that are not in the desired configuration and return API responses."""
+        responses = []
         # Get all fabrics being managed
         fabrics = list(set(config.fabric for config in configs))
 
@@ -48,10 +56,14 @@ class Overridden(BaseState):
             for existing_vrf_name in existing_vrfs.keys():
                 if existing_vrf_name not in desired_vrf_names:
                     success, del_response = self.api_client.delete_vrf(fabric, existing_vrf_name)
-                    self._handle_api_response(success, del_response, existing_vrf_name, "delete", deleted_vrfs, errors)
+                    if self._handle_api_response(success, del_response, existing_vrf_name, "delete", deleted_vrfs, errors):
+                        responses.append(del_response)
 
-    def _process_desired_vrfs(self, configs: list[VrfConfig], created_vrfs: list[str], updated_vrfs: list[str], errors: list[str]) -> None:
-        """Process desired VRFs for create/update operations."""
+        return responses
+
+    def _process_desired_vrfs(self, configs: list[VrfConfig], created_vrfs: list[str], updated_vrfs: list[str], errors: list[str]) -> list[dict]:
+        """Process desired VRFs for create/update operations and return API responses."""
+        responses = []
         for config in configs:
             exists, current_vrf = self._vrf_exists(config.fabric, config.vrf_name)
             if current_vrf is None:
@@ -60,7 +72,13 @@ class Overridden(BaseState):
             if exists:
                 # Update if different
                 if not self._vrfs_equal(current_vrf, config):
-                    self._execute_vrf_operation(config, "update", created_vrfs, updated_vrfs, errors)
+                    response_data = self._execute_vrf_operation_with_response(config, "update", created_vrfs, updated_vrfs, errors)
+                    if response_data:
+                        responses.append(response_data)
             else:
                 # Create new VRF
-                self._execute_vrf_operation(config, "create", created_vrfs, updated_vrfs, errors)
+                response_data = self._execute_vrf_operation_with_response(config, "create", created_vrfs, updated_vrfs, errors)
+                if response_data:
+                    responses.append(response_data)
+
+        return responses
