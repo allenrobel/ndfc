@@ -16,7 +16,7 @@ from .template_models import VrfTemplateConfig, ServiceVrfTemplateConfig
 class BaseVrfConfig(BaseModel):
     """Base VRF configuration with common settings."""
 
-    model_config = ConfigDict(str_strip_whitespace=True, validate_assignment=True, extra="forbid")
+    model_config = ConfigDict(str_strip_whitespace=True, validate_assignment=True, extra="ignore")
 
     fabric: str = Field(..., min_length=1, max_length=64)
 
