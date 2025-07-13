@@ -47,8 +47,9 @@
 
 - name: "{{ task_name }}"
   cisco.ndfc.ndfc_vrf:
-    fabric: "{{ fabric_1 }}"
     state: deleted
+    config:
+      fabric: "{{ fabric_1 }}"
   register: result_setup_2
 
 
@@ -74,8 +75,9 @@
 
 - name: SETUP.4 - DELETED - [query] Wait for vrfStatus == NA
   cisco.ndfc.ndfc_vrf:
-    fabric: "{{ fabric_1 }}"
     state: query
+    config:
+      fabric: "{{ fabric_1 }}"
   register: result_setup_4
   until:
     - "result_setup_4.response[0].vrfStatus is search('NA')"
@@ -215,11 +217,12 @@
 
 - name: "{{ task_name }}"
   cisco.ndfc.ndfc_vrf: &conf2
-    fabric: "{{ fabric_1 }}"
     state: deleted
     config:
-    - vrf_name: vrf1
-    - vrf_name: vrf2
+    - fabric: "{{ fabric_1 }}"
+      vrf_name: vrf1
+    - fabric: "{{ fabric_1 }}"
+      vrf_name: vrf2
   register: result_2b
 
 - name: TEST.2c - DELETED - [debug] print result_2b
