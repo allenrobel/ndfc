@@ -58,7 +58,7 @@
 
 - name: Set task name
   ansible.builtin.set_fact:
-    task_name: "SETUP.4 - REPLACED - [merged] Create, VLAN+VRF ansible-vrf-int1."
+    task_name: "SETUP.4 - REPLACED - [merged] Create, VLAN+VRF vrf1."
 
 - name: Log task
   cisco.dcnm.dcnm_log:
@@ -69,7 +69,7 @@
     fabric: "{{ fabric_1 }}"
     state: merged
     config:
-    - vrf_name: ansible-vrf-int1
+    - vrf_name: vrf1
       vrf_id: 9008011
       vrf_template: Default_VRF_Universal
       vrf_extension_template: Default_VRF_Extension_Universal
@@ -105,7 +105,7 @@
 - assert:
     that:
     - result_setup_4.changed == true
-    - result_setup_4.diff[0].vrf_name == "ansible-vrf-int1"
+    - result_setup_4.diff[0].vrf_name == "vrf1"
     - result_setup_4.response[0].RETURN_CODE == 200
 
 ###############################################
@@ -125,7 +125,7 @@
     fabric: "{{ fabric_1 }}"
     state: replaced
     config:
-    - vrf_name: ansible-vrf-int1
+    - vrf_name: vrf1
       vrf_id: 9008011
       vrf_template: Default_VRF_Universal
       vrf_extension_template: Default_VRF_Extension_Universal
@@ -149,7 +149,7 @@
 - assert:
     that:
     - result_1.changed == true
-    - result_1.diff[0].vrf_name == "ansible-vrf-int1"
+    - result_1.diff[0].vrf_name == "vrf1"
     - result_1.response[0].RETURN_CODE == 200
     - result_1.response[1].RETURN_CODE == 200
 
@@ -186,7 +186,7 @@
     fabric: "{{ fabric_1 }}"
     state: replaced
     config:
-    - vrf_name: ansible-vrf-int1
+    - vrf_name: vrf1
       vrf_id: 9008033
       vrf_template: Default_VRF_Universal
       vrf_extension_template: Default_VRF_Extension_Universal
@@ -223,7 +223,7 @@
 - assert:
     that:
     - result_2.changed == true
-    - result_2.response[0].vrf_name == "ansible-vrf-int1"
+    - result_2.response[0].vrf_name == "vrf1"
     - result_2.response[0].vlan_id == 700
     - result_2.response[0].vrf_id == 9008033
     - result_2.response[0].RETURN_CODE == 200

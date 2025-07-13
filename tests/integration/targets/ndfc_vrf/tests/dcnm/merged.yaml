@@ -52,7 +52,7 @@
 
 - name: Set task name
   ansible.builtin.set_fact:
-    task_name: "TEST.1 - MERGED - [merged] Create VRF ansible-vrf-int1 with VLAN 600"
+    task_name: "TEST.1 - MERGED - [merged] Create VRF vrf1 with VLAN 600"
 
 - name: Log task
   cisco.dcnm.dcnm_log:
@@ -63,7 +63,7 @@
     fabric: "{{ fabric_1 }}"
     state: merged
     config:
-    - vrf_name: ansible-vrf-int1
+    - vrf_name: vrf1
       vrf_id: 9008011
       vrf_template: Default_VRF_Universal
       vrf_extension_template: Default_VRF_Extension_Universal
@@ -95,7 +95,7 @@
 - assert:
     that:
     - result_1.changed == true
-    - result_1.diff[0].vrf_name == "ansible-vrf-int1"
+    - result_1.diff[0].vrf_name == "vrf1"
     - result_1.response[0].METHOD == "POST"
     - result_1.response[0].RETURN_CODE == 200
 
@@ -148,7 +148,7 @@
     fabric: "{{ fabric_1 }}"
     state: merged
     config:
-    - vrf_name: ansible-vrf-int1
+    - vrf_name: vrf1
       vrf_id: 9008011
       vrf_template: Default_VRF_Universal
       vrf_extension_template: Default_VRF_Extension_Universal
@@ -179,7 +179,7 @@
 - assert:
     that:
     - result_2.changed == true
-    - result_2.diff[0].vrf_name == "ansible-vrf-int1"
+    - result_2.diff[0].vrf_name == "vrf1"
     - result_2.response[0].RETURN_CODE == 200
 
 - name: Set task name
@@ -230,7 +230,7 @@
     fabric: "{{ fabric_1 }}"
     state: merged
     config:
-    - vrf_name: ansible-vrf-int1
+    - vrf_name: vrf1
       vrf_id: 9008011
       vrf_template: Default_VRF_Universal
       vrf_extension_template: Default_VRF_Extension_Universal
@@ -262,7 +262,7 @@
 - assert:
     that:
     - result_3.changed == true
-    - result_3.diff[0].vrf_name == "ansible-vrf-int1"
+    - result_3.diff[0].vrf_name == "vrf1"
     - result_3.response[0].METHOD == "POST"
     - result_3.response[0].RETURN_CODE == 200
 
@@ -315,7 +315,7 @@
     fabric: "{{ fabric_1 }}"
     state: merged
     config:
-      - vrf_name: ansible-vrf-int1
+      - vrf_name: vrf1
         vrf_id: 9008012
         vrf_template: Default_VRF_Universal
         vrf_extension_template: Default_VRF_Extension_Universal
@@ -348,7 +348,7 @@
     fabric: "{{ fabric_1 }}"
     state: merged
     config:
-      - vrf_name: ansible-vrf-int1
+      - vrf_name: vrf1
         vrf_id: 9008012000000000
         vrf_template: Default_VRF_Universal
         vrf_extension_template: Default_VRF_Extension_Universal

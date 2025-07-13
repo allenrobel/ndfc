@@ -59,7 +59,7 @@
 
 - name: Set task name
   ansible.builtin.set_fact:
-    task_name: "SETUP.3 - QUERY - [merged] Create VRF ansible-vrf-int1."
+    task_name: "SETUP.3 - QUERY - [merged] Create VRF vrf1."
 
 - name: Log task
   cisco.dcnm.dcnm_log:
@@ -70,7 +70,7 @@
     state: merged
     config:
     - fabric: "{{ fabric_1 }}"
-      vrf_name: ansible-vrf-int1
+      vrf_name: vrf1
       vrf_id: 9008011
       vrf_template: Default_VRF_Universal
       vrf_extension_template: Default_VRF_Extension_Universal
@@ -89,7 +89,7 @@
 
 - name: Set task name
   ansible.builtin.set_fact:
-    task_name: "TEST.1 - QUERY - [query] Query specific VRF ansible-vrf-int1."
+    task_name: "TEST.1 - QUERY - [query] Query specific VRF vrf1."
 
 - name: Log task
   cisco.dcnm.dcnm_log:
@@ -100,7 +100,7 @@
     state: query
     config:
       - fabric: "{{ fabric_1 }}"
-        vrf_name: ansible-vrf-int1
+        vrf_name: vrf1
   register: result_1
 
 - name: TEST.1b - QUERY - [debug] print result_1
@@ -111,7 +111,7 @@
     that:
     - result_1.changed == false
     - result_1.response[0].vrf_id == 9008011
-    - result_1.response[0].vrf_name == "ansible-vrf-int1"
+    - result_1.response[0].vrf_name == "vrf1"
     - result_1.response[0].vrfStatus == "NA"
 
 - name: Set task name
@@ -137,12 +137,12 @@
     that:
     - result_2.changed == false
     - result_2.response[0].vrf_id == 9008011
-    - result_2.response[0].vrf_name == "ansible-vrf-int1"
+    - result_2.response[0].vrf_name == "vrf1"
     - result_2.response[0].vrfStatus == "NA"
 
 - name: Set task name
   ansible.builtin.set_fact:
-    task_name: "TEST.3 - QUERY - [merged] Create second VRF ansible-vrf-int2."
+    task_name: "TEST.3 - QUERY - [merged] Create second VRF vrf2."
 
 - name: Log task
   cisco.dcnm.dcnm_log:
@@ -153,7 +153,7 @@
     state: merged
     config:
     - fabric: "{{ fabric_1 }}"
-      vrf_name: ansible-vrf-int2
+      vrf_name: vrf2
       vrf_id: 9008012
       vrf_template: Default_VRF_Universal
       vrf_extension_template: Default_VRF_Extension_Universal
@@ -198,8 +198,8 @@
     that:
     - result_4.changed == false
     - result_4.response|length == 2
-    - '"ansible-vrf-int1" in (result_4.response | map(attribute="vrf_name") | list)'
-    - '"ansible-vrf-int2" in (result_4.response | map(attribute="vrf_name") | list)'
+    - '"vrf1" in (result_4.response | map(attribute="vrf_name") | list)'
+    - '"vrf2" in (result_4.response | map(attribute="vrf_name") | list)'
 
 - name: Set task name
   ansible.builtin.set_fact:
@@ -214,7 +214,7 @@
     state: query
     config:
     - fabric: "{{ fabric_1 }}"
-      vrf_name: ansible-vrf-int2
+      vrf_name: vrf2
       vrf_id: 9008012
       vrf_template: Default_VRF_Universal
       vrf_extension_template: Default_VRF_Extension_Universal
@@ -235,7 +235,7 @@
     that:
     - result_5.changed == false
     - result_5.response[0].vrf_id == 9008012
-    - result_5.response[0].vrf_name == "ansible-vrf-int2"
+    - result_5.response[0].vrf_name == "vrf2"
     - result_5.response[0].vrfStatus == "NA"
 
 - name: Set task name
@@ -276,7 +276,7 @@
     state: deleted
     config:
       - fabric: "{{ fabric_1 }}"
-        vrf_name: ansible-vrf-int1
+        vrf_name: vrf1
   register: result_7
 
 - name: TEST.7a - QUERY - [debug] print result_7
@@ -311,7 +311,7 @@
     that:
     - result_8.changed == false
     - result_8.response|length == 1
-    - result_8.response[0].vrf_name == "ansible-vrf-int2"
+    - result_8.response[0].vrf_name == "vrf2"
 
 ###############################################
 ###                 CLEAN-UP                 ##
