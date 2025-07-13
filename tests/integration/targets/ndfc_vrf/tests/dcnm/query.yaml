@@ -77,22 +77,6 @@
 
 - name: Set task name
   ansible.builtin.set_fact:
-    task_name: "SETUP.2a - QUERY - Wait 60 seconds for controller and switch to sync."
-
-- name: Log task
-  cisco.dcnm.dcnm_log:
-    msg: "{{ task_name }}"
-
-- name: "{{ task_name }}"
-  # The vrf profile removal returns ok for deployment, but the switch
-  # takes time to remove the profile so wait for some time before creating
-  # a new vrf, else the switch goes into OUT-OF-SYNC state
-  wait_for:
-    timeout: 60
-  when: result_setup_2.changed == true
-
-- name: Set task name
-  ansible.builtin.set_fact:
     task_name: "SETUP.3 - QUERY - [merged] Create VRF ansible-vrf-int1."
 
 - name: Log task
