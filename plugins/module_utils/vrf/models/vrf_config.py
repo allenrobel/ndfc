@@ -22,6 +22,8 @@ class VrfConfig(BaseModel):
     vrf_template_config: VrfTemplateConfig = Field(default_factory=VrfTemplateConfig)
     vrf_extension_template: str = Field(default=VrfTemplates.DEFAULT_VRF_EXTENSION_UNIVERSAL.value)
     service_vrf_template: Optional[ServiceVrfTemplateConfig] = Field(default=None)
+    tenant_name: Optional[str] = Field(default=None)
+    hierarchical_key: Optional[str] = Field(default=None)
 
     def to_payload(self) -> VrfPayload:
         """Convert VrfConfig to VrfPayload for API calls."""
@@ -32,6 +34,8 @@ class VrfConfig(BaseModel):
             "vrfTemplate": self.vrf_template,
             "vrfTemplateConfig": json.dumps(self.vrf_template_config.model_dump(by_alias=True, exclude_none=True)),  # pylint: disable=no-member
             "vrfExtensionTemplate": self.vrf_extension_template,
+            "tenantName": self.tenant_name,
+            "hierarchicalKey": self.hierarchical_key,
             "source": None,
         }
 

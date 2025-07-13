@@ -45,6 +45,8 @@ class QueryVrfConfig(BaseVrfConfig):
     vrf_template_config: Optional[VrfTemplateConfig] = Field(default=None)
     vrf_extension_template: Optional[str] = Field(default=None)
     service_vrf_template: Optional[ServiceVrfTemplateConfig] = Field(default=None)
+    tenant_name: Optional[str] = Field(default=None)
+    hierarchical_key: Optional[str] = Field(default=None)
 
     def to_vrf_config(self) -> VrfConfig:
         """Convert to main VrfConfig model with sensible defaults."""
@@ -56,6 +58,8 @@ class QueryVrfConfig(BaseVrfConfig):
             vrf_template_config=self.vrf_template_config or VrfTemplateConfig(),
             vrf_extension_template=self.vrf_extension_template or VrfTemplates.DEFAULT_VRF_EXTENSION_UNIVERSAL.value,
             service_vrf_template=self.service_vrf_template,
+            tenant_name=self.tenant_name,
+            hierarchical_key=self.hierarchical_key,
         )
 
 
@@ -68,6 +72,8 @@ class MergedVrfConfig(BaseVrfConfig):
     vrf_template_config: VrfTemplateConfig = Field(...)
     vrf_extension_template: str = Field(default=VrfTemplates.DEFAULT_VRF_EXTENSION_UNIVERSAL.value)
     service_vrf_template: Optional[ServiceVrfTemplateConfig] = Field(default=None)
+    tenant_name: Optional[str] = Field(default=None)
+    hierarchical_key: Optional[str] = Field(default=None)
 
     def to_vrf_config(self) -> VrfConfig:
         """Convert to main VrfConfig model."""
@@ -79,6 +85,8 @@ class MergedVrfConfig(BaseVrfConfig):
             vrf_template_config=self.vrf_template_config,
             vrf_extension_template=self.vrf_extension_template,
             service_vrf_template=self.service_vrf_template,
+            tenant_name=self.tenant_name,
+            hierarchical_key=self.hierarchical_key,
         )
 
 
@@ -91,6 +99,8 @@ class ReplacedVrfConfig(BaseVrfConfig):
     vrf_template_config: VrfTemplateConfig = Field(...)
     vrf_extension_template: str = Field(default=VrfTemplates.DEFAULT_VRF_EXTENSION_UNIVERSAL.value)
     service_vrf_template: Optional[ServiceVrfTemplateConfig] = Field(default=None)
+    tenant_name: Optional[str] = Field(default=None)
+    hierarchical_key: Optional[str] = Field(default=None)
 
     def to_vrf_config(self) -> VrfConfig:
         """Convert to main VrfConfig model."""
@@ -102,6 +112,8 @@ class ReplacedVrfConfig(BaseVrfConfig):
             vrf_template_config=self.vrf_template_config,
             vrf_extension_template=self.vrf_extension_template,
             service_vrf_template=self.service_vrf_template,
+            tenant_name=self.tenant_name,
+            hierarchical_key=self.hierarchical_key,
         )
 
 

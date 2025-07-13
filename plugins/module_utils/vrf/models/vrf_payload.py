@@ -19,6 +19,8 @@ class VrfPayload(BaseModel):
     vrf_template_config: str = Field(..., alias="vrfTemplateConfig")
     vrf_extension_template: str = Field(default="Default_VRF_Extension_Universal", alias="vrfExtensionTemplate")
     service_vrf_template: Optional[str] = Field(default=None, alias="serviceVrfTemplate")
+    tenant_name: Optional[str] = Field(default=None, alias="tenantName")
+    hierarchical_key: Optional[str] = Field(default=None, alias="hierarchicalKey")
     source: Optional[str] = Field(default=None)
 
     @field_validator("vrf_template_config")

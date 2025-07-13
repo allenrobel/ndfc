@@ -61,9 +61,42 @@ options:
         type: str
       vrf_template_config:
         description:
-          - Dictionary containing VRF template configuration
+          - Dictionary containing VRF template configuration parameters
+          - Contains nested configuration like vrfSegmentId, vrfVlanId, mtu, etc.
           - Validation handled by state-specific models
         type: dict
+        suboptions:
+          asn:
+            description: Autonomous system number
+            type: str
+          mtu:
+            description: Maximum transmission unit for the VRF
+            type: int
+          route_target_export:
+            description: Route target export value
+            type: str
+            aliases: [routeTargetExport]
+          route_target_import:
+            description: Route target import value
+            type: str
+            aliases: [routeTargetImport]
+          tag:
+            description: Loopback routing tag for the VRF
+            type: int
+            default: 12345
+            maximum: 4294967295
+          vrf_description:
+            description: Description for the VRF
+            type: str
+            aliases: [vrfDescription]
+          vrf_segment_id:
+            description: VRF segment ID for VXLAN
+            type: int
+            aliases: [vrfSegmentId]
+          vrf_vlan_id:
+            description: VLAN ID for the VRF
+            type: int
+            aliases: [vrfVlanId]
       vrf_extension_template:
         description:
           - Template name for VRF extension configuration
@@ -74,6 +107,16 @@ options:
           - Dictionary containing service VRF template configuration
           - Validation handled by state-specific models
         type: dict
+      tenant_name:
+        description:
+          - Name of the tenant associated with the VRF
+          - Optional field for multi-tenant deployments
+        type: str
+      hierarchical_key:
+        description:
+          - Hierarchical key for the VRF in NDFC
+          - Usually matches the fabric name
+        type: str
   state:
     description:
       - The state of the VRF configuration
@@ -101,17 +144,24 @@ notes:
 """
 
 EXAMPLES = r"""
-# Create or update a VRF
-- name: Create VRF
+# Create or update a VRF with nested template configuration
+- name: Create VRF with comprehensive configuration
   nexus_vrf:
     config:
       - fabric: "fabric1"
         vrf_name: "test_vrf"
         vrf_id: 12345
         vrf_template_config:
-          vrfSegmentId: 12345
-          vrfVlanId: 100
+          vrf_segment_id: 12345
+          vrf_vlan_id: 100
           mtu: 9216
+          vrf_description: "Test VRF for application"
+          asn: "65001"
+          route_target_import: "65001:12345"
+          route_target_export: "65001:12345"
+          advertise_default_route_flag: "true"
+          max_bgp_paths: "1"
+          max_ibgp_paths: "2"
     state: merged
 
 # Delete specific VRF
@@ -144,35 +194,49 @@ EXAMPLES = r"""
         vrf_name: "test_vrf"
     state: query
 
-# Replace VRF
-- name: Replace VRF
+# Replace VRF with updated configuration
+- name: Replace VRF with updated template config
   nexus_vrf:
     config:
       - fabric: "fabric1"
         vrf_name: "test_vrf"
         vrf_id: 12345
+        tenant_name: "production"
+        hierarchical_key: "fabric1"
         vrf_template_config:
-          vrfSegmentId: 12345
-          vrfVlanId: 200
+          vrf_segment_id: 12345
+          vrf_vlan_id: 200
           mtu: 9000
+          vrf_description: "Updated production VRF"
+          asn: "65001"
+          route_target_import: "65001:12345"
+          route_target_export: "65001:12345"
+          advertise_default_route_flag: "true"
+          configure_static_default_route_flag: "true"
     state: replaced
 
-# Override all VRFs in fabric
-- name: Override VRFs
+# Override all VRFs in fabric with proper nested structure
+- name: Override VRFs with comprehensive configuration
   nexus_vrf:
     config:
       - fabric: "fabric1"
         vrf_name: "prod_vrf"
         vrf_id: 10001
         vrf_template_config:
-          vrfSegmentId: 10001
-          vrfVlanId: 101
+          vrf_segment_id: 10001
+          vrf_vlan_id: 101
+          mtu: 9216
+          vrf_description: "Production VRF"
+          asn: "65001"
       - fabric: "fabric1"
         vrf_name: "dev_vrf"
         vrf_id: 10002
         vrf_template_config:
-          vrfSegmentId: 10002
-          vrfVlanId: 102
+          vrf_segment_id: 10002
+          vrf_vlan_id: 102
+          mtu: 9216
+          vrf_description: "Development VRF"
+          asn: "65001"
     state: overridden
 
 # Multiple VRFs across different fabrics with optimized caching
@@ -184,32 +248,37 @@ EXAMPLES = r"""
         vrf_name: "vrf1"
         vrf_id: 1001
         vrf_template_config:
-          vrfSegmentId: 1001
-          vrfVlanId: 101
+          vrf_segment_id: 1001
+          vrf_vlan_id: 101
+          mtu: 9216
       - fabric: "fabric1"
         vrf_name: "vrf2"
         vrf_id: 1002
         vrf_template_config:
-          vrfSegmentId: 1002
-          vrfVlanId: 102
+          vrf_segment_id: 1002
+          vrf_vlan_id: 102
+          mtu: 9216
       - fabric: "fabric1"
         vrf_name: "vrf3"
         vrf_id: 1003
         vrf_template_config:
-          vrfSegmentId: 1003
-          vrfVlanId: 103
+          vrf_segment_id: 1003
+          vrf_vlan_id: 103
+          mtu: 9216
       - fabric: "fabric2"
         vrf_name: "vrf4"
         vrf_id: 2001
         vrf_template_config:
-          vrfSegmentId: 2001
-          vrfVlanId: 201
+          vrf_segment_id: 2001
+          vrf_vlan_id: 201
+          mtu: 9216
       - fabric: "fabric2"
         vrf_name: "vrf5"
         vrf_id: 2002
         vrf_template_config:
-          vrfSegmentId: 2002
-          vrfVlanId: 202
+          vrf_segment_id: 2002
+          vrf_vlan_id: 202
+          mtu: 9216
     state: merged
 
 # Example showing Pydantic validation catching errors
@@ -219,7 +288,8 @@ EXAMPLES = r"""
     config:
       - fabric: "fabric1"
         vrf_template_config:
-          vrfSegmentId: 1001
+          vrf_segment_id: 1001
+          vrf_vlan_id: 101
     state: merged
   # Error: "Invalid VRF configuration at index 0 for state 'merged': Field required [type=missing, input={'fabric': 'fabric1', 'vrf_template_config': {...}}]"
 """
@@ -338,21 +408,12 @@ def main():
                     "type": "dict",
                     "required": False,
                 },
-                # Allow additional fields that might be in template configs
-                "vlan_id": {
-                    "type": "int",
+                "tenant_name": {
+                    "type": "str",
                     "required": False,
                 },
-                "vrfSegmentId": {
-                    "type": "int",
-                    "required": False,
-                },
-                "vrfVlanId": {
-                    "type": "int",
-                    "required": False,
-                },
-                "mtu": {
-                    "type": "int",
+                "hierarchical_key": {
+                    "type": "str",
                     "required": False,
                 },
             },
