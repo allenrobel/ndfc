@@ -84,7 +84,7 @@
     state: query
   register: result_1a
   until:
-    - "result_1a.response[0].vrfStatus is search('NA')"
+    - "result_1a.response[0].DATA.vrfStatus is search('NA')"
   retries: 30
   delay: 2
 
@@ -168,7 +168,7 @@
     state: query
   register: result_2a
   until:
-    - "result_2a.response[0].vrfStatus is search('NA')"
+    - "result_2a.response[0].DATA.vrfStatus is search('NA')"
   retries: 30
   delay: 2
 
@@ -251,7 +251,7 @@
     state: query
   register: result_3a
   until:
-    - "result_3a.response[0].vrfStatus is search('NA')"
+    - "result_3a.response[0].DATA.vrfStatus is search('NA')"
   retries: 30
   delay: 2
 

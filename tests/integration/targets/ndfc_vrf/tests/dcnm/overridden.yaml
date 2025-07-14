@@ -92,7 +92,7 @@
     state: query
   register: result_setup_4
   until:
-    - "result_setup_4.response[0].vrfStatus is search('NA')"
+    - "result_setup_4.response[0].DATA.vrfStatus is search('NA')"
   retries: 30
   delay: 2
 
@@ -145,7 +145,7 @@
     state: query
   register: result_1a
   until:
-    - "result_1a.response[0].vrfStatus is search('NA')"
+    - "result_1a.response[0].DATA.vrfStatus is search('NA')"
   retries: 30
   delay: 2
 
@@ -248,7 +248,7 @@
     state: query
   register: result_2b
   until:
-    - "result_2b.response[0].vrfStatus is search('NA')"
+    - "result_2b.response[0].DATA.vrfStatus is search('NA')"
   retries: 30
   delay: 2
 
@@ -301,7 +301,7 @@
     state: query
   register: result_3d
   until:
-    - "result_3d.response[0].vrfStatus is search('NA')"
+    - "result_3d.response[0].DATA.vrfStatus is search('NA')"
   retries: 30
   delay: 2
 
@@ -373,7 +373,7 @@
     state: query
   register: result_4b
   until:
-    - "result_4b.response[0].vrfStatus is search('NA')"
+    - "result_4b.response[0].DATA.vrfStatus is search('NA')"
   retries: 30
   delay: 2
 
