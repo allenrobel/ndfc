@@ -249,6 +249,7 @@
     config:
       - fabric: "{{ fabric_1 }}"
         vrf_name: non-existent-vrf
+  ignore_errors: true
   register: result_6
 
 - name: TEST.6a - QUERY - [debug] print result_6
@@ -259,6 +260,7 @@
     that:
     - result_6.changed == false
     - result_6.response|length == 0
+    - result_6.response[0].RETURN_CODE == 400
 
 - name: Set task name
   ansible.builtin.set_fact:
