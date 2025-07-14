@@ -17,9 +17,6 @@ class Deleted(BaseState):
 
     def execute(self, configs: list[VrfConfig]) -> ModuleResult:
         """Delete VRF resources."""
-        # Pre-populate cache for all fabrics to minimize API calls
-        self._populate_all_fabric_caches(configs)
-
         deleted_vrfs = []
         errors = []
         api_responses = []
@@ -72,14 +69,37 @@ class Deleted(BaseState):
     def _delete_all_vrfs_in_fabric(self, fabric: str, deleted_vrfs: list[str], errors: list[str]) -> list[dict[str, Any]]:
         """Delete all VRFs in a fabric and return API responses."""
         responses = []
-        # Get all VRFs in the fabric from cache
-        all_vrfs = self._get_all_fabric_vrfs(fabric)
+        
+        # For delete operations, always get fresh data to ensure we catch
+        # VRFs created outside of this module (bypassing cache)
+        success, response = self.api_client.query_all_vrfs(fabric)
+        
+        if not success:
+            errors.append(f"Failed to query VRFs in fabric {fabric}: {response.get('error', 'Unknown error')}")
+            return responses
+            
+        # Extract VRF data from the controller response
+        if not response or not response.get("DATA"):
+            # No VRFs to delete in this fabric
+            return responses
+            
+        data_field = response.get("DATA", [])
+        vrfs_to_delete = []
+        
+        if isinstance(data_field, list):
+            # Multiple VRFs
+            for vrf_data in data_field:
+                if vrf_data and vrf_data.get("vrfName"):
+                    vrfs_to_delete.append(vrf_data.get("vrfName"))
+        elif isinstance(data_field, dict) and data_field.get("vrfName"):
+            # Single VRF
+            vrfs_to_delete.append(data_field.get("vrfName"))
 
-        if not all_vrfs:
+        if not vrfs_to_delete:
             # No VRFs to delete in this fabric
             return responses
 
-        for vrf_name in all_vrfs:
+        for vrf_name in vrfs_to_delete:
             success, response = self.api_client.delete_vrf(fabric, vrf_name)
 
             if success:
