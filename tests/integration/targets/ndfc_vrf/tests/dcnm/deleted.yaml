@@ -80,7 +80,21 @@
 
 - name: Set task name
   ansible.builtin.set_fact:
-    task_name: "SETUP.4 - DELETED - [query] Wait for vrfStatus == NA."
+    task_name: "SETUP.4a - DELETED - [query] query vrf and print response."
+
+- name: Log task
+  cisco.dcnm.dcnm_log:
+    msg: "{{ task_name }}"
+
+- name: "{{ task_name }}"
+  cisco.ndfc.ndfc_vrf:
+    state: query
+    config:
+      fabric: "{{ fabric_1 }}"
+
+- name: Set task name
+  ansible.builtin.set_fact:
+    task_name: "SETUP.4b - DELETED - [query] Wait for vrfStatus == NA in response."
 
 - name: Log task
   cisco.dcnm.dcnm_log:
