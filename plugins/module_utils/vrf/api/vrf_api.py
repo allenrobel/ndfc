@@ -145,7 +145,7 @@ class VrfApi:
                 self._cached_service.update_cache_after_create(vrf_payload.fabric, vrf_payload.vrf_name, response_data)
 
             # Return the raw controller response with RETURN_CODE for module tests
-            return True, response.get("response", {})
+            return True, response.get("response", response)
         else:
             return False, response
 
@@ -159,7 +159,7 @@ class VrfApi:
             # Update cache after successful deletion
             self._cached_service.update_cache_after_delete(fabric, vrf_name)
             # Return the raw controller response with RETURN_CODE for module tests
-            return True, response.get("response", {})
+            return True, response.get("response", response)
         else:
             return False, response
 
@@ -177,7 +177,7 @@ class VrfApi:
                 self._cached_service.update_cache_after_update(vrf_payload.fabric, vrf_payload.vrf_name, response_data)
 
             # Return the raw controller response with RETURN_CODE for module tests
-            return True, response.get("response", {})
+            return True, response.get("response", response)
         else:
             return False, response
 

@@ -29,7 +29,7 @@ class VrfResponseHandler(ResponseHandler):
             if self.response and self.response.get("RETURN_CODE", 0) == 200:
                 # Keep the parent's result structure and add VRF-specific data
                 current_result = self.result or {}
-                current_result["response"] = self.response.get("DATA", {})
+                current_result["response"] = self.response
                 self.result = current_result
                 
         except Exception as e:
