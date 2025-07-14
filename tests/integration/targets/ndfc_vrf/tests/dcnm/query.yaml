@@ -259,7 +259,7 @@
 - assert:
     that:
     - result_6.changed == false
-    - result_6.response == null
+    - result_6.response == "null"
 
 - name: Set task name
   ansible.builtin.set_fact:
