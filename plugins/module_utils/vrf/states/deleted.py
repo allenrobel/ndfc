@@ -72,7 +72,7 @@ class Deleted(BaseState):
     def _delete_all_vrfs_in_fabric(self, fabric: str, deleted_vrfs: list[str], errors: list[str]) -> list[dict[str, Any]]:
         """Delete all VRFs in a fabric and return API responses."""
         responses = []
-        # Get all VRFs in the fabric
+        # Get all VRFs in the fabric from cache
         all_vrfs = self._get_all_fabric_vrfs(fabric)
 
         if not all_vrfs:

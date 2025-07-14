@@ -48,6 +48,36 @@ class VrfApi:
         # 409: Conflict - Resource already exists or conflicts with current state
         self.rest_send.non_retryable_codes = {400, 404, 409}
 
+    def _extract_vrf_data_for_cache(self, response_data: dict[str, Any]) -> dict[str, Any]:
+        """
+        Extract VRF data from response for cache storage.
+        
+        The controller response includes metadata (MESSAGE, RETURN_CODE, etc.)
+        but cache should only store the actual VRF data.
+        
+        Args:
+            response_data: Full controller response
+            
+        Returns:
+            VRF data suitable for cache storage
+        """
+        # For POST responses, the VRF data might be directly in the response
+        # (after field name transformation) or in a DATA field
+        
+        if "DATA" in response_data:
+            # Query-style response with DATA field
+            return response_data["DATA"]
+        else:
+            # POST response - extract VRF fields, exclude controller metadata
+            vrf_data = {}
+            controller_fields = {"MESSAGE", "METHOD", "REQUEST_PATH", "RETURN_CODE", "ERROR"}
+            
+            for key, value in response_data.items():
+                if key not in controller_fields:
+                    vrf_data[key] = value
+                    
+            return vrf_data
+
     def _execute_request(self, verb: str, path: str, payload: Optional[dict[str, Any]] = None) -> tuple[bool, dict[str, Any]]:
         """Execute a REST request using RestSend."""
         try:
@@ -133,7 +163,10 @@ class VrfApi:
             # Update cache after successful creation
             if response.get("result", {}).get("response"):
                 response_data = response["result"]["response"]
-                self._cached_service.update_cache_after_create(vrf_payload.fabric, vrf_payload.vrf_name, response_data)
+                
+                # Extract VRF data for cache (excluding controller metadata)
+                vrf_data = self._extract_vrf_data_for_cache(response_data)
+                self._cached_service.update_cache_after_create(vrf_payload.fabric, vrf_payload.vrf_name, vrf_data)
 
             # Return the raw controller response with RETURN_CODE for module tests
             return True, response.get("response", response)
@@ -165,7 +198,10 @@ class VrfApi:
             # Update cache after successful update
             if response.get("result", {}).get("response"):
                 response_data = response["result"]["response"]
-                self._cached_service.update_cache_after_update(vrf_payload.fabric, vrf_payload.vrf_name, response_data)
+                
+                # Extract VRF data for cache (excluding controller metadata)
+                vrf_data = self._extract_vrf_data_for_cache(response_data)
+                self._cached_service.update_cache_after_update(vrf_payload.fabric, vrf_payload.vrf_name, vrf_data)
 
             # Return the raw controller response with RETURN_CODE for module tests
             return True, response.get("response", response)
