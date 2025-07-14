@@ -80,11 +80,8 @@ class VrfApi:
         success, response = self._execute_request("GET", path)
 
         if success and response.get("result", {}).get("response"):
-            try:
-                validated_response = VrfValidator.validate_response(response["result"]["response"])
-                return validated_response.model_dump()
-            except ValueError:
-                return response["result"]["response"]
+            # Return raw controller response to preserve original field names and structure
+            return response["result"]["response"]
         return None
 
     def _fetch_all_vrfs(self, fabric: str) -> dict[str, dict[str, Any]]:
@@ -100,19 +97,13 @@ class VrfApi:
                 for vrf_data in response_data:
                     vrf_name = vrf_data.get("vrfName")
                     if vrf_name:
-                        try:
-                            validated = VrfValidator.validate_response(vrf_data)
-                            result[vrf_name] = validated.model_dump()
-                        except ValueError:
-                            result[vrf_name] = vrf_data
+                        # Return raw controller response to preserve original field names and structure
+                        result[vrf_name] = vrf_data
             else:
                 vrf_name = response_data.get("vrfName")
                 if vrf_name:
-                    try:
-                        validated = VrfValidator.validate_response(response_data)
-                        result[vrf_name] = validated.model_dump()
-                    except ValueError:
-                        result[vrf_name] = response_data
+                    # Return raw controller response to preserve original field names and structure
+                    result[vrf_name] = response_data
 
         return result
 
@@ -195,6 +186,29 @@ class VrfApi:
                 "fabrics": all_stats.get("by_fabric", {}),
             }
         return {"message": "Cache statistics not available"}
+
+    # Query methods that return full controller responses
+    def query_vrf(self, fabric: str, vrf_name: str) -> tuple[bool, dict[str, Any]]:
+        """Query a specific VRF and return full controller response."""
+        path = f"{self.base_path}/{fabric}/vrfs/{vrf_name}"
+        success, response = self._execute_request("GET", path)
+        
+        if success:
+            # Return the raw controller response for query operations
+            return True, response.get("response", response)
+        else:
+            return False, response
+
+    def query_all_vrfs(self, fabric: str) -> tuple[bool, dict[str, Any]]:
+        """Query all VRFs for a fabric and return full controller response."""
+        path = f"{self.base_path}/{fabric}/vrfs"
+        success, response = self._execute_request("GET", path)
+        
+        if success:
+            # Return the raw controller response for query operations
+            return True, response.get("response", response)
+        else:
+            return False, response
 
     # Legacy methods for backward compatibility
     def get_vrf(self, fabric: str, vrf_name: str) -> tuple[bool, dict[str, Any]]:

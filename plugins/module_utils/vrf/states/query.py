@@ -17,23 +17,43 @@ class Query(BaseState):
 
     def execute(self, configs: list[VrfConfig]) -> ModuleResult:
         """Query VRF resources."""
-        # Pre-populate cache for all fabrics to minimize API calls
-        self._populate_all_fabric_caches(configs)
-
         queried_vrfs: list[dict[str, Any]] = []
         errors: list[str] = []
 
         for config in configs:
             if config.vrf_name:
-                # Query specific VRF
-                exists, current_vrf = self._vrf_exists(config.fabric, config.vrf_name)
-                if exists and current_vrf:
-                    queried_vrfs.append(current_vrf)
+                # Query specific VRF - get full controller response
+                success, response = self.api_client.query_vrf(config.fabric, config.vrf_name)
+                if success and response:
+                    # Add the full controller response directly
+                    queried_vrfs.append(response)
+                elif not success:
+                    errors.append(f"Failed to query VRF {config.vrf_name} in fabric {config.fabric}")
                 # If VRF doesn't exist, we don't add it to the results
             else:
-                # Query all VRFs in fabric
-                fabric_vrfs = self._get_all_fabric_vrfs(config.fabric)
-                queried_vrfs.extend(fabric_vrfs.values())
+                # Query all VRFs in fabric - get full controller response
+                success, response = self.api_client.query_all_vrfs(config.fabric)
+                if success and response:
+                    # The response should contain the full controller response with DATA field
+                    # DATA field contains the list of VRFs or single VRF
+                    data_field = response.get("DATA", [])
+                    if isinstance(data_field, list):
+                        # Multiple VRFs - create individual responses for each VRF
+                        for vrf_data in data_field:
+                            if vrf_data and vrf_data.get("vrfName"):
+                                individual_response = {
+                                    "DATA": vrf_data,
+                                    "MESSAGE": response.get("MESSAGE", "OK"),
+                                    "METHOD": response.get("METHOD", "GET"),
+                                    "REQUEST_PATH": response.get("REQUEST_PATH", ""),
+                                    "RETURN_CODE": response.get("RETURN_CODE", 200)
+                                }
+                                queried_vrfs.append(individual_response)
+                    elif isinstance(data_field, dict) and data_field.get("vrfName"):
+                        # Single VRF - add the full response
+                        queried_vrfs.append(response)
+                elif not success:
+                    errors.append(f"Failed to query VRFs in fabric {config.fabric}")
 
         if errors:
             self.result.failed = True
