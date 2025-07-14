@@ -332,3 +332,27 @@
     state: deleted
     config:
       - fabric: "{{ fabric_1 }}"
+  register: cleanup_1
+
+- name: PRINT register cleanup_1
+  ansible.builtin.debug:
+    var: cleanup_1
+
+- name: Set task name
+  ansible.builtin.set_fact:
+    task_name: "CLEANUP.2 - QUERY - [query] query all VRFs in fabric_1."
+
+- name: Log task
+  cisco.dcnm.dcnm_log:
+    msg: "{{ task_name }}"
+
+- name: "{{ task_name }}"
+  cisco.ndfc.ndfc_vrf:
+    state: query
+    config:
+      - fabric: "{{ fabric_1 }}"
+  register: cleanup_2
+
+- name: PRINT register cleanup_2
+  ansible.builtin.debug:
+    var: cleanup_2
