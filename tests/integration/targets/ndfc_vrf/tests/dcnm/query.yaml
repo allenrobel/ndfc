@@ -57,6 +57,10 @@
       - fabric: "{{ fabric_1 }}"
   register: result_setup_2
 
+- name: PRINT result_setup_2 (deleted state result)
+  ansible.builtin.debug:
+    var: result_setup_2
+
 - name: Set task name
   ansible.builtin.set_fact:
     task_name: "SETUP.3 - QUERY - [merged] Create VRF vrf1."
