@@ -75,10 +75,21 @@ tox -e venv -- <command>
 #### API Layer
 
 - `plugins/module_utils/common/api/` - Hierarchical API structure matching DCNM/NDFC REST endpoints
+- `plugins/module_utils/common/ep/`  - All endpoints in api above will move into ep eventually
+- `plugins/module_utils/common/epp/` - endpoint parsers.  These classes are responsible for sending a request for the corresponding endpoint (ep) and providing properties that return the values of each of the fields in the controller response for the endpoint (ep)
 - `plugins/module_utils/common/classes/log_v2.py` - Logger for the project
 - `plugins/module_utils/common/classes/rest_send_v2.py` - HTTP request handling
 - `plugins/module_utils/common/classes/results.py` - HTTP request results handler
 - `plugins/module_utils/common/classes/sender_*.py` - Request sender implementations
+
+#### General utilities
+
+- `plugins/module_utils/common/classes/switch_details.py` - Returns inventory details for switches in a fabric.
+- `plugins/module_utils/common/classes/conversion.py` - Provides conversion methods for several commonly-used conversions (e.g. translate mac address)
+- `plugins/module_utils/common/classes/conversion.py` - The logger used by this project
+- `plugins/module_utils/common/classes/rest_send_v2.py` - Send requests to the controller using injected dependencies.
+- `plugins/module_utils/common/classes/sender_dcnm.py` - RestSend dependency that sends requests to NDFC using the dcnm_send()
+- `plugins/module_utils/common/classes/sender_dcnm.py` - RestSend dependency that sends requests to NDFC using the python requests library
 
 #### VRF Module (Active Development)
 
