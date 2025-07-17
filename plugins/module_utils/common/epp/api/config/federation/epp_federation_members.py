@@ -25,14 +25,9 @@ import copy
 import inspect
 import logging
 
-from .....api.config.federation.federation import \
-    EpFederationMembers
-# from ansible_collections.cisco.dcnm.plugins.module_utils.common.ep.nexus.api.federation.v4.members.members import \
-#     EpFederationMembers
-from .....conversion import \
-    ConversionUtils
-from .....properties import \
-    Properties
+from .....ep.config.federation.federation import EpFederationMembers
+from .....classes.conversion import ConversionUtils
+from .....classes.properties import Properties
 
 
 @Properties.add_rest_send

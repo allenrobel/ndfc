@@ -19,7 +19,7 @@ __author__ = "Allen Robel"
 
 import logging
 
-from ..conversion import ConversionUtils
+from ..classes.conversion import ConversionUtils
 
 
 class EpLogin:

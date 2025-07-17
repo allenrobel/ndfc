@@ -24,7 +24,7 @@ __author__ = "Allen Robel"
 import inspect
 import logging
 
-from ..api.v1.lan_fabric.rest.inventory.inventory import EpAllSwitches
+from ..ep.v1.lan_fabric.rest.inventory.inventory import EpAllSwitches
 from .conversion import ConversionUtils
 from .exceptions import ControllerResponseError
 from .properties import Properties

@@ -24,9 +24,9 @@ __author__ = "Allen Robel"
 import inspect
 import logging
 
-from ..api.login import EpLogin
-from ..conversion import ConversionUtils
-from ..properties import Properties
+from ..ep.login import EpLogin
+from ..classes.conversion import ConversionUtils
+from ..classes.properties import Properties
 
 
 @Properties.add_rest_send
