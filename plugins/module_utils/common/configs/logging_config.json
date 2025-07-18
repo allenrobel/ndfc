@@ -11,7 +11,7 @@
       "class": "logging.handlers.RotatingFileHandler",
       "formatter": "standard",
       "level": "DEBUG",
-      "filename": "/tmp/dcnm.log",
+      "filename": "/tmp/nd.log",
       "mode": "a",
       "encoding": "utf-8",
       "maxBytes": 50000000,
@@ -19,7 +19,7 @@
     }
   },
   "loggers": {
-    "dcnm": {
+    "nd": {
       "handlers": [
         "file"
       ],

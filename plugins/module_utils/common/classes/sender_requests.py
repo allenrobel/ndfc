@@ -92,7 +92,7 @@ class Sender:
     - username
 
     ```python
-    from ansible_collections.cisco.dcnm.plugins.module_utils.common.sender_requests import \
+    from ansible_collections.cisco.nd.plugins.module_utils.common.sender_requests import \
         Sender
 
     sender = Sender()

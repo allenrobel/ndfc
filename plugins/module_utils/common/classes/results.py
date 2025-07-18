@@ -151,7 +151,7 @@ class Results:
     }
     ```
 
-    diff, response, and result dicts are per the Ansible DCNM Collection standard output.
+    diff, response, and result dicts are per the Ansible ND Collection standard output.
 
     An example of a result dict would be (sequence_number is added by Results):
 

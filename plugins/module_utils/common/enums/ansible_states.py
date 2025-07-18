@@ -9,13 +9,13 @@ class AnsibleStates(Enum):
     """
     # Summary
 
-    Ansible states used by the DCNM Ansible Collection
+    Ansible states used by the ND Ansible Collection
 
     ## Values
 
     ### deleted
 
-    Remove the resource, if it exists. NDFC uses DELETE HTTP verb for this.
+    Remove the resource, if it exists. ND uses DELETE HTTP verb for this.
 
     If the resource does not exist, no action is taken and the Ansible
     result is updated to indicate that no changes were made (i.e.
@@ -23,7 +23,7 @@ class AnsibleStates(Enum):
 
     ### merged
 
-    Merge the resource. NDFC uses POST HTTP verb for this.
+    Merge the resource. ND uses POST HTTP verb for this.
 
     With merged state, a resource is created if it does not exist,
     or is updated if it does exist.
@@ -38,7 +38,7 @@ class AnsibleStates(Enum):
 
     ### overridden
 
-    Override the resource. NDFC uses DELETE and POST HTTP verbs for this.
+    Override the resource. ND uses DELETE and POST HTTP verbs for this.
 
     With overridden state, all resources that are not specified in the
     Ansible task are removed, and the specified resources are created or
@@ -54,7 +54,7 @@ class AnsibleStates(Enum):
 
     ### query
 
-    Query the resource. NDFC uses GET HTTP verb for this.
+    Query the resource. ND uses GET HTTP verb for this.
 
     If the resource exists, its representation is returned to the caller.
     If the resource does not exist, an empty list is returned.  A
@@ -65,7 +65,7 @@ class AnsibleStates(Enum):
     ### replaced
 
     Replace the resource if it exists and its properties differ from
-    the properties specified in the Ansible task. NDFC uses DELETE and
+    the properties specified in the Ansible task. ND uses DELETE and
     POST HTTP verbs for this.  Resources not specified in the
     Ansible task are not removed or modified.
 

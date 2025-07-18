@@ -19,7 +19,7 @@ __author__ = "Allen Robel"
 
 import logging
 
-from ansible_collections.cisco.dcnm.plugins.module_utils.common.ep.nexus.api.api import Api
+from ansible_collections.cisco.nd.plugins.module_utils.common.ep.nexus.api.api import Api
 
 
 class Federation(Api):

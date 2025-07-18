@@ -51,7 +51,7 @@ class EpSites(V2):
     ### Usage
 
     ```python
-    from ansible_collections.cisco.dcnm.plugins.module_utils.common.api.config.class_ep.v2.sites import EpSites
+    from ansible_collections.cisco.nd.plugins.module_utils.common.api.config.class_ep.v2.sites import EpSites
     instance = EpSites()
     path = instance.path
     verb = instance.verb

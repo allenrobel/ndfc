@@ -24,13 +24,13 @@ __author__ = "Allen Robel"
 import inspect
 import logging
 
-from ansible_collections.cisco.dcnm.plugins.module_utils.common.api.config.federation.manager.manager import \
+from ansible_collections.cisco.nd.plugins.module_utils.common.api.config.federation.manager.manager import \
     EpFederationManagerGet
-# from ansible_collections.cisco.dcnm.plugins.module_utils.common.ep.nexus.api.federation.v4.members.members import \
+# from ansible_collections.cisco.nd.plugins.module_utils.common.ep.nexus.api.federation.v4.members.members import \
 #     EpFederationMembers
-from ansible_collections.cisco.dcnm.plugins.module_utils.common.conversion import \
+from ansible_collections.cisco.nd.plugins.module_utils.common.conversion import \
     ConversionUtils
-from ansible_collections.cisco.dcnm.plugins.module_utils.common.properties import \
+from ansible_collections.cisco.nd.plugins.module_utils.common.properties import \
     Properties
 
 
@@ -52,11 +52,11 @@ class EppFederationManagerGet:
     ### Usage
 
     ```python
-    from ansible_collections.cisco.dcnm.plugins.module_utils.common.epp.api.config.federation.manager.epp_federation_manager import \
+    from ansible_collections.cisco.nd.plugins.module_utils.common.epp.api.config.federation.manager.epp_federation_manager import \
         EppFederationManagerGet
-    from ansible_collections.cisco.dcnm.plugins.module_utils.common.rest_send_v2 import RestSend
-    from ansible_collections.cisco.dcnm.plugins.module_utils.common.results import Results
-    from ansible_collections.cisco.dcnm.plugins.module_utils.common.sender_nd import Sender
+    from ansible_collections.cisco.nd.plugins.module_utils.common.rest_send_v2 import RestSend
+    from ansible_collections.cisco.nd.plugins.module_utils.common.results import Results
+    from ansible_collections.cisco.nd.plugins.module_utils.common.sender_nd import Sender
 
     params = {"check_mode": False, "state": "merged"}
     sender = Sender()
