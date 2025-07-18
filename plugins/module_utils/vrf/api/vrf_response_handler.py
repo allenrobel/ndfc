@@ -24,6 +24,7 @@ class VrfResponseHandler:
         self._response = None
         self._result = None
         self._verb = None
+        self._implements = "response_handler_v1"
 
     def commit(self):
         """
@@ -86,6 +87,16 @@ class VrfResponseHandler:
                         self._transform_vrf_fields(item)
 
         return transformed_response
+
+    @property
+    def implements(self):
+        """
+        The interface implemented by this class.
+
+        Returns:
+            str: The interface version identifier
+        """
+        return self._implements
 
     @property
     def response(self):
