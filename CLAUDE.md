@@ -154,6 +154,38 @@ Modules follow Ansible's declarative state patterns:
 - Follow existing module structure in `plugins/modules/`
 - Use Pydantic models for structured data
 
+### Interface Versioning
+
+Components that interact with each other should implement interface versioning to ensure compatibility and enable safe refactoring:
+
+- **Add `implements` property** - All classes that implement an interface should declare the interface version via an `implements` property
+- **Use semantic versioning** - Interface versions follow `interface_name_v{major}` format (e.g., `response_handler_v1`)
+- **Validate compatibility** - Components should check the `implements` property of injected dependencies to ensure compatibility
+
+#### Implementation Pattern
+
+```python
+class MyHandler:
+    def __init__(self):
+        self._implements = "my_interface_v1"
+    
+    @property
+    def implements(self):
+        """Return the interface version implemented by this class."""
+        return self._implements
+
+# Usage in component that expects the interface
+def some_method(self, handler):
+    if handler.implements != "my_interface_v1":
+        raise ValueError(f"Expected my_interface_v1, got {handler.implements}")
+```
+
+#### Examples
+
+- **RestSend**: Uses `response_handler_v1` interface for response handler injection
+- **VrfResponseHandler**: Implements `response_handler_v1` interface for compatibility with RestSend
+- **Benefits**: Enables safe dependency injection, interface evolution, and compile-time compatibility checking
+
 ### Version Compatibility
 
 - Support NDFC 12.0+
