@@ -53,7 +53,7 @@ class Log:
 
     By default, Log() does the following:
 
-    1.  Reads the environment variable ``NDFC_LOGGING_CONFIG`` to determine
+    1.  Reads the environment variable ``ND_LOGGING_CONFIG`` to determine
         the path to the logging config file.  If the environment variable is
         not set, then logging is disabled.
     2.  Sets ``develop`` to False.  This disables exceptions raised by the
@@ -61,12 +61,12 @@ class Log:
 
     Hence, the simplest usage for Log() is:
 
-    -   Set the environment variable ``NDFC_LOGGING_CONFIG`` to the
+    -   Set the environment variable ``ND_LOGGING_CONFIG`` to the
         path of the logging config file.  ``bash`` shell is used in the
         example below.
 
     ```bash
-    export NDFC_LOGGING_CONFIG="/path/to/logging_config.json"
+    export ND_LOGGING_CONFIG="/path/to/logging_config.json"
     ```
 
     -   Instantiate a Log() object instance and call ``commit()`` on the instance:
@@ -101,7 +101,7 @@ class Log:
     ```
 
     To directly set the path to the logging config file, overriding the
-    ``NDFC_LOGGING_CONFIG`` environment variable, set the ``config``
+    ``ND_LOGGING_CONFIG`` environment variable, set the ``config``
     property prior to calling ``commit()``:
 
     ```python
@@ -210,7 +210,7 @@ class Log:
 
     def _build_properties(self) -> None:
         self.properties = {}
-        self.properties["config"] = environ.get("NDFC_LOGGING_CONFIG", None)
+        self.properties["config"] = environ.get("ND_LOGGING_CONFIG", None)
         self.properties["develop"] = False
 
     def disable_logging(self):
@@ -298,13 +298,13 @@ class Log:
         bad_handlers = []
         for handler in logging_config.get("handlers", {}):
             if handler not in self.valid_handlers:
-                msg = "logging.config.dictConfig: "
-                msg += "handlers found that may interrupt Ansible module "
-                msg += "execution. "
-                msg += "Remove these handlers from the logging config file "
-                msg += "and try again. "
                 bad_handlers.append(handler)
         if len(bad_handlers) > 0:
+            msg = "logging.config.dictConfig: "
+            msg += "handlers found that may interrupt Ansible module "
+            msg += "execution. "
+            msg += "Remove these handlers from the logging config file "
+            msg += "and try again. "
             msg += f"Handlers: {','.join(bad_handlers)}. "
             msg += f"Logging config file: {self.config}."
             raise ValueError(msg)
@@ -347,7 +347,7 @@ class Log:
         standard library.
 
         ### Default
-        If the environment variable ``NDFC_LOGGING_CONFIG`` is set, then
+        If the environment variable ``ND_LOGGING_CONFIG`` is set, then
         the value of that variable is used.  Otherwise, None.
 
         The environment variable can be overridden by directly setting
