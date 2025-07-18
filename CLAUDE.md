@@ -58,10 +58,10 @@ tox -e venv -- <command>
 
 - `plugins/modules/` - Ansible modules (nd_vrf, nd_fabric, nd_interface, etc.)
 - `plugins/module_utils/` - Shared utility modules organized by feature
-- `plugins/httpapi/` - HTTP API plugin for DCNM/NDFC communication
+- `plugins/httpapi/` - HTTP API plugin for ND communication
 - `plugins/action/` - Action plugins for complex module operations
 - `tests/unit/` - Unit tests mirroring the plugins directory structure
-- `tests/integration/` - Integration tests with real DCNM/NDFC instances
+- `tests/integration/` - Integration tests with real ND instances
 
 ### Key Components
 
@@ -74,7 +74,7 @@ tox -e venv -- <command>
 
 #### API Layer
 
-- `plugins/module_utils/common/api/` - Hierarchical API structure matching DCNM/NDFC REST endpoints
+- `plugins/module_utils/common/api/` - Hierarchical API structure matching ND REST endpoints
 - `plugins/module_utils/common/ep/`  - All endpoints in api above will move into ep eventually
 - `plugins/module_utils/common/epp/` - endpoint parsers.  These classes are responsible for sending a request for the corresponding endpoint (ep) and providing properties that return the values of each of the fields in the controller response for the endpoint (ep)
 - `plugins/module_utils/common/classes/log_v2.py` - Logger for the project
@@ -171,7 +171,7 @@ Modules follow Ansible's declarative state patterns:
 
 - Always run `tox -e linters` before committing
 - Unit tests should mock controller responses using fixtures
-- Integration tests require real DCNM/NDFC instances
+- Integration tests require real ND instances
 
 ### Common Issues
 
