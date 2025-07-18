@@ -298,13 +298,13 @@ response:
 
 # Import our custom modules
 try:
-    from ansible_collections.cisco.ndfc.plugins.module_utils.common.enums.ansible_states import AnsibleStates
-    from ansible_collections.cisco.ndfc.plugins.module_utils.common.cache.cache_manager import CacheManager
-    from ansible_collections.cisco.ndfc.plugins.module_utils.common.cache.cached_resource_service import CachedResourceService
-    from ansible_collections.cisco.ndfc.plugins.module_utils.vrf_attachment.validators.vrf_attachment_validator import VrfAttachmentValidator
-    from ansible_collections.cisco.ndfc.plugins.module_utils.vrf_attachment.api.vrf_attachment_api import VrfAttachmentApi
-    from ansible_collections.cisco.ndfc.plugins.module_utils.vrf_attachment.states.state_factory import StateFactory
-    from ansible_collections.cisco.ndfc.plugins.module_utils.common.classes.log_v2 import Log
+    from ansible_collections.cisco.nd.plugins.module_utils.common.enums.ansible_states import AnsibleStates
+    from ansible_collections.cisco.nd.plugins.module_utils.common.cache.cache_manager import CacheManager
+    from ansible_collections.cisco.nd.plugins.module_utils.common.cache.cached_resource_service import CachedResourceService
+    from ansible_collections.cisco.nd.plugins.module_utils.vrf_attachment.validators.vrf_attachment_validator import VrfAttachmentValidator
+    from ansible_collections.cisco.nd.plugins.module_utils.vrf_attachment.api.vrf_attachment_api import VrfAttachmentApi
+    from ansible_collections.cisco.nd.plugins.module_utils.vrf_attachment.states.state_factory import StateFactory
+    from ansible_collections.cisco.nd.plugins.module_utils.common.classes.log_v2 import Log
 except ImportError:
     # This will be caught by the module and reported as an error
     pass
