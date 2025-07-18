@@ -1,0 +1,87 @@
+flowchart TD
+    %% Entry Points
+    User[User/Ansible Playbook] --> VRF_MOD[nd_vrf.py]
+    User --> VRF_ATT_MOD[nd_vrf_attachments.py]
+    User --> LOG_MOD[nd_log.py]
+    
+    %% Main Module Layer
+    VRF_MOD --> PARAM_VAL{Parameter Validation}
+    VRF_MOD --> STATE_FACTORY[StateFactory]
+    VRF_MOD --> CACHE_MGR[CacheManager]
+    
+    %% State Management Layer
+    STATE_FACTORY --> MERGED[MergedState]
+    STATE_FACTORY --> DELETED[DeletedState]
+    STATE_FACTORY --> QUERY[QueryState]
+    STATE_FACTORY --> REPLACED[ReplacedState]
+    STATE_FACTORY --> OVERRIDDEN[OverriddenState]
+    
+    %% Validation Layer
+    PARAM_VAL --> VRF_VALIDATOR[VrfValidator]
+    VRF_VALIDATOR --> STATE_MODELS[State-Specific Models]
+    STATE_MODELS --> DELETED_CFG[DeletedVrfConfig]
+    STATE_MODELS --> MERGED_CFG[MergedVrfConfig]
+    STATE_MODELS --> QUERY_CFG[QueryVrfConfig]
+    STATE_MODELS --> REPLACED_CFG[ReplacedVrfConfig]
+    
+    %% Core Data Models
+    STATE_MODELS --> VRF_CONFIG[VrfConfig]
+    VRF_CONFIG --> TEMPLATE_CFG[VrfTemplateConfig]
+    VRF_CONFIG --> VRF_PAYLOAD[VrfPayload]
+    VRF_CONFIG --> MODULE_RESULT[ModuleResult]
+    
+    %% API Layer
+    MERGED --> VRF_API[VrfApi]
+    DELETED --> VRF_API
+    QUERY --> VRF_API
+    REPLACED --> VRF_API
+    OVERRIDDEN --> VRF_API
+    
+    %% Cache System
+    CACHE_MGR --> CACHE_IFACE[CacheInterface]
+    CACHE_MGR --> CACHED_SVC[CachedResourceService]
+    CACHED_SVC --> VRF_API
+    
+    %% HTTP Communication Layer
+    VRF_API --> REST_SEND[RestSend v2]
+    REST_SEND --> SENDER[Sender]
+    REST_SEND --> RESPONSE_HANDLER[ResponseHandler]
+    REST_SEND --> RESULTS[Results]
+    
+    %% Endpoint Layer
+    SENDER --> VRF_SENDER[VrfSender]
+    VRF_SENDER --> EP_LAYER[Endpoint Layer]
+    EP_LAYER --> EP_API[ep/api/]
+    EP_LAYER --> EP_V1[ep/v1/]
+    EP_LAYER --> EPP_LAYER[epp/]
+    
+    %% Controller Communication
+    EP_API --> NDFC[NDFC Controller]
+    RESPONSE_HANDLER --> VRF_RESP_HANDLER[VrfResponseHandler]
+    
+    %% Common Utilities
+    VRF_API --> LOG[Log v2]
+    REST_SEND --> LOG
+    
+    %% Enums and Constants
+    VRF_VALIDATOR --> HTTP_VERBS[HTTP Request Verbs]
+    STATE_FACTORY --> ANSIBLE_STATES[Ansible States]
+    
+    %% Styling
+    classDef entryPoint fill:#e1f5fe,stroke:#0277bd,stroke-width:2px,color:#000000
+    classDef stateLayer fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px,color:#000000
+    classDef validation fill:#fff3e0,stroke:#f57c00,stroke-width:2px,color:#000000
+    classDef api fill:#e8f5e8,stroke:#388e3c,stroke-width:2px,color:#000000
+    classDef cache fill:#fce4ec,stroke:#c2185b,stroke-width:2px,color:#000000
+    classDef communication fill:#e0f2f1,stroke:#00695c,stroke-width:2px,color:#000000
+    classDef controller fill:#ffebee,stroke:#d32f2f,stroke-width:2px,color:#000000
+    classDef models fill:#f1f8e9,stroke:#558b2f,stroke-width:2px,color:#000000
+    
+    class User,VRF_MOD,VRF_ATT_MOD,LOG_MOD entryPoint
+    class STATE_FACTORY,MERGED,DELETED,QUERY,REPLACED,OVERRIDDEN stateLayer
+    class PARAM_VAL,VRF_VALIDATOR,STATE_MODELS,DELETED_CFG,MERGED_CFG,QUERY_CFG,REPLACED_CFG validation
+    class VRF_API,EP_LAYER,EP_API,EP_V1,EPP_LAYER api
+    class CACHE_MGR,CACHE_IFACE,CACHED_SVC cache
+    class REST_SEND,SENDER,VRF_SENDER,RESPONSE_HANDLER,VRF_RESP_HANDLER,RESULTS communication
+    class NDFC controller
+    class VRF_CONFIG,TEMPLATE_CFG,VRF_PAYLOAD,MODULE_RESULT models
