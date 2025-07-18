@@ -267,19 +267,19 @@
 
 - name: Set task name
   ansible.builtin.set_fact:
-    task_name: "TEST.7 - QUERY - [deleted] Delete specific VRF."
+    task_name: "TEST.7 - QUERY - [deleted] Delete specific VRF vrf1."
 
 - name: Log task
   cisco.nd.nd_log:
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
+  register: result_7
   cisco.nd.nd_vrf:
     state: deleted
     config:
       - fabric: "{{ fabric_1 }}"
         vrf_name: vrf1
-  register: result_7
 
 - name: TEST.7a - QUERY - [debug] print result_7
   debug:
@@ -292,7 +292,7 @@
 
 - name: Set task name
   ansible.builtin.set_fact:
-    task_name: "TEST.8 - QUERY - [query] Verify only one VRF remains."
+    task_name: "TEST.8 - QUERY - [query] Verify only one VRF (vrf2) remains."
 
 - name: Log task
   cisco.nd.nd_log:
