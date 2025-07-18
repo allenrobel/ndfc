@@ -24,7 +24,7 @@
     task_name: "SETUP.1 - DELETED - [dcnm_rest.GET] Verify fabric is deployed."
 
 - name: Log task
-  cisco.dcnm.dcnm_log:
+  cisco.nd.nd_log:
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
@@ -42,7 +42,7 @@
     task_name: "SETUP.2 - DELETED - [deleted] Delete all VRFs"
 
 - name: Log task
-  cisco.dcnm.dcnm_log:
+  cisco.nd.nd_log:
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
@@ -57,7 +57,7 @@
     task_name: "SETUP.3 - DELETED - [merged] Create VRF vrf1"
 
 - name: Log task
-  cisco.dcnm.dcnm_log:
+  cisco.nd.nd_log:
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
@@ -83,7 +83,7 @@
     task_name: "SETUP.4a - DELETED - [query] query vrf and print response."
 
 - name: Log task
-  cisco.dcnm.dcnm_log:
+  cisco.nd.nd_log:
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
@@ -97,7 +97,7 @@
     task_name: "SETUP.4b - DELETED - [query] Wait for vrfStatus == NA in response."
 
 - name: Log task
-  cisco.dcnm.dcnm_log:
+  cisco.nd.nd_log:
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
@@ -132,7 +132,7 @@
     task_name: "TEST.1 - DELETED - [deleted] Delete VRF vrf1"
 
 - name: Log task
-  cisco.dcnm.dcnm_log:
+  cisco.nd.nd_log:
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
@@ -160,7 +160,7 @@
     task_name: "TEST.1c - DELETED - [deleted] conf1 - Idempotence"
 
 - name: Log task
-  cisco.dcnm.dcnm_log:
+  cisco.nd.nd_log:
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
@@ -181,7 +181,7 @@
     task_name: "TEST.2 - DELETED - [merged] Create VRFs vrf1 and vrf2"
 
 - name: Log task
-  cisco.dcnm.dcnm_log:
+  cisco.nd.nd_log:
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
@@ -219,7 +219,7 @@
     task_name: "TEST.2a - DELETED - [query] Wait for vrfStatus == NA"
 
 - name: Log task
-  cisco.dcnm.dcnm_log:
+  cisco.nd.nd_log:
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
@@ -251,7 +251,7 @@
     task_name: "TEST.2b - DELETED - [deleted] Delete specific VRFs vrf1 and vrf2"
 
 - name: Log task
-  cisco.dcnm.dcnm_log:
+  cisco.nd.nd_log:
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
@@ -285,7 +285,7 @@
     task_name: "TEST.2e - DELETED - [deleted] conf2 - Idempotence"
 
 - name: Log task
-  cisco.dcnm.dcnm_log:
+  cisco.nd.nd_log:
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
@@ -307,7 +307,7 @@
     task_name: "TEST.3c - DELETED - [deleted] Delete VRF - empty config element should fail"
 
 - name: Log task
-  cisco.dcnm.dcnm_log:
+  cisco.nd.nd_log:
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
@@ -336,7 +336,7 @@
     task_name: "CLEANUP.1 - DELETED - [deleted] Delete all VRFs in fabric"
 
 - name: Log task
-  cisco.dcnm.dcnm_log:
+  cisco.nd.nd_log:
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"

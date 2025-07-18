@@ -55,7 +55,7 @@
     task_name: "TEST.1 - MERGED - [merged] Create VRF vrf1 with VLAN 600"
 
 - name: Log task
-  cisco.dcnm.dcnm_log:
+  cisco.nd.nd_log:
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
@@ -75,7 +75,7 @@
     task_name: "TEST.1a - MERGED - [query] Wait for vrfStatus == NA"
 
 - name: Log task
-  cisco.dcnm.dcnm_log:
+  cisco.nd.nd_log:
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
@@ -104,7 +104,7 @@
     task_name: "TEST.1c - MERGED - [merged] conf1 - Idempotence"
 
 - name: Log task
-  cisco.dcnm.dcnm_log:
+  cisco.nd.nd_log:
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
@@ -125,7 +125,7 @@
     task_name: "TEST.1e - MERGED - [deleted] Delete all VRFs"
 
 - name: Log task
-  cisco.dcnm.dcnm_log:
+  cisco.nd.nd_log:
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
@@ -140,7 +140,7 @@
     task_name: "TEST.2 - MERGED - [merged] Create VRF with controller provided VLAN"
 
 - name: Log task
-  cisco.dcnm.dcnm_log:
+  cisco.nd.nd_log:
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
@@ -159,7 +159,7 @@
     task_name: "TEST.2a - MERGED - [query] Wait for vrfStatus == NA"
 
 - name: Log task
-  cisco.dcnm.dcnm_log:
+  cisco.nd.nd_log:
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
@@ -187,7 +187,7 @@
     task_name: "TEST.2c - MERGED - [merged] conf2 - Idempotence"
 
 - name: Log task
-  cisco.dcnm.dcnm_log:
+  cisco.nd.nd_log:
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
@@ -208,7 +208,7 @@
     task_name: "TEST.2e - MERGED - [deleted] Delete all VRFs"
 
 - name: Log task
-  cisco.dcnm.dcnm_log:
+  cisco.nd.nd_log:
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
@@ -222,7 +222,7 @@
     task_name: "TEST.3 - MERGED - [merged] Create VRF with user provided VLAN"
 
 - name: Log task
-  cisco.dcnm.dcnm_log:
+  cisco.nd.nd_log:
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
@@ -242,7 +242,7 @@
     task_name: "TEST.3a - MERGED - [query] Wait for vrfStatus == NA"
 
 - name: Log task
-  cisco.dcnm.dcnm_log:
+  cisco.nd.nd_log:
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
@@ -271,7 +271,7 @@
     task_name: "TEST.3c - MERGED - [merged] conf3 - Idempotence"
 
 - name: Log task
-  cisco.dcnm.dcnm_log:
+  cisco.nd.nd_log:
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
@@ -292,7 +292,7 @@
     task_name: "TEST.3e - MERGED - [deleted] Delete all VRFs"
 
 - name: Log task
-  cisco.dcnm.dcnm_log:
+  cisco.nd.nd_log:
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
@@ -307,7 +307,7 @@
     task_name: "TEST.4 - MERGED - [merged] Create VRF - Update with incorrect VRF ID."
 
 - name: Log task
-  cisco.dcnm.dcnm_log:
+  cisco.nd.nd_log:
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
@@ -340,7 +340,7 @@
     task_name: "TEST.5 - MERGED - [merged] Create VRF - Update with Out of Range vrf_id."
 
 - name: Log task
-  cisco.dcnm.dcnm_log:
+  cisco.nd.nd_log:
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
@@ -380,7 +380,7 @@
     task_name: "CLEANUP.1 - MERGED - [deleted] Delete all VRFs"
 
 - name: Log task
-  cisco.dcnm.dcnm_log:
+  cisco.nd.nd_log:
     msg: "{{ task_name }}"
 
 

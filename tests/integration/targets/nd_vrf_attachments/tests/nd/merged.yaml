@@ -87,7 +87,7 @@
     task_name: "TEST.1 - MERGED - [merged] Create VRF vrf1"
 
 - name: Log task
-  cisco.dcnm.dcnm_log:
+  cisco.nd.nd_log:
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
@@ -117,7 +117,7 @@
     task_name: "TEST.1 - MERGED - [merged] Attach vrf_1 to switch_2 with lite config"
 
 - name: Log task
-  cisco.dcnm.dcnm_log:
+  cisco.nd.nd_log:
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
@@ -148,7 +148,7 @@
     task_name: "TEST.1a - MERGED - [query] Wait for vrfStatus == DEPLOYED"
 
 - name: Log task
-  cisco.dcnm.dcnm_log:
+  cisco.nd.nd_log:
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
@@ -188,7 +188,7 @@
     task_name: "TEST.1c - MERGED - [merged] conf1 - Idempotence"
 
 - name: Log task
-  cisco.dcnm.dcnm_log:
+  cisco.nd.nd_log:
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
@@ -209,7 +209,7 @@
     task_name: "TEST.1e - MERGED - [deleted] Delete VRF attachments"
 
 - name: Log task
-  cisco.dcnm.dcnm_log:
+  cisco.nd.nd_log:
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
@@ -225,7 +225,7 @@
     task_name: "TEST.1e - MERGED - [deleted] Delete VRFs"
 
 - name: Log task
-  cisco.dcnm.dcnm_log:
+  cisco.nd.nd_log:
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
@@ -245,7 +245,7 @@
     task_name: "CLEANUP.1 - MERGED - [deleted] Delete all VRFs"
 
 - name: Log task
-  cisco.dcnm.dcnm_log:
+  cisco.nd.nd_log:
     msg: "{{ task_name }}"
 
 

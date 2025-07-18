@@ -20,7 +20,7 @@
      - "fabric_1 : {{ fabric_1 }}"
 
 - name: SETUP.0b - REPLACED - [with_items] log vars
-  cisco.dcnm.dcnm_log:
+  cisco.nd.nd_log:
     msg: "{{ item }}"
   with_items:
      - "fabric_1 : {{ fabric_1 }}"
@@ -30,7 +30,7 @@
     task_name: "SETUP.1 - REPLACED - [dcnm_rest.GET] Verify if fabric is deployed."
 
 - name: Log task
-  cisco.dcnm.dcnm_log:
+  cisco.nd.nd_log:
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
@@ -48,7 +48,7 @@
     task_name: "SETUP.2 - REPLACED - [deleted] Delete all VRFs."
 
 - name: Log task
-  cisco.dcnm.dcnm_log:
+  cisco.nd.nd_log:
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
@@ -61,7 +61,7 @@
     task_name: "SETUP.4 - REPLACED - [merged] Create, VLAN+VRF vrf1."
 
 - name: Log task
-  cisco.dcnm.dcnm_log:
+  cisco.nd.nd_log:
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
@@ -81,7 +81,7 @@
     task_name: "SETUP.4a - REPLACED - [query] Wait for vrfStatus == NA."
 
 - name: Log task
-  cisco.dcnm.dcnm_log:
+  cisco.nd.nd_log:
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
@@ -117,7 +117,7 @@
     task_name: "TEST.1 - REPLACED - [replaced] Update existing VRF using replace (change vlan)."
 
 - name: Log task
-  cisco.dcnm.dcnm_log:
+  cisco.nd.nd_log:
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
@@ -158,7 +158,7 @@
     task_name: "TEST.1c - REPLACED - conf1 - Idempotence."
 
 - name: Log task
-  cisco.dcnm.dcnm_log:
+  cisco.nd.nd_log:
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
@@ -178,7 +178,7 @@
     task_name: "TEST.2 - REPLACED - [replaced] Update existing VRF using replace (change vrf_id and vlan_id)."
 
 - name: Log task
-  cisco.dcnm.dcnm_log:
+  cisco.nd.nd_log:
     msg: "{{ task_name }}"
 
 - name: "{{ task_name}}"
@@ -198,7 +198,7 @@
     task_name: "TEST.2a - REPLACED - [query] Wait for vrfStatus == NA."
 
 - name: Log task
-  cisco.dcnm.dcnm_log:
+  cisco.nd.nd_log:
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
@@ -236,7 +236,7 @@
     task_name: "TEST.2c - REPLACED - [replaced] conf2 - Idempotence."
 
 - name: Log task
-  cisco.dcnm.dcnm_log:
+  cisco.nd.nd_log:
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
@@ -260,7 +260,7 @@
     task_name: "CLEANUP.1 - REPLACED - [deleted] Delete all VRFs."
 
 - name: Log task
-  cisco.dcnm.dcnm_log:
+  cisco.nd.nd_log:
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
