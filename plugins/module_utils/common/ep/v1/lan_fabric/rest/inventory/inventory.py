@@ -1,3 +1,4 @@
+"""Inventory endpoints"""
 # Copyright (c) 2024 Cisco and/or its affiliates.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +15,7 @@
 # pylint: disable=line-too-long
 from __future__ import absolute_import, division, print_function
 
-__metaclass__ = type
+__metaclass__ = type  # pylint: disable=invalid-name
 __author__ = "Allen Robel"
 
 import logging
@@ -24,13 +25,15 @@ from ..rest import Rest
 
 class Inventory(Rest):
     """
-    ## api.v1.lan_fabric.rest.inventory.Inventory()
+    # api.v1.lan_fabric.rest.inventory.Inventory()
 
-    ### Description
+    ## Description
+
     Common methods and properties for Inventory() subclasses.
 
-    ### Path
-    -   ``/api/v1/lan-fabric/rest/inventory``
+    ## Path
+
+    -   `/api/v1/lan-fabric/rest/inventory`
     """
 
     def __init__(self):
@@ -50,25 +53,31 @@ class Inventory(Rest):
 
 class EpAllSwitches(Inventory):
     """
-    ##api.v1.lan_fabric.rest.inventory.EpAllSwitches()
+    # api.v1.lan_fabric.rest.inventory.EpAllSwitches()
 
-    ### Description
+    ## Description
+
     Return endpoint information.
 
-    ### Raises
+    ## Raises
+
     -   None
 
-    ### Path
-    -   ``/api/v1/lan-fabric/rest/inventory/allswitches``
+    ## Path
 
-    ### Verb
-    -   GET
+    -   `/api/v1/lan-fabric/rest/inventory/allswitches`
 
-    ### Parameters
+    ## Verb
+
+    GET
+
+    ## Parameters
+
     -   path: retrieve the path for the endpoint
     -   verb: retrieve the verb for the endpoint
 
     ### Usage
+
     ```python
     instance = EpAllSwitches()
     path = instance.path

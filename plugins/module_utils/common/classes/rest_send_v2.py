@@ -451,7 +451,7 @@ class RestSend:
         ### Discussion
         We want to be able to read data from the controller for read-only
         operations (i.e. to set check_mode to False temporarily, even when
-        the user has set check_mode to True).  For example, SwitchDetails
+        the user has set check_mode to True).  For example, AllSwitches
         is a read-only operation, and we want to be able to read this data to
         provide a real controller response to the user.
         """
