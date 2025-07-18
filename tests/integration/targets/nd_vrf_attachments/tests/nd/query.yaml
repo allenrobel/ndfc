@@ -51,7 +51,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.nd.ndfc_vrf:
+  cisco.nd.nd_vrf:
     state: deleted
     config:
       - fabric: "{{ fabric_1 }}"
@@ -70,7 +70,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.nd.ndfc_vrf:
+  cisco.nd.nd_vrf:
     state: merged
     config:
     - fabric: "{{ fabric_1 }}"
@@ -100,7 +100,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.nd.ndfc_vrf:
+  cisco.nd.nd_vrf:
     state: query
     config:
       - fabric: "{{ fabric_1 }}"
@@ -126,7 +126,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.nd.ndfc_vrf:
+  cisco.nd.nd_vrf:
     state: query
     config:
       - fabric: "{{ fabric_1 }}"
@@ -151,7 +151,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.nd.ndfc_vrf:
+  cisco.nd.nd_vrf:
     state: merged
     config:
     - fabric: "{{ fabric_1 }}"
@@ -186,7 +186,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.nd.ndfc_vrf:
+  cisco.nd.nd_vrf:
     state: query
     config:
       - fabric: "{{ fabric_1 }}"
@@ -212,7 +212,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.nd.ndfc_vrf:
+  cisco.nd.nd_vrf:
     state: query
     config:
     - fabric: "{{ fabric_1 }}"
@@ -248,7 +248,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.nd.ndfc_vrf:
+  cisco.nd.nd_vrf:
     state: query
     config:
       - fabric: "{{ fabric_1 }}"
@@ -274,7 +274,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.nd.ndfc_vrf:
+  cisco.nd.nd_vrf:
     state: deleted
     config:
       - fabric: "{{ fabric_1 }}"
@@ -299,7 +299,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.nd.ndfc_vrf:
+  cisco.nd.nd_vrf:
     state: query
     config:
       - fabric: "{{ fabric_1 }}"
@@ -328,7 +328,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.nd.ndfc_vrf:
+  cisco.nd.nd_vrf:
     state: deleted
     config:
       - fabric: "{{ fabric_1 }}"
@@ -347,7 +347,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.nd.ndfc_vrf:
+  cisco.nd.nd_vrf:
     state: query
     config:
       - fabric: "{{ fabric_1 }}"

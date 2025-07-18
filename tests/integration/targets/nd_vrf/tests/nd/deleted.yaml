@@ -46,7 +46,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.nd.ndfc_vrf:
+  cisco.nd.nd_vrf:
     state: deleted
     config:
     - fabric: "{{ fabric_1 }}"
@@ -61,7 +61,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.nd.ndfc_vrf:
+  cisco.nd.nd_vrf:
     state: merged
     config:
     - fabric: "{{ fabric_1 }}"
@@ -87,7 +87,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.nd.ndfc_vrf:
+  cisco.nd.nd_vrf:
     state: query
     config:
       fabric: "{{ fabric_1 }}"
@@ -101,7 +101,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.nd.ndfc_vrf:
+  cisco.nd.nd_vrf:
     state: query
     config:
       fabric: "{{ fabric_1 }}"
@@ -136,7 +136,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.nd.ndfc_vrf: &conf1
+  cisco.nd.nd_vrf: &conf1
     state: deleted
     config:
     - fabric: "{{ fabric_1 }}"
@@ -164,7 +164,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.nd.ndfc_vrf: *conf1
+  cisco.nd.nd_vrf: *conf1
   register: result_1c
 
 - name: TEST.1d - DELETED - [debug] print result_1c
@@ -185,7 +185,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.nd.ndfc_vrf:
+  cisco.nd.nd_vrf:
     state: merged
     config:
     - fabric: "{{ fabric_1 }}"
@@ -223,7 +223,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.nd.ndfc_vrf:
+  cisco.nd.nd_vrf:
     state: query
     config:
     - fabric: "{{ fabric_1 }}"
@@ -255,7 +255,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.nd.ndfc_vrf: &conf2
+  cisco.nd.nd_vrf: &conf2
     state: deleted
     config:
     - fabric: "{{ fabric_1 }}"
@@ -289,7 +289,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.nd.ndfc_vrf: *conf2
+  cisco.nd.nd_vrf: *conf2
   register: result_2e
 
 - name: TEST.2f - DELETED - [debug] print result_2e
@@ -311,7 +311,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.nd.ndfc_vrf:
+  cisco.nd.nd_vrf:
     state: deleted
     config:
   ignore_errors: true
@@ -340,7 +340,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.nd.ndfc_vrf:
+  cisco.nd.nd_vrf:
     state: deleted
     config:
     - fabric: "{{ fabric_1 }}"

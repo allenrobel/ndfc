@@ -52,7 +52,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.nd.ndfc_vrf:
+  cisco.nd.nd_vrf:
     fabric: "{{ fabric_1 }}"
     state: deleted
 
@@ -65,7 +65,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.nd.ndfc_vrf:
+  cisco.nd.nd_vrf:
     fabric: "{{ fabric_1 }}"
     state: merged
     config:
@@ -85,7 +85,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.nd.ndfc_vrf:
+  cisco.nd.nd_vrf:
     fabric: "{{ fabric_1 }}"
     state: query
   register: result_setup_4a
@@ -121,7 +121,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.nd.ndfc_vrf: &conf1
+  cisco.nd.nd_vrf: &conf1
     fabric: "{{ fabric_1 }}"
     state: replaced
     config:
@@ -133,7 +133,7 @@
   register: result_1
 
 - name: TEST.1a - REPLACED - [query] Wait for vrfStatus == NA
-  cisco.nd.ndfc_vrf:
+  cisco.nd.nd_vrf:
     fabric: "{{ fabric_1 }}"
     state: query
   register: result_1a
@@ -162,7 +162,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.nd.ndfc_vrf: *conf1
+  cisco.nd.nd_vrf: *conf1
   register: result_1c
 
 - name: TEST.1d - REPLACED - [debug] print result_1c
@@ -182,7 +182,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name}}"
-  cisco.nd.ndfc_vrf: &conf2
+  cisco.nd.nd_vrf: &conf2
     fabric: "{{ fabric_1 }}"
     state: replaced
     config:
@@ -202,7 +202,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.nd.ndfc_vrf:
+  cisco.nd.nd_vrf:
     fabric: "{{ fabric_1 }}"
     state: query
   register: result_2a
@@ -240,7 +240,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.nd.ndfc_vrf: *conf2
+  cisco.nd.nd_vrf: *conf2
   register: result_2c
 
 - name: TEST.2d - REPLACED - [debug] print result_2c
@@ -264,7 +264,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.nd.ndfc_vrf:
+  cisco.nd.nd_vrf:
     fabric: "{{ fabric_1 }}"
     state: deleted
 

@@ -48,7 +48,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.nd.ndfc_vrf:
+  cisco.nd.nd_vrf:
     fabric: "{{ fabric_1 }}"
     state: deleted
   register: result_setup_2
@@ -63,7 +63,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.nd.ndfc_vrf:
+  cisco.nd.nd_vrf:
     fabric: "{{ fabric_1 }}"
     state: merged
     config:
@@ -87,7 +87,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.nd.ndfc_vrf:
+  cisco.nd.nd_vrf:
     fabric: "{{ fabric_1 }}"
     state: query
   register: result_setup_4
@@ -120,7 +120,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.nd.ndfc_vrf: &conf1
+  cisco.nd.nd_vrf: &conf1
     fabric: "{{ fabric_1 }}"
     state: overridden
     config:
@@ -140,7 +140,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.nd.ndfc_vrf:
+  cisco.nd.nd_vrf:
     fabric: "{{ fabric_1 }}"
     state: query
   register: result_1a
@@ -182,7 +182,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.nd.ndfc_vrf: *conf1
+  cisco.nd.nd_vrf: *conf1
   register: result_1c
 
 - name: TEST.1d - OVERRIDDEN - [debug] print result_1c
@@ -203,7 +203,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.nd.ndfc_vrf:
+  cisco.nd.nd_vrf:
     fabric: "{{ fabric_1 }}"
     state: deleted
   register: result_1f
@@ -222,7 +222,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.nd.ndfc_vrf:
+  cisco.nd.nd_vrf:
     fabric: "{{ fabric_1 }}"
     state: merged
     config:
@@ -243,7 +243,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.nd.ndfc_vrf:
+  cisco.nd.nd_vrf:
     fabric: "{{ fabric_1 }}"
     state: query
   register: result_2b
@@ -274,7 +274,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.nd.ndfc_vrf: &conf3
+  cisco.nd.nd_vrf: &conf3
     fabric: "{{ fabric_1 }}"
     state: overridden
     config:
@@ -296,7 +296,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.nd.ndfc_vrf:
+  cisco.nd.nd_vrf:
     fabric: "{{ fabric_1 }}"
     state: query
   register: result_3d
@@ -326,7 +326,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.nd.ndfc_vrf: *conf3
+  cisco.nd.nd_vrf: *conf3
   register: result_3f
 
 - name: TEST.3g - OVERRIDDEN - [debug] print result_3f
@@ -347,7 +347,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.nd.ndfc_vrf: &conf4
+  cisco.nd.nd_vrf: &conf4
     fabric: "{{ fabric_1 }}"
     state: overridden
     config:
@@ -368,7 +368,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.nd.ndfc_vrf:
+  cisco.nd.nd_vrf:
     fabric: "{{ fabric_1 }}"
     state: query
   register: result_4b
@@ -410,7 +410,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.nd.ndfc_vrf: *conf4
+  cisco.nd.nd_vrf: *conf4
   register: result_4d
 
 - name: TEST.4e - OVERRIDDEN - [debug] print result_4d
@@ -435,7 +435,7 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.nd.ndfc_vrf:
+  cisco.nd.nd_vrf:
     fabric: "{{ fabric_1 }}"
     state: deleted
 

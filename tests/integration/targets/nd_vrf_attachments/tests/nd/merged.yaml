@@ -92,7 +92,7 @@
 
 - name: "{{ task_name }}"
   register: result_1_nd_vrf
-  cisco.nd.ndfc_vrf:
+  cisco.nd.nd_vrf:
     state: merged
     config:
     - fabric: "{{ fabric_1 }}"
