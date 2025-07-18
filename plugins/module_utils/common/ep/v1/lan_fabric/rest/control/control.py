@@ -36,7 +36,7 @@ class Control(Rest):
     def __init__(self):
         super().__init__()
         self.class_name = self.__class__.__name__
-        self.log = logging.getLogger(f"dcnm.{self.class_name}")
+        self.log = logging.getLogger(f"nd.{self.class_name}")
         self.control = f"{self.rest}/control"
         msg = f"ENTERED api.v1.lan_fabric.rest.control.{self.class_name}"
         self.log.debug(msg)

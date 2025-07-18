@@ -62,7 +62,7 @@ class Sender:
         self.class_name = self.__class__.__name__
         self._implements = "sender_v1"
 
-        self.log = logging.getLogger(f"dcnm.{self.class_name}")
+        self.log = logging.getLogger(f"nd.{self.class_name}")
 
         self.params = None
         self._ansible_module = None

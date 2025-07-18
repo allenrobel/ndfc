@@ -36,7 +36,7 @@ class ImageUpgrade(Rest):
     def __init__(self):
         super().__init__()
         self.class_name = self.__class__.__name__
-        self.log = logging.getLogger(f"dcnm.{self.class_name}")
+        self.log = logging.getLogger(f"nd.{self.class_name}")
         self.imageupgrade = f"{self.rest}/imageupgrade"
         msg = f"ENTERED api.v1.imagemanagement.rest.{self.class_name}"
         self.log.debug(msg)
@@ -79,7 +79,7 @@ class EpInstallOptions(ImageUpgrade):
     def __init__(self):
         super().__init__()
         self.class_name = self.__class__.__name__
-        self.log = logging.getLogger(f"dcnm.{self.class_name}")
+        self.log = logging.getLogger(f"nd.{self.class_name}")
         msg = "ENTERED api.v1.imagemanagement.rest."
         msg += f"imageupgrade.{self.class_name}"
         self.log.debug(msg)
@@ -130,7 +130,7 @@ class EpUpgradeImage(ImageUpgrade):
     def __init__(self):
         super().__init__()
         self.class_name = self.__class__.__name__
-        self.log = logging.getLogger(f"dcnm.{self.class_name}")
+        self.log = logging.getLogger(f"nd.{self.class_name}")
         msg = "ENTERED api.v1.imagemanagement.rest."
         msg += f"imageupgrade.{self.class_name}"
         self.log.debug(msg)

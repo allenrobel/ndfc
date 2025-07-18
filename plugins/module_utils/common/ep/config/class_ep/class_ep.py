@@ -43,6 +43,6 @@ class ClassEp(Config):
     def __init__(self):
         super().__init__()
         self.class_name = self.__class__.__name__
-        self.log = logging.getLogger(f"dcnm.{self.class_name}")
+        self.log = logging.getLogger(f"nd.{self.class_name}")
         self.log.debug("ENTERED api.config.class_ep.ClassEp()")
         self.class_ep = f"{self.config}/class"

@@ -81,7 +81,7 @@ class EppFederationMembers:
         self.class_name = self.__class__.__name__
 
         self.action = "federation_members"
-        self.log = logging.getLogger(f"dcnm.{self.class_name}")
+        self.log = logging.getLogger(f"nd.{self.class_name}")
 
         msg = "ENTERED EppFederationMembers()"
         self.log.debug(msg)
@@ -267,7 +267,7 @@ class EppFederationMemberByName(EppFederationMembers):
     from ansible_collections.cisco.dcnm.plugins.module_utils.common.epp.api.config.federation import EppFederationMemberByName
     from ansible_collections.cisco.dcnm.plugins.module_utils.common.rest_send_v2 import RestSend
     from ansible_collections.cisco.dcnm.plugins.module_utils.common.results import Results
-    from ansible_collections.cisco.dcnm.plugins.module_utils.common.sender_dcnm import Sender
+    from ansible_collections.cisco.dcnm.plugins.module_utils.common.sender_nd import Sender
 
     params = {"check_mode": False, "state": "merged"}
     sender = Sender()
@@ -296,7 +296,7 @@ class EppFederationMemberByName(EppFederationMembers):
     from ansible_collections.cisco.dcnm.plugins.module_utils.common.epp.api.config.federation.epp_federation_members import EppFederationMemberByName
     from ansible_collections.cisco.dcnm.plugins.module_utils.common.rest_send_v2 import RestSend
     from ansible_collections.cisco.dcnm.plugins.module_utils.common.results import Results
-    from ansible_collections.cisco.dcnm.plugins.module_utils.common.sender_dcnm import Sender
+    from ansible_collections.cisco.dcnm.plugins.module_utils.common.sender_nd import Sender
 
     params = {"check_mode": False, "state": "merged"}
     sender = Sender()
@@ -320,7 +320,7 @@ class EppFederationMemberByName(EppFederationMembers):
         self.class_name = self.__class__.__name__
         super().__init__()
 
-        self.log = logging.getLogger(f"dcnm.{self.class_name}")
+        self.log = logging.getLogger(f"nd.{self.class_name}")
         msg = "ENTERED EppFederationMemberByName()"
         self.log.debug(msg)
 

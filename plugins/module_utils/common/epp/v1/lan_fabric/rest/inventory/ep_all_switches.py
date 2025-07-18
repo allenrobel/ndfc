@@ -74,7 +74,7 @@ class AllSwitches:
     def __init__(self) -> None:
         self.class_name = self.__class__.__name__
 
-        self.log = logging.getLogger(f"dcnm.{self.class_name}")
+        self.log = logging.getLogger(f"nd.{self.class_name}")
         self.log.debug("ENTERED epp.AllSwitches()")
 
         self.action = "all_switches"
@@ -82,9 +82,7 @@ class AllSwitches:
         self.ep_all_switches = EpAllSwitches()
         self._filter = None
         self._info: dict = {}
-        # self._rest_send = None
         self._rest_send_property = RestSendProperty()
-        # self._results = None
         self._results_property = ResultsProperty()
         self._results: Results = Results()
 

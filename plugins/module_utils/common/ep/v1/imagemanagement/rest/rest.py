@@ -36,7 +36,7 @@ class Rest(ImageManagement):
     def __init__(self):
         super().__init__()
         self.class_name = self.__class__.__name__
-        self.log = logging.getLogger(f"dcnm.{self.class_name}")
+        self.log = logging.getLogger(f"nd.{self.class_name}")
         self.rest = f"{self.imagemanagement}/rest"
         msg = f"ENTERED api.v1.imagemanagement.rest.{self.class_name}"
         self.log.debug(msg)

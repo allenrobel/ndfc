@@ -36,7 +36,7 @@ class Rest(LanFabric):
     def __init__(self):
         super().__init__()
         self.class_name = self.__class__.__name__
-        self.log = logging.getLogger(f"dcnm.{self.class_name}")
+        self.log = logging.getLogger(f"nd.{self.class_name}")
         self.rest = f"{self.lan_fabric}/rest"
         msg = f"ENTERED api.v1.lan_fabric.rest.{self.class_name}"
         self.log.debug(msg)

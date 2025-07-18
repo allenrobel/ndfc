@@ -36,7 +36,7 @@ class FM(V1):
     def __init__(self):
         super().__init__()
         self.class_name = self.__class__.__name__
-        self.log = logging.getLogger(f"dcnm.{self.class_name}")
+        self.log = logging.getLogger(f"nd.{self.class_name}")
         self.fm = f"{self.v1}/fm"
         self.log.debug("ENTERED api.v1.fm.FM()")
 
@@ -72,7 +72,7 @@ class EpFeatures(FM):
     def __init__(self):
         super().__init__()
         self.class_name = self.__class__.__name__
-        self.log = logging.getLogger(f"dcnm.{self.class_name}")
+        self.log = logging.getLogger(f"nd.{self.class_name}")
         self.log.debug("ENTERED api.v1.fm.EpFeatures()")
 
     @property
@@ -115,7 +115,7 @@ class EpVersion(FM):
     def __init__(self):
         super().__init__()
         self.class_name = self.__class__.__name__
-        self.log = logging.getLogger(f"dcnm.{self.class_name}")
+        self.log = logging.getLogger(f"nd.{self.class_name}")
         self.log.debug("ENTERED api.v1.fm.EpVersion()")
 
     @property

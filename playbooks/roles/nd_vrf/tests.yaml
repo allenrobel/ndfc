@@ -2,32 +2,32 @@
 # This playbook can be used to execute integration tests for
 # the roles located in:
 #
-# REPO_ROOT/tests/integration/targets/dcnm_vrf/tests/dcnm/*.yaml
+# REPO_ROOT/tests/integration/targets/nd_vrf/tests/nd/*.yaml
 #
 # Either:
 #
 # 1. Modify the following:
 #
 #    - The vars section below with details for your testing setup.
-#    - dcnm_hosts.yaml in this directory
+#    - hosts.yaml in this directory
 #
 # 2. Run the tests
 #
-#    ansible-playbook dcnm_tests.yaml -i dcnm_hosts.yaml
+#    ansible-playbook tests.yaml -i hosts.yaml
 #
 # OR:
 #
 # 1. Modify ../../files/dynamic_inventory.py to align with your setup
 #
 #    This must contain the vars mentioned below and controller
-#    info from dcnm_hosts.yaml (modified for your setup)
+#    info from hosts.yaml (modified for your setup)
 #
 #  2. Run the tests
 #
-#     ansible-playbook dcnm_tests.yaml -i ../../files/dynamic_inventory.py
+#     ansible-playbook tests.yaml -i ../../files/dynamic_inventory.py
 #
 # 
-- hosts: dcnm
+- hosts: nd
   gather_facts: no
   connection: ansible.netcommon.httpapi
 # Uncomment and modify if not using dynamic_inventory.py

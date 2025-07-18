@@ -119,7 +119,7 @@ class Sender:
         self._implements = "sender_v1"
 
         urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-        self.log = logging.getLogger(f"dcnm.{self.class_name}")
+        self.log = logging.getLogger(f"nd.{self.class_name}")
 
         self._domain = environ.get("ND_DOMAIN", "local")
         self._headers = None

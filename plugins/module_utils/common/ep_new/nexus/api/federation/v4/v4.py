@@ -36,7 +36,7 @@ class V4(Federation):
     def __init__(self):
         super().__init__()
         self.class_name = self.__class__.__name__
-        self.log = logging.getLogger(f"dcnm.{self.class_name}")
+        self.log = logging.getLogger(f"nd.{self.class_name}")
         self.v4 = f"{self.federation}/v4"
 
         msg = "ENTERED ep.nexus.api.federation.v4.V4()"

@@ -53,7 +53,7 @@ class EppLogin:
         self.class_name = self.__class__.__name__
 
         self.action = "login"
-        self.log = logging.getLogger(f"dcnm.{self.class_name}")
+        self.log = logging.getLogger(f"nd.{self.class_name}")
 
         msg = "ENTERED EppLogin()"
         self.log.debug(msg)

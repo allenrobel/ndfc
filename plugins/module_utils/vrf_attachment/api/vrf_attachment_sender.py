@@ -6,10 +6,10 @@ This module provides the VrfAttachmentSender class that handles HTTP request
 transmission for VRF attachment operations.
 """
 from ansible.module_utils.basic import AnsibleModule
-from ...common.classes.sender_dcnm import SenderDcnm
+from ...common.classes.sender_nd import Sender
 
 
-class VrfAttachmentSender(SenderDcnm):
+class VrfAttachmentSender(Sender):
     """Sender for VRF attachment operations."""
 
     def __init__(self, ansible_module: AnsibleModule):

@@ -26,7 +26,7 @@ from os import environ
 """
 # Summary
 
-Optional dynamic inventory for the ansible-dcnm repository
+Optional dynamic inventory for the ansible-nd repository
 integration tests. This inventory is built from environment
 variables.
 
@@ -44,7 +44,7 @@ Values below are examples, and should be modified for your
 setup and the roles/testcases you are running.
 
 ```bash
-export ND_ROLE=dcnm_vrf         # The role to run
+export ND_ROLE=nd_vrf         # The role to run
 export ND_TESTCASE=query        # The testcase to run
 export ND_IP4=10.1.1.1          # Controller IPv4 address
 export ND_PASSWORD=MyPassword   # Controller password
@@ -108,7 +108,7 @@ interface_1b - 2st interface on switch_1
 etc...
 
 """
-nd_role = environ.get("ND_ROLE", "dcnm_vrf")
+nd_role = environ.get("ND_ROLE", "nd_vrf")
 nd_testcase = environ.get("ND_TESTCASE", "query")
 
 fabric_1 = environ.get("ND_FABRIC_1")
@@ -144,7 +144,7 @@ interface_2a = environ.get("ND_INTERFACE_2a", "Ethernet1/1")
 interface_2b = environ.get("ND_INTERFACE_2b", "Ethernet1/2")
 interface_3a = environ.get("ND_INTERFACE_3a", "Ethernet1/3")
 
-if nd_role == "dcnm_vrf":
+if nd_role == "nd_vrf":
     pass
     # VXLAN/EVPN Fabric Name
     # fabric_1
@@ -193,7 +193,7 @@ else:
 output = {
     "_meta": {"hostvars": {}},
     "all": {
-        "children": ["ungrouped", "dcnm", "ndfc", "nxos"],
+        "children": ["ungrouped", "nd", "nxos"],
         "vars": {
             "ansible_httpapi_use_ssl": "true",
             "ansible_httpapi_validate_certs": "false",
@@ -229,14 +229,7 @@ output = {
             "interface_3a": interface_3a,
         },
     },
-    "dcnm": {
-        "hosts": [nd_ip4],
-        "vars": {
-            "ansible_connection": "ansible.netcommon.httpapi",
-            "ansible_network_os": "cisco.dcnm.dcnm",
-        },
-    },
-    "ndfc": {
+    "nd": {
         "hosts": [nd_ip4],
         "vars": {
             "ansible_connection": "ansible.netcommon.httpapi",

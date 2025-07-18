@@ -36,6 +36,6 @@ class LanFabric(V1):
     def __init__(self):
         super().__init__()
         self.class_name = self.__class__.__name__
-        self.log = logging.getLogger(f"dcnm.{self.class_name}")
+        self.log = logging.getLogger(f"nd.{self.class_name}")
         self.lan_fabric = f"{self.v1}/lan-fabric"
         self.log.debug("ENTERED api.v1.lan-fabric.LanFabric()")

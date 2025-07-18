@@ -56,7 +56,7 @@ tox -e venv -- <command>
 
 ### Directory Structure
 
-- `plugins/modules/` - Ansible modules (dcnm_vrf, dcnm_fabric, dcnm_interface, etc.)
+- `plugins/modules/` - Ansible modules (nd_vrf, nd_fabric, nd_interface, etc.)
 - `plugins/module_utils/` - Shared utility modules organized by feature
 - `plugins/httpapi/` - HTTP API plugin for DCNM/NDFC communication
 - `plugins/action/` - Action plugins for complex module operations
@@ -88,18 +88,16 @@ tox -e venv -- <command>
 - `plugins/module_utils/common/classes/conversion.py` - Provides conversion methods for several commonly-used conversions (e.g. translate mac address)
 - `plugins/module_utils/common/classes/conversion.py` - The logger used by this project
 - `plugins/module_utils/common/classes/rest_send_v2.py` - Send requests to the controller using injected dependencies.
-- `plugins/module_utils/common/classes/sender_dcnm.py` - RestSend dependency that sends requests to NDFC using the dcnm_send()
-- `plugins/module_utils/common/classes/sender_dcnm.py` - RestSend dependency that sends requests to NDFC using the python requests library
+- `plugins/module_utils/common/classes/sender.nd.py` - RestSend dependency that sends requests to NDFC using the nd_send()
+- `plugins/module_utils/common/classes/sender_requests.py` - RestSend dependency that sends requests to NDFC using the python requests library
 
 #### VRF Module (Active Development)
 
 The VRF module is currently being refactored to use Pydantic models:
 
-- `plugins/module_utils/vrf/dcnm_vrf_v12.py` - Main VRF module (v12 API)
+- `plugins/module_utils/vrf/nd_vrf_v12.py` - Main VRF module (v12 API)
 - `plugins/module_utils/vrf/model_*.py` - Pydantic models for request/response data
 - Working on integrating Pydantic validation throughout the VRF workflow
-
-**IMPORTANT**: `plugins/module_utils/vrf/dcnm_vrf_v11.py` is dead code and should NOT be used as reference for current work. All active development should focus on the v12 implementation.
 
 ### Design Patterns
 
@@ -168,7 +166,6 @@ Modules follow Ansible's declarative state patterns:
 
 - Pay attention to `plugins/module_utils/vrf/` for latest patterns
 - Follow the model-based validation approach being implemented
-- **AVOID**: Do not reference or modify `dcnm_vrf_v11.py` - it is dead code
 
 ### Testing Strategy
 

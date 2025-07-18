@@ -234,7 +234,7 @@ class EppSites:
         self.class_name = self.__class__.__name__
 
         self.action = "sites"
-        self.log = logging.getLogger(f"dcnm.{self.class_name}")
+        self.log = logging.getLogger(f"nd.{self.class_name}")
 
         msg = "ENTERED EppSites()"
         self.log.debug(msg)
@@ -425,7 +425,7 @@ class EppSitesByName(EppSites):
     from ansible_collections.cisco.dcnm.plugins.module_utils.common.epp.api.class_epp.v2.sites.epp_sites import EppSitesByName
     from ansible_collections.cisco.dcnm.plugins.module_utils.common.rest_send_v2 import RestSend
     from ansible_collections.cisco.dcnm.plugins.module_utils.common.results import Results
-    from ansible_collections.cisco.dcnm.plugins.module_utils.common.sender_dcnm import Sender
+    from ansible_collections.cisco.dcnm.plugins.module_utils.common.sender_nd import Sender
 
     params = {"check_mode": False, "state": "merged"}
     sender = Sender()
@@ -454,7 +454,7 @@ class EppSitesByName(EppSites):
     from ansible_collections.cisco.dcnm.plugins.module_utils.common.epp.api.class_epp.v2.sites.epp_sites import EppSitesByName
     from ansible_collections.cisco.dcnm.plugins.module_utils.common.rest_send_v2 import RestSend
     from ansible_collections.cisco.dcnm.plugins.module_utils.common.results import Results
-    from ansible_collections.cisco.dcnm.plugins.module_utils.common.sender_dcnm import Sender
+    from ansible_collections.cisco.dcnm.plugins.module_utils.common.sender_nd import Sender
 
     params = {"check_mode": False, "state": "merged"}
     sender = Sender()
@@ -478,7 +478,7 @@ class EppSitesByName(EppSites):
         self.class_name = self.__class__.__name__
         super().__init__()
 
-        self.log = logging.getLogger(f"dcnm.{self.class_name}")
+        self.log = logging.getLogger(f"nd.{self.class_name}")
         msg = "ENTERED EppSitesByName()"
         self.log.debug(msg)
 

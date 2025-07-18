@@ -36,7 +36,7 @@ class Bootflash(ImageMgnt):
     def __init__(self):
         super().__init__()
         self.class_name = self.__class__.__name__
-        self.log = logging.getLogger(f"dcnm.{self.class_name}")
+        self.log = logging.getLogger(f"nd.{self.class_name}")
         self.bootflash = f"{self.image_mgmt}/bootFlash"
         msg = "ENTERED api.v1.imagemanagement.rest.imagemgnt.Bootflash()"
         self.log.debug(msg)
@@ -73,7 +73,7 @@ class EpBootflashFiles(Bootflash):
     def __init__(self):
         super().__init__()
         self.class_name = self.__class__.__name__
-        self.log = logging.getLogger(f"dcnm.{self.class_name}")
+        self.log = logging.getLogger(f"nd.{self.class_name}")
         msg = "ENTERED api.v1.imagemanagement.rest.imagemgnt."
         msg += "BootflashFiles.EpBootflashFiles()"
         self.log.debug(msg)
@@ -120,7 +120,7 @@ class EpBootflashInfo(Bootflash):
     def __init__(self):
         super().__init__()
         self.class_name = self.__class__.__name__
-        self.log = logging.getLogger(f"dcnm.{self.class_name}")
+        self.log = logging.getLogger(f"nd.{self.class_name}")
         msg = "ENTERED api.v1.imagemanagement.rest.imagemgnt."
         msg += "BootflashFiles.EpBootflashInfo()"
         self.log.debug(msg)

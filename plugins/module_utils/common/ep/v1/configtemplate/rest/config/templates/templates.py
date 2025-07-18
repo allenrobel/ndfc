@@ -37,7 +37,7 @@ class Templates(Config):
     def __init__(self):
         super().__init__()
         self.class_name = self.__class__.__name__
-        self.log = logging.getLogger(f"dcnm.{self.class_name}")
+        self.log = logging.getLogger(f"nd.{self.class_name}")
 
         self.templates = f"{self.config}/templates"
         self._template_name = None
@@ -108,7 +108,7 @@ class EpTemplate(Templates):
     def __init__(self):
         super().__init__()
         self.class_name = self.__class__.__name__
-        self.log = logging.getLogger(f"dcnm.{self.class_name}")
+        self.log = logging.getLogger(f"nd.{self.class_name}")
         self.required_properties.add("template_name")
         msg = "ENTERED api.v1.configtemplate.rest.config."
         msg += f"templates.Templates.{self.class_name}"
@@ -161,7 +161,7 @@ class EpTemplates(Templates):
     def __init__(self):
         super().__init__()
         self.class_name = self.__class__.__name__
-        self.log = logging.getLogger(f"dcnm.{self.class_name}")
+        self.log = logging.getLogger(f"nd.{self.class_name}")
         self._build_properties()
         msg = "ENTERED api.v1.configtemplate.rest.config."
         msg += f"templates.Templates.{self.class_name}"

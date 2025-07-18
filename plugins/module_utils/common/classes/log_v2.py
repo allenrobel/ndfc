@@ -13,9 +13,9 @@
 # limitations under the License.
 
 """
-Logging utilities for DCNM/NDFC modules.
+Logging utilities for ND modules.
 
-This module provides logging configuration and utilities for the DCNM/NDFC
+This module provides logging configuration and utilities for the ND
 Ansible collection.
 """
 
@@ -35,7 +35,7 @@ from os import environ
 class Log:
     """
     ### Summary
-    Create the base dcnm logging object.
+    Create the base nd logging object.
 
     ### Raises
     -   ``ValueError`` if:
@@ -72,7 +72,7 @@ class Log:
     -   Instantiate a Log() object instance and call ``commit()`` on the instance:
 
     ```python
-    from ansible_collections.cisco.dcnm.plugins.module_utils.common.log_v2 import Log
+    from ansible_collections.cisco.nd.plugins.module_utils.common.log_v2 import Log
     try:
         log = Log()
         log.commit()
@@ -84,14 +84,14 @@ class Log:
     ``bash`` shell is used in the example below.
 
     ```bash
-    unset NDFC_LOGGING_CONFIG
+    unset ND_LOGGING_CONFIG
     ```
 
     To enable exceptions from the logging module (not recommended, unless needed for
     development), set ``develop`` to True:
 
     ```python
-    from ansible_collections.cisco.dcnm.plugins.module_utils.common.log_v2 import Log
+    from ansible_collections.cisco.nd.plugins.module_utils.common.log_v2 import Log
     try:
         log = Log()
         log.develop = True
@@ -105,7 +105,7 @@ class Log:
     property prior to calling ``commit()``:
 
     ```python
-    from ansible_collections.cisco.dcnm.plugins.module_utils.common.log_v2 import Log
+    from ansible_collections.cisco.nd.plugins.module_utils.common.log_v2 import Log
     try:
         log = Log()
         log.config = "/path/to/logging_config.json"
@@ -115,7 +115,7 @@ class Log:
     ```
 
     At this point, a base/parent logger is created for which all other
-    loggers throughout the dcnm collection will be children.
+    loggers throughout the nd collection will be children.
     This allows for a single logging config to be used for all modules in the
     collection, and allows for the logging config to be specified in a
     single place external to the code.
@@ -124,7 +124,7 @@ class Log:
 
     In the main() function of a module.
     ```python
-    from ansible_collections.cisco.dcnm.plugins.module_utils.common.log_v2 import Log
+    from ansible_collections.cisco.nd.plugins.module_utils.common.log_v2 import Log
 
     def main():
         try:
@@ -144,7 +144,7 @@ class Log:
     class AnsibleTask:
         def __init__(self):
             self.class_name = self.__class__.__name__
-            self.log = logging.getLogger(f"dcnm.{self.class_name}")
+            self.log = logging.getLogger(f"nd.{self.class_name}")
         def some_method(self):
             self.log.debug("This is a debug message.")
     ```
@@ -171,7 +171,7 @@ class Log:
                 "class": "logging.handlers.RotatingFileHandler",
                 "formatter": "standard",
                 "level": "DEBUG",
-                "filename": "/tmp/dcnm.log",
+                "filename": "/tmp/nd.log",
                 "mode": "a",
                 "encoding": "utf-8",
                 "maxBytes": 50000000,
@@ -179,7 +179,7 @@ class Log:
             }
         },
         "loggers": {
-            "dcnm": {
+            "nd": {
                 "handlers": [
                     "file"
                 ],

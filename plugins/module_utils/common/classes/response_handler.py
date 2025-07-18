@@ -67,7 +67,7 @@ class ResponseHandler:
 
     ```python
     # import and instantiate the class
-    from ansible_collections.cisco.dcnm.plugins.module_utils.common.response_handler import ResponseHandler
+    from ansible_collections.cisco.nd.plugins.module_utils.common.response_handler import ResponseHandler
     response_handler = ResponseHandler()
 
     try:
@@ -95,7 +95,7 @@ class ResponseHandler:
         method_name = inspect.stack()[0][3]
         self._implements = "response_handler_v1"
 
-        self.log = logging.getLogger(f"dcnm.{self.class_name}")
+        self.log = logging.getLogger(f"nd.{self.class_name}")
 
         self._response = None
         self._result = None

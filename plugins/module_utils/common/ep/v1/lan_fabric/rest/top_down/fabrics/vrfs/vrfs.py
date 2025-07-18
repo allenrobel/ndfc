@@ -38,7 +38,7 @@ class Vrfs(Fabrics):
     def __init__(self):
         super().__init__()
         self.class_name = self.__class__.__name__
-        self.log = logging.getLogger(f"dcnm.{self.class_name}")
+        self.log = logging.getLogger(f"nd.{self.class_name}")
         self.fabrics = f"{self.top_down}/fabrics"
         msg = f"ENTERED api.v1.lan_fabric.rest.top_down.fabrics.vrfs.{self.class_name}"
         self.log.debug(msg)
@@ -143,7 +143,7 @@ class EpVrfGet(Fabrics):
     def __init__(self):
         super().__init__()
         self.class_name = self.__class__.__name__
-        self.log = logging.getLogger(f"dcnm.{self.class_name}")
+        self.log = logging.getLogger(f"nd.{self.class_name}")
         self.required_properties.add("fabric_name")
         self._build_properties()
         msg = "ENTERED api.v1.lan_fabric.rest.top_down.fabrics.vrfs."
@@ -199,7 +199,7 @@ class EpVrfPost(Fabrics):
     def __init__(self):
         super().__init__()
         self.class_name = self.__class__.__name__
-        self.log = logging.getLogger(f"dcnm.{self.class_name}")
+        self.log = logging.getLogger(f"nd.{self.class_name}")
         self.required_properties.add("fabric_name")
         self._build_properties()
         msg = "ENTERED api.v1.lan_fabric.rest.top_down.fabrics.vrfs."

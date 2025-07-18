@@ -36,7 +36,7 @@ class PackageMgnt(Rest):
     def __init__(self):
         super().__init__()
         self.class_name = self.__class__.__name__
-        self.log = logging.getLogger(f"dcnm.{self.class_name}")
+        self.log = logging.getLogger(f"nd.{self.class_name}")
         self.packagemgnt = f"{self.rest}/packagemgnt"
         self.log.debug("ENTERED api.v1.PackageMgnt()")
 
@@ -72,7 +72,7 @@ class EpIssu(PackageMgnt):
     def __init__(self):
         super().__init__()
         self.class_name = self.__class__.__name__
-        self.log = logging.getLogger(f"dcnm.{self.class_name}")
+        self.log = logging.getLogger(f"nd.{self.class_name}")
         msg = "ENTERED api.v1.imagemanagement.rest."
         msg += f"packagemgnt.{self.class_name}"
         self.log.debug(msg)

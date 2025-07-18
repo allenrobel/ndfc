@@ -6,7 +6,7 @@ This module provides the VrfSender class that handles HTTP communications
 with DCNM/NDFC for VRF operations.
 """
 from ansible.module_utils.basic import AnsibleModule
-from ...common.classes.sender_dcnm import Sender
+from ...common.classes.sender_nd import Sender
 
 
 class VrfSender(Sender):

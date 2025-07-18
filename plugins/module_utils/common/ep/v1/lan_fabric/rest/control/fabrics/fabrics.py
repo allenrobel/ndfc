@@ -39,7 +39,7 @@ class Fabrics(Control):
     def __init__(self):
         super().__init__()
         self.class_name = self.__class__.__name__
-        self.log = logging.getLogger(f"dcnm.{self.class_name}")
+        self.log = logging.getLogger(f"nd.{self.class_name}")
         self.fabric_types = FabricTypes()
         self.fabrics = f"{self.control}/fabrics"
         msg = f"ENTERED api.v1.lan_fabric.rest.control.fabrics.{self.class_name}"
@@ -259,7 +259,7 @@ class EpFabricConfigDeploy(Fabrics):
     def __init__(self):
         super().__init__()
         self.class_name = self.__class__.__name__
-        self.log = logging.getLogger(f"dcnm.{self.class_name}")
+        self.log = logging.getLogger(f"nd.{self.class_name}")
         self.required_properties.add("fabric_name")
         self._build_properties()
         msg = "ENTERED api.v1.lan_fabric.rest.control.fabrics."
@@ -414,7 +414,7 @@ class EpFabricConfigSave(Fabrics):
     def __init__(self):
         super().__init__()
         self.class_name = self.__class__.__name__
-        self.log = logging.getLogger(f"dcnm.{self.class_name}")
+        self.log = logging.getLogger(f"nd.{self.class_name}")
         self.required_properties.add("fabric_name")
         self._build_properties()
         msg = "ENTERED api.v1.lan_fabric.rest.control.fabrics."
@@ -481,7 +481,7 @@ class EpFabricCreate(Fabrics):
     def __init__(self):
         super().__init__()
         self.class_name = self.__class__.__name__
-        self.log = logging.getLogger(f"dcnm.{self.class_name}")
+        self.log = logging.getLogger(f"nd.{self.class_name}")
         self.required_properties.add("fabric_name")
         self.required_properties.add("template_name")
         self._build_properties()
@@ -538,7 +538,7 @@ class EpFabricDelete(Fabrics):
     def __init__(self):
         super().__init__()
         self.class_name = self.__class__.__name__
-        self.log = logging.getLogger(f"dcnm.{self.class_name}")
+        self.log = logging.getLogger(f"nd.{self.class_name}")
         self.required_properties.add("fabric_name")
         self._build_properties()
         msg = "ENTERED api.v1.lan_fabric.rest.control.fabrics."
@@ -594,7 +594,7 @@ class EpFabricDetails(Fabrics):
     def __init__(self):
         super().__init__()
         self.class_name = self.__class__.__name__
-        self.log = logging.getLogger(f"dcnm.{self.class_name}")
+        self.log = logging.getLogger(f"nd.{self.class_name}")
         self.required_properties.add("fabric_name")
         self._build_properties()
         msg = "ENTERED api.v1.lan_fabric.rest.control.fabrics."
@@ -646,7 +646,7 @@ class EpFabricFreezeMode(Fabrics):
     def __init__(self):
         super().__init__()
         self.class_name = self.__class__.__name__
-        self.log = logging.getLogger(f"dcnm.{self.class_name}")
+        self.log = logging.getLogger(f"nd.{self.class_name}")
         self.required_properties.add("fabric_name")
         self._build_properties()
         msg = "ENTERED api.v1.lan_fabric.rest.control.fabrics."
@@ -707,7 +707,7 @@ class EpFabricUpdate(Fabrics):
     def __init__(self):
         super().__init__()
         self.class_name = self.__class__.__name__
-        self.log = logging.getLogger(f"dcnm.{self.class_name}")
+        self.log = logging.getLogger(f"nd.{self.class_name}")
         self.required_properties.add("fabric_name")
         self.required_properties.add("template_name")
         msg = "ENTERED api.v1.lan_fabric.rest.control.fabrics."
@@ -758,7 +758,7 @@ class EpFabrics(Fabrics):
     def __init__(self):
         super().__init__()
         self.class_name = self.__class__.__name__
-        self.log = logging.getLogger(f"dcnm.{self.class_name}")
+        self.log = logging.getLogger(f"nd.{self.class_name}")
         self._build_properties()
         msg = "ENTERED api.v1.lan_fabric.rest.control.fabrics."
         msg += f"Fabrics.{self.class_name}"
@@ -821,7 +821,7 @@ class EpMaintenanceModeDeploy(Fabrics):
     def __init__(self):
         super().__init__()
         self.class_name = self.__class__.__name__
-        self.log = logging.getLogger(f"dcnm.{self.class_name}")
+        self.log = logging.getLogger(f"nd.{self.class_name}")
         self.required_properties.add("fabric_name")
         self.required_properties.add("serial_number")
         self._wait_for_mode_change = False
@@ -919,7 +919,7 @@ class EpMaintenanceModeEnable(Fabrics):
     def __init__(self):
         super().__init__()
         self.class_name = self.__class__.__name__
-        self.log = logging.getLogger(f"dcnm.{self.class_name}")
+        self.log = logging.getLogger(f"nd.{self.class_name}")
         self.required_properties.add("fabric_name")
         self.required_properties.add("serial_number")
         msg = "ENTERED api.v1.lan_fabric.rest.control.fabrics."
@@ -996,7 +996,7 @@ class EpMaintenanceModeDisable(Fabrics):
     def __init__(self):
         super().__init__()
         self.class_name = self.__class__.__name__
-        self.log = logging.getLogger(f"dcnm.{self.class_name}")
+        self.log = logging.getLogger(f"nd.{self.class_name}")
         self.required_properties.add("fabric_name")
         self.required_properties.add("serial_number")
         msg = "ENTERED api.v1.lan_fabric.rest.control.fabrics."

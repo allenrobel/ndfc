@@ -56,7 +56,7 @@ class EppFederationManagerGet:
         EppFederationManagerGet
     from ansible_collections.cisco.dcnm.plugins.module_utils.common.rest_send_v2 import RestSend
     from ansible_collections.cisco.dcnm.plugins.module_utils.common.results import Results
-    from ansible_collections.cisco.dcnm.plugins.module_utils.common.sender_dcnm import Sender
+    from ansible_collections.cisco.dcnm.plugins.module_utils.common.sender_nd import Sender
 
     params = {"check_mode": False, "state": "merged"}
     sender = Sender()
@@ -99,7 +99,7 @@ class EppFederationManagerGet:
         self.class_name = self.__class__.__name__
 
         self.action = "federation_manager"
-        self.log = logging.getLogger(f"dcnm.{self.class_name}")
+        self.log = logging.getLogger(f"nd.{self.class_name}")
 
         msg = "ENTERED EppFederationManagerGet()"
         self.log.debug(msg)

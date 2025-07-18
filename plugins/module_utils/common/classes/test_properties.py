@@ -1,6 +1,6 @@
 """test script"""
 from ansible_collections.cisco.ndfc.plugins.module_utils.common.classes.rest_send_v2 import RestSend
-from ansible_collections.cisco.ndfc.plugins.module_utils.common.classes.sender_dcnm import Sender
+from ansible_collections.cisco.ndfc.plugins.module_utils.common.classes.sender_nd import Sender
 from ansible_collections.cisco.ndfc.plugins.module_utils.common.classes.response_handler import ResponseHandler
 from ansible_collections.cisco.ndfc.plugins.module_utils.common.properties.rest_send import RestSendProperty
 

@@ -37,7 +37,7 @@ class PolicyMgnt(Rest):
     def __init__(self):
         super().__init__()
         self.class_name = self.__class__.__name__
-        self.log = logging.getLogger(f"dcnm.{self.class_name}")
+        self.log = logging.getLogger(f"nd.{self.class_name}")
         self.policymgnt = f"{self.rest}/policymgnt"
         self.log.debug("ENTERED api.v1.PolicyMgnt()")
 
@@ -73,7 +73,7 @@ class EpPolicies(PolicyMgnt):
     def __init__(self):
         super().__init__()
         self.class_name = self.__class__.__name__
-        self.log = logging.getLogger(f"dcnm.{self.class_name}")
+        self.log = logging.getLogger(f"nd.{self.class_name}")
         msg = "ENTERED api.v1.imagemanagement.rest."
         msg += f"policymgnt.{self.class_name}"
         self.log.debug(msg)
@@ -118,7 +118,7 @@ class EpPoliciesAllAttached(PolicyMgnt):
     def __init__(self):
         super().__init__()
         self.class_name = self.__class__.__name__
-        self.log = logging.getLogger(f"dcnm.{self.class_name}")
+        self.log = logging.getLogger(f"nd.{self.class_name}")
         msg = "ENTERED api.v1.imagemanagement.rest."
         msg += f"policymgnt.{self.class_name}"
         self.log.debug(msg)
@@ -163,7 +163,7 @@ class EpPolicyAttach(PolicyMgnt):
     def __init__(self):
         super().__init__()
         self.class_name = self.__class__.__name__
-        self.log = logging.getLogger(f"dcnm.{self.class_name}")
+        self.log = logging.getLogger(f"nd.{self.class_name}")
         msg = "ENTERED api.v1.imagemanagement.rest."
         msg += f"policymgnt.{self.class_name}"
         self.log.debug(msg)
@@ -208,7 +208,7 @@ class EpPolicyCreate(PolicyMgnt):
     def __init__(self):
         super().__init__()
         self.class_name = self.__class__.__name__
-        self.log = logging.getLogger(f"dcnm.{self.class_name}")
+        self.log = logging.getLogger(f"nd.{self.class_name}")
         msg = "ENTERED api.v1.imagemanagement.rest."
         msg += f"policymgnt.{self.class_name}"
         self.log.debug(msg)
@@ -252,7 +252,7 @@ class EpPolicyDelete(PolicyMgnt):
     def __init__(self):
         super().__init__()
         self.class_name = self.__class__.__name__
-        self.log = logging.getLogger(f"dcnm.{self.class_name}")
+        self.log = logging.getLogger(f"nd.{self.class_name}")
         msg = "ENTERED api.v1.imagemanagement.rest."
         msg += f"policymgnt.{self.class_name}"
         self.log.debug(msg)
@@ -297,7 +297,7 @@ class EpPolicyDetach(PolicyMgnt):
     def __init__(self):
         super().__init__()
         self.class_name = self.__class__.__name__
-        self.log = logging.getLogger(f"dcnm.{self.class_name}")
+        self.log = logging.getLogger(f"nd.{self.class_name}")
         self._serial_numbers = None
         msg = "ENTERED api.v1.imagemanagement.rest."
         msg += f"policymgnt.{self.class_name}"
@@ -376,7 +376,7 @@ class EpPolicyEdit(PolicyMgnt):
     def __init__(self):
         super().__init__()
         self.class_name = self.__class__.__name__
-        self.log = logging.getLogger(f"dcnm.{self.class_name}")
+        self.log = logging.getLogger(f"nd.{self.class_name}")
         msg = "ENTERED api.v1.imagemanagement.rest."
         msg += f"policymgnt.{self.class_name}"
         self.log.debug(msg)
@@ -425,7 +425,7 @@ class EpPolicyInfo(PolicyMgnt):
     def __init__(self):
         super().__init__()
         self.class_name = self.__class__.__name__
-        self.log = logging.getLogger(f"dcnm.{self.class_name}")
+        self.log = logging.getLogger(f"nd.{self.class_name}")
         self._policy_name = None
         msg = "ENTERED api.v1.imagemanagement.rest."
         msg += f"policymgnt.{self.class_name}"

@@ -37,7 +37,7 @@ class Manager(Federation):
     def __init__(self):
         super().__init__()
         self.class_name = self.__class__.__name__
-        self.log = logging.getLogger(f"dcnm.{self.class_name}")
+        self.log = logging.getLogger(f"nd.{self.class_name}")
         self.log.debug("ENTERED api.config.federation.manager.Manager()")
         self.manager = f"{self.federation}/manager"
 
@@ -55,7 +55,7 @@ class EpFederationManagerGet(Manager):
     def __init__(self):
         super().__init__()
         self.class_name = self.__class__.__name__
-        self.log = logging.getLogger(f"dcnm.{self.class_name}")
+        self.log = logging.getLogger(f"nd.{self.class_name}")
 
         self._verb = "GET"
         self._path = f"{self.manager}/mo"
