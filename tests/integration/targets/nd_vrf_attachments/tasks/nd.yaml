@@ -1,0 +1,32 @@
+---
+- name: collect nd test cases
+  find:
+    paths: ["{{ role_path }}/tests/nd", "{{ role_path }}/tests/nd/self-contained-tests"]
+    patterns: "{{ testcase }}.yaml"
+  connection: local
+  register: nd_cases
+  tags: sanity
+
+- set_fact:
+    test_cases:
+      files: "{{ nd_cases.files }}"
+  tags: sanity
+
+- name: set test_items
+  set_fact: test_items="{{ test_cases.files | map(attribute='path') | list }}"
+  tags: sanity
+
+- name: debug
+  debug:
+     var: test_items
+
+- name: debug
+  debug:
+     var: testcase
+
+- name: run test cases (connection=httpapi)
+  include_tasks: "{{ test_case_to_run }}"
+  with_items: "{{ test_items }}"
+  loop_control:
+    loop_var: test_case_to_run
+  tags: sanity

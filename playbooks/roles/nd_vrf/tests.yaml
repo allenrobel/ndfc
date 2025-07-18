@@ -48,4 +48,4 @@
     # testcase: query
 
   roles:
-    - dcnm_vrf
+    - nd_vrf

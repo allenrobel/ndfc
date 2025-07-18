@@ -5,7 +5,8 @@
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 """
-Ansible module for managing VRF attachments on Nexus Dashboard Fabric Controller.
+Ansible module for managing VRF attachments on Nexus Dashboard
+.
 
 This module provides comprehensive VRF attachment management capabilities for NDFC including
 creation, updates, deletion, and querying with optimized caching support.

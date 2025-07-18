@@ -1,15 +1,15 @@
 ---
-- name: collect dcnm test cases
+- name: collect nd test cases
   find:
-    paths: ["{{ role_path }}/tests/dcnm", "{{ role_path }}/tests/dcnm/self-contained-tests"]
+    paths: ["{{ role_path }}/tests/nd", "{{ role_path }}/tests/nd/self-contained-tests"]
     patterns: "{{ testcase }}.yaml"
   connection: local
-  register: dcnm_cases
+  register: nd_cases
   tags: sanity
 
 - set_fact:
     test_cases:
-      files: "{{ dcnm_cases.files }}"
+      files: "{{ nd_cases.files }}"
   tags: sanity
 
 - name: set test_items

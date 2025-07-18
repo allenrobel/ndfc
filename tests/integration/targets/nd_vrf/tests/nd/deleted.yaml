@@ -1,0 +1,347 @@
+##############################################
+##            REQUIRED VARS                 ##
+##############################################
+# fabric_1
+#
+# - A VXLAN_EVPN fabric
+#
+# No switches are required
+#
+##############################################
+
+##############################################
+##                 SETUP                    ##
+##############################################
+
+- name: SETUP.0 - DELETED - print vars
+  ansible.builtin.debug:
+    var: item
+  with_items:
+     - "fabric_1 : {{ fabric_1 }}"
+
+- name: Set task name
+  ansible.builtin.set_fact:
+    task_name: "SETUP.1 - DELETED - [dcnm_rest.GET] Verify fabric is deployed."
+
+- name: Log task
+  cisco.dcnm.dcnm_log:
+    msg: "{{ task_name }}"
+
+- name: "{{ task_name }}"
+  cisco.dcnm.dcnm_rest:
+    method: GET
+    path: "/appcenter/cisco/ndfc/api/v1/lan-fabric/rest/control/fabrics/{{ fabric_1 }}"
+  register: result_setup_1
+
+- assert:
+    that:
+    - result_setup_1.response.DATA != None
+
+- name: Set task name
+  ansible.builtin.set_fact:
+    task_name: "SETUP.2 - DELETED - [deleted] Delete all VRFs"
+
+- name: Log task
+  cisco.dcnm.dcnm_log:
+    msg: "{{ task_name }}"
+
+- name: "{{ task_name }}"
+  cisco.nd.ndfc_vrf:
+    state: deleted
+    config:
+    - fabric: "{{ fabric_1 }}"
+  register: result_setup_2
+
+- name: Set task name
+  ansible.builtin.set_fact:
+    task_name: "SETUP.3 - DELETED - [merged] Create VRF vrf1"
+
+- name: Log task
+  cisco.dcnm.dcnm_log:
+    msg: "{{ task_name }}"
+
+- name: "{{ task_name }}"
+  cisco.nd.ndfc_vrf:
+    state: merged
+    config:
+    - fabric: "{{ fabric_1 }}"
+      vrf_name: vrf1
+      vrf_id: 9008011
+      vrf_template: Default_VRF_Universal
+      vrf_extension_template: Default_VRF_Extension_Universal
+      vrf_template_config:
+        vrf_segment_id: 9008011
+        vrf_vlan_id: 500
+        mtu: 9216
+        vrf_description: "Test VRF for query integration test"
+        asn: "65001"
+        tag: 12345
+  register: result_setup_3
+
+- name: Set task name
+  ansible.builtin.set_fact:
+    task_name: "SETUP.4a - DELETED - [query] query vrf and print response."
+
+- name: Log task
+  cisco.dcnm.dcnm_log:
+    msg: "{{ task_name }}"
+
+- name: "{{ task_name }}"
+  cisco.nd.ndfc_vrf:
+    state: query
+    config:
+      fabric: "{{ fabric_1 }}"
+
+- name: Set task name
+  ansible.builtin.set_fact:
+    task_name: "SETUP.4b - DELETED - [query] Wait for vrfStatus == NA in response."
+
+- name: Log task
+  cisco.dcnm.dcnm_log:
+    msg: "{{ task_name }}"
+
+- name: "{{ task_name }}"
+  cisco.nd.ndfc_vrf:
+    state: query
+    config:
+      fabric: "{{ fabric_1 }}"
+  register: result_setup_4
+  until:
+    - "result_setup_4.response[0].DATA.vrfStatus is search('NA')"
+  retries: 30
+  delay: 2
+
+- name: SETUP.4a - DELETED - [debug] print result_setup_3
+  debug:
+    var: result_setup_3
+
+- assert:
+    that:
+    - result_setup_3.changed == true
+    - result_setup_3.diff[0].vrf_name == "vrf1"
+    - result_setup_3.response[0].RETURN_CODE == 200
+    - result_setup_3.response[1].RETURN_CODE == 200
+    - result_setup_3.response[2].RETURN_CODE == 200
+
+###############################################
+###                 DELETED                  ##
+###############################################
+
+- name: Set task name
+  ansible.builtin.set_fact:
+    task_name: "TEST.1 - DELETED - [deleted] Delete VRF vrf1"
+
+- name: Log task
+  cisco.dcnm.dcnm_log:
+    msg: "{{ task_name }}"
+
+- name: "{{ task_name }}"
+  cisco.nd.ndfc_vrf: &conf1
+    state: deleted
+    config:
+    - fabric: "{{ fabric_1 }}"
+      vrf_name: vrf1
+  register: result_1
+
+- name: TEST.1b - DELETED - [debug] print result_1
+  debug:
+    var: result_1
+
+- assert:
+    that:
+    - result_1.changed == true
+    - result_1.response[0].vrf_name == "vrf1"
+    - result_1.response[0].MESSAGE == "OK"
+    - result_1.response[0].METHOD == "DELETE"
+    - result_1.response[0].RETURN_CODE == 200
+
+- name: Set task name
+  ansible.builtin.set_fact:
+    task_name: "TEST.1c - DELETED - [deleted] conf1 - Idempotence"
+
+- name: Log task
+  cisco.dcnm.dcnm_log:
+    msg: "{{ task_name }}"
+
+- name: "{{ task_name }}"
+  cisco.nd.ndfc_vrf: *conf1
+  register: result_1c
+
+- name: TEST.1d - DELETED - [debug] print result_1c
+  debug:
+    var: result_1c
+
+- assert:
+    that:
+    - result_1c.changed == false
+    - result_1c.response|length == 0
+
+- name: Set task name
+  ansible.builtin.set_fact:
+    task_name: "TEST.2 - DELETED - [merged] Create VRFs vrf1 and vrf2"
+
+- name: Log task
+  cisco.dcnm.dcnm_log:
+    msg: "{{ task_name }}"
+
+- name: "{{ task_name }}"
+  cisco.nd.ndfc_vrf:
+    state: merged
+    config:
+    - fabric: "{{ fabric_1 }}"
+      vrf_name: vrf1
+      vrf_id: 9008011
+      vrf_template: Default_VRF_Universal
+      vrf_extension_template: Default_VRF_Extension_Universal
+      vrf_template_config:
+        vrf_segment_id: 9008011
+        vrf_vlan_id: 501
+        mtu: 9216
+        vrf_description: "Test VRF vrf1 for query integration test"
+        asn: "65001"
+        tag: 12345
+    - fabric: "{{ fabric_1 }}"
+      vrf_name: vrf2
+      vrf_id: 9008012
+      vrf_template: Default_VRF_Universal
+      vrf_extension_template: Default_VRF_Extension_Universal
+      vrf_template_config:
+        vrf_segment_id: 9008012
+        vrf_vlan_id: 502
+        mtu: 9216
+        vrf_description: "Test VRF vrf2 for query integration test"
+        asn: "65002"
+        tag: 12345
+  register: result_2
+
+- name: Set task name
+  ansible.builtin.set_fact:
+    task_name: "TEST.2a - DELETED - [query] Wait for vrfStatus == NA"
+
+- name: Log task
+  cisco.dcnm.dcnm_log:
+    msg: "{{ task_name }}"
+
+- name: "{{ task_name }}"
+  cisco.nd.ndfc_vrf:
+    state: query
+    config:
+    - fabric: "{{ fabric_1 }}"
+  register: result_2a
+  until:
+    - "result_2a.response[0].DATA.vrfStatus is search('NA')"
+    - "result_2a.response[1].DATA.vrfStatus is search('NA')"
+  retries: 5
+  delay: 2
+
+- name: TEST.2b - DELETED - [debug] print result_2
+  debug:
+    var: result_2
+
+- assert:
+    that:
+    - result_2.changed == true
+    - result_2.response[0].vrf_name == "vrf1"
+    - result_2.response[1].vrf_name == "vrf2"
+    - result_2.response[0].RETURN_CODE == 200
+    - result_2.response[1].RETURN_CODE == 200
+
+- name: Set task name
+  ansible.builtin.set_fact:
+    task_name: "TEST.2b - DELETED - [deleted] Delete specific VRFs vrf1 and vrf2"
+
+- name: Log task
+  cisco.dcnm.dcnm_log:
+    msg: "{{ task_name }}"
+
+- name: "{{ task_name }}"
+  cisco.nd.ndfc_vrf: &conf2
+    state: deleted
+    config:
+    - fabric: "{{ fabric_1 }}"
+      vrf_name: vrf1
+    - fabric: "{{ fabric_1 }}"
+      vrf_name: vrf2
+  register: result_2b
+
+- name: TEST.2c - DELETED - [debug] print result_2b
+  debug:
+    var: result_2b
+
+- assert:
+    that:
+    - result_2b.changed == true
+    - result_2b.response[0].vrf_name == "vrf1"
+    - result_2b.response[1].vrf_name == "vrf2"
+    - result_2b.response[0].MESSAGE == "OK"
+    - result_2b.response[1].MESSAGE == "OK"
+    - result_2b.response[0].METHOD == "DELETE"
+    - result_2b.response[1].METHOD == "DELETE"
+    - result_2b.response[0].RETURN_CODE == 200
+    - result_2b.response[1].RETURN_CODE == 200
+
+- name: Set task name
+  ansible.builtin.set_fact:
+    task_name: "TEST.2e - DELETED - [deleted] conf2 - Idempotence"
+
+- name: Log task
+  cisco.dcnm.dcnm_log:
+    msg: "{{ task_name }}"
+
+- name: "{{ task_name }}"
+  cisco.nd.ndfc_vrf: *conf2
+  register: result_2e
+
+- name: TEST.2f - DELETED - [debug] print result_2e
+  debug:
+    var: result_2e
+
+- assert:
+    that:
+    - result_2e.changed == false
+    - result_2e.response|length == 0
+    - result_2e.diff|length == 0
+
+- name: Set task name
+  ansible.builtin.set_fact:
+    task_name: "TEST.3c - DELETED - [deleted] Delete VRF - empty config element should fail"
+
+- name: Log task
+  cisco.dcnm.dcnm_log:
+    msg: "{{ task_name }}"
+
+- name: "{{ task_name }}"
+  cisco.nd.ndfc_vrf:
+    state: deleted
+    config:
+  ignore_errors: true
+  register: result_3c
+
+- name: TEST.3d - DELETED - [debug] print result_3c
+  debug:
+    var: result_3c
+
+- assert:
+    that:
+    - result_3c.changed == false
+    - result_3c.response[0].METHOD == "DELETE"
+    - result_3c.response[0].RETURN_CODE == 500
+
+################################################
+##                 CLEAN-UP                   ##
+################################################
+
+- name: Set task name
+  ansible.builtin.set_fact:
+    task_name: "CLEANUP.1 - DELETED - [deleted] Delete all VRFs in fabric"
+
+- name: Log task
+  cisco.dcnm.dcnm_log:
+    msg: "{{ task_name }}"
+
+- name: "{{ task_name }}"
+  cisco.nd.ndfc_vrf:
+    state: deleted
+    config:
+    - fabric: "{{ fabric_1 }}"
+
