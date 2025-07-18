@@ -6,18 +6,16 @@ This module provides the VrfAttachmentApi class that handles all VRF attachment-
 API operations including creation, deletion, updates, and querying with caching support.
 """
 import json
-from typing import Any, Optional, Dict, List
+from typing import Any, Optional, List
 from ansible.module_utils.basic import AnsibleModule
 from ...common.classes.rest_send_v2 import RestSend
-from ...common.classes.switch_details import SwitchDetails
+from ...common.epp.v1.lan_fabric.rest.inventory.ep_all_switches import AllSwitches
 from ...common.classes.results import Results
 from ...common.cache.cached_resource_service import CachedResourceService
 from ...common.cache.cache_manager import CacheManager
-from ...common.enums.http_requests import RequestVerb
 from .vrf_attachment_sender import VrfAttachmentSender
 from .vrf_attachment_response_handler import VrfAttachmentResponseHandler
 from ..models.vrf_attachment_payload import VrfAttachmentPayload
-from ..validators.vrf_attachment_validator import VrfAttachmentValidator
 
 
 class VrfAttachmentApi:
@@ -91,8 +89,8 @@ class VrfAttachmentApi:
             ValueError: If the IP address cannot be translated to a serial number
         """
         try:
-            # Create SwitchDetails instance
-            switch_details = SwitchDetails()
+            # Create AllSwitches instance
+            all_switches = AllSwitches()
             
             # Create results instance
             results = Results()
@@ -103,16 +101,16 @@ class VrfAttachmentApi:
             rest_send.sender = self.sender
             rest_send.response_handler = self.response_handler
             
-            # Configure SwitchDetails
-            switch_details.results = results
-            switch_details.rest_send = rest_send
+            # Configure AllSwitches
+            all_switches.results = results
+            all_switches.rest_send = rest_send
             
             # Refresh switch details from controller
-            switch_details.refresh()
+            all_switches.refresh()
             
             # Set filter to the IP address and get serial number
-            switch_details.filter = ip_address
-            serial_number = switch_details.serial_number
+            all_switches.filter = ip_address
+            serial_number = all_switches.serial_number
             
             if serial_number is None:
                 raise ValueError(f"Could not find serial number for IP address {ip_address} in fabric {fabric}")
