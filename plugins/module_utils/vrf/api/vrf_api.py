@@ -13,7 +13,6 @@ from ...common.cache.cache_manager import CacheManager
 from .vrf_sender import VrfSender
 from .vrf_response_handler import VrfResponseHandler
 from ..models.vrf_payload import VrfPayload
-from ..validators.vrf_validator import VrfValidator
 
 
 class VrfApi:
