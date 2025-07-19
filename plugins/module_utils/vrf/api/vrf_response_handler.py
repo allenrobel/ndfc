@@ -43,7 +43,7 @@ class VrfResponseHandler:
 
         # Add VRF-specific processing to the existing result
         try:
-            if self._response and self._response.get("RETURN_CODE", 0) == 200:
+            if self._response and self._response.get("RETURN_CODE", 0) in (200, 201):
                 # Convert controller field names to standard format
                 transformed_response = self._transform_controller_response(self._response)
                 base_result["response"] = transformed_response

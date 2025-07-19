@@ -167,8 +167,13 @@ class VrfApi:
                 vrf_data = self._extract_vrf_data_for_cache(response_data)
                 self._cached_service.update_cache_after_create(vrf_payload.fabric, vrf_payload.vrf_name, vrf_data)
 
-            # Return the raw controller response with RETURN_CODE for module tests
-            return True, response.get("response", response)
+            # Return the processed response with field transformations
+            processed_response = self.response_handler.result
+            if processed_response and processed_response.get("response"):
+                return True, processed_response["response"]
+            else:
+                # Fallback to raw response if processing failed
+                return True, response.get("response", response)
         else:
             return False, response
 
@@ -202,8 +207,13 @@ class VrfApi:
                 vrf_data = self._extract_vrf_data_for_cache(response_data)
                 self._cached_service.update_cache_after_update(vrf_payload.fabric, vrf_payload.vrf_name, vrf_data)
 
-            # Return the raw controller response with RETURN_CODE for module tests
-            return True, response.get("response", response)
+            # Return the processed response with field transformations
+            processed_response = self.response_handler.result
+            if processed_response and processed_response.get("response"):
+                return True, processed_response["response"]
+            else:
+                # Fallback to raw response if processing failed
+                return True, response.get("response", response)
         else:
             return False, response
 
