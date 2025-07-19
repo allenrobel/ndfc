@@ -99,7 +99,7 @@
     - fabric: "{{ fabric_1 }}"
       vrf_name: vrf1
   until:
-    - "result_1a.response[0].DATA[0].vrfStatus is search('NA')"
+    - "result_1a.response[0].vrfStatus is search('NA')"
   retries: 30
   delay: 2
 
@@ -218,7 +218,7 @@
     - fabric: "{{ fabric_1 }}"
       vrf_name: vrf1
   until:
-    - "result_3a.response[0].DATA[0].vrfStatus is search('NA')"
+    - "result_3a.response[0].vrfStatus is search('NA')"
   retries: 30
   delay: 2
 
@@ -230,7 +230,7 @@
     - fabric: "{{ fabric_1 }}"
       vrf_name: vrf2
   until:
-    - "result_3b.response[0].DATA[0].vrfStatus is search('NA')"
+    - "result_3b.response[0].vrfStatus is search('NA')"
   retries: 30
   delay: 2
 
