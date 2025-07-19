@@ -45,7 +45,7 @@
 
 - name: Set task name
   ansible.builtin.set_fact:
-    task_name: "TEST.1 - MERGED - [merged] Create VRF vrf1"
+    task_name: "TEST.1 - MERGED - [merged] Create VRF vrf1, vlan 500"
 
 - name: Log task
   cisco.nd.nd_log:
@@ -61,6 +61,15 @@
       vrf_id: 9008011
       vrf_template: Default_VRF_Universal
       vrf_extension_template: Default_VRF_Extension_Universal
+      vrf_template_config:
+        vrf_segment_id: 9008011
+        vrf_vlan_id: 500
+        mtu: 9216
+        vrf_description: "Test VRF for query integration test"
+        asn: "65001"
+        tag: 12345
+  register: result_4
+  ignore_errors: yes
 
 - name: Set task name
   ansible.builtin.set_fact:
@@ -146,7 +155,7 @@
 
 - name: Set task name
   ansible.builtin.set_fact:
-    task_name: "TEST.3 - MERGED - [merged] Create two VRFs"
+    task_name: "TEST.3 - MERGED - [merged] Create two VRFs (vrf1, vrf2), vlan 501, 502"
 
 - name: Log task
   cisco.nd.nd_log:
@@ -162,11 +171,25 @@
       vrf_id: 9008011
       vrf_template: Default_VRF_Universal
       vrf_extension_template: Default_VRF_Extension_Universal
+      vrf_template_config:
+        vrf_segment_id: 9008011
+        vrf_vlan_id: 501
+        mtu: 9216
+        vrf_description: "Test VRF for query integration test"
+        asn: "65001"
+        tag: 12345
     - fabric: "{{ fabric_1 }}"
       vrf_name: vrf2
       vrf_id: 9008012
       vrf_template: Default_VRF_Universal
       vrf_extension_template: Default_VRF_Extension_Universal
+      vrf_template_config:
+        vrf_segment_id: 9008012
+        vrf_vlan_id: 502
+        mtu: 9216
+        vrf_description: "Test VRF for query integration test"
+        asn: "65002"
+        tag: 12345
 
 - name: Set task name
   ansible.builtin.set_fact:
@@ -235,21 +258,7 @@
 
 - name: Set task name
   ansible.builtin.set_fact:
-    task_name: "TEST.3e - MERGED - [deleted] Delete all VRFs"
-
-- name: Log task
-  cisco.nd.nd_log:
-    msg: "{{ task_name }}"
-
-- name: "{{ task_name }}"
-  cisco.nd.nd_vrf:
-    state: deleted
-    config:
-    - fabric: "{{ fabric_1 }}"
-
-- name: Set task name
-  ansible.builtin.set_fact:
-    task_name: "TEST.4 - MERGED - [merged] Create VRF - Update with incorrect VRF ID."
+    task_name: "TEST.4 - MERGED - [merged] Create VRF - Update vrf1 with incorrect VRF ID."
 
 - name: Log task
   cisco.nd.nd_log:
@@ -266,6 +275,13 @@
         vrf_id: 9008012
         vrf_template: Default_VRF_Universal
         vrf_extension_template: Default_VRF_Extension_Universal
+        vrf_template_config:
+            vrf_segment_id: 9008012
+            vrf_vlan_id: 502
+            mtu: 9216
+            vrf_description: "Test VRF for query integration test"
+            asn: "65002"
+            tag: 12345
 
 - name: TEST.4a - MERGED - [debug] print result_4
   ansible.builtin.debug:
@@ -299,6 +315,13 @@
       vrf_id: 9008012000000000
       vrf_template: Default_VRF_Universal
       vrf_extension_template: Default_VRF_Extension_Universal
+      vrf_template_config:
+        vrf_segment_id: 9008012000000000
+        vrf_vlan_id: 501
+        mtu: 9216
+        vrf_description: "Test VRF for query integration test"
+        asn: "65001"
+        tag: 12345
 
 - name: TEST.5a - MERGED - [debug] print result_5
   ansible.builtin.debug:
