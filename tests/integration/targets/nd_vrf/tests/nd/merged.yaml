@@ -19,14 +19,14 @@
      - "fabric_1 : {{ fabric_1 }}"
 
 - name: SETUP.1 - MERGED - [dcnm_rest.GET] Verify fabric is deployed.
+  register: result_setup_1
   cisco.dcnm.dcnm_rest:
     method: GET
     path: "/appcenter/cisco/ndfc/api/v1/lan-fabric/rest/control/fabrics/{{ fabric_1 }}"
-  register: result
 
 - assert:
     that:
-    - result.response.DATA != None
+    - result_setup_1.response.DATA != None
 
 - name: SETUP.2 - MERGED - [deleted] Delete all VRFs
   register: result_setup_2
@@ -68,7 +68,6 @@
         vrf_description: "Test VRF for query integration test"
         asn: "65001"
         tag: 12345
-  register: result_4
   ignore_errors: yes
 
 - name: Set task name
@@ -144,11 +143,11 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
+  register: result_1e
   cisco.nd.nd_vrf:
     state: deleted
     config:
     - fabric: "{{ fabric_1 }}"
-  register: result_1e
 
 - name: Set task name
   ansible.builtin.set_fact:
