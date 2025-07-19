@@ -72,28 +72,23 @@ class Deleted(BaseState):
         
         # For delete operations, always get fresh data to ensure we catch
         # VRFs created outside of this module (bypassing cache)
-        success, response = self.api_client.query_all_vrfs(fabric)
+        success, vrf_array = self.api_client.query_all_vrfs(fabric)
         
         if not success:
-            errors.append(f"Failed to query VRFs in fabric {fabric}: {response.get('error', 'Unknown error')}")
+            errors.append(f"Failed to query VRFs in fabric {fabric}")
             return responses
             
-        # Extract VRF data from the controller response
-        if not response or not response.get("DATA"):
+        # vrf_array is now a list of VRF data dictionaries
+        if not vrf_array:
             # No VRFs to delete in this fabric
             return responses
             
-        data_field = response.get("DATA", [])
         vrfs_to_delete = []
         
-        if isinstance(data_field, list):
-            # Multiple VRFs
-            for vrf_data in data_field:
-                if vrf_data and vrf_data.get("vrfName"):
-                    vrfs_to_delete.append(vrf_data.get("vrfName"))
-        elif isinstance(data_field, dict) and data_field.get("vrfName"):
-            # Single VRF
-            vrfs_to_delete.append(data_field.get("vrfName"))
+        # Extract VRF names from the array
+        for vrf_data in vrf_array:
+            if vrf_data and vrf_data.get("vrfName"):
+                vrfs_to_delete.append(vrf_data.get("vrfName"))
 
         if not vrfs_to_delete:
             # No VRFs to delete in this fabric
