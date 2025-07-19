@@ -45,7 +45,7 @@
 
 - name: Set task name
   ansible.builtin.set_fact:
-    task_name: "TEST.1 - MERGED - [merged] Create VRF vrf1 with VLAN 600"
+    task_name: "TEST.1 - MERGED - [merged] Create VRF vrf1"
 
 - name: Log task
   cisco.nd.nd_log:
@@ -61,7 +61,6 @@
       vrf_id: 9008011
       vrf_template: Default_VRF_Universal
       vrf_extension_template: Default_VRF_Extension_Universal
-      vlan_id: 600
 
 - name: Set task name
   ansible.builtin.set_fact:
@@ -131,77 +130,6 @@
     - fabric: "{{ fabric_1 }}"
   register: result_1e
 
-
-- name: Set task name
-  ansible.builtin.set_fact:
-    task_name: "TEST.2 - MERGED - [merged] Create VRF with controller provided VLAN"
-
-- name: Log task
-  cisco.nd.nd_log:
-    msg: "{{ task_name }}"
-
-- name: "{{ task_name }}"
-  register: result_2
-  cisco.nd.nd_vrf: &conf2
-    state: merged
-    config:
-    - fabric: "{{ fabric_1 }}"
-      vrf_name: vrf1
-      vrf_id: 9008011
-      vrf_template: Default_VRF_Universal
-      vrf_extension_template: Default_VRF_Extension_Universal
-
-- name: Set task name
-  ansible.builtin.set_fact:
-    task_name: "TEST.2a - MERGED - [query] Wait for vrfStatus == NA"
-
-- name: Log task
-  cisco.nd.nd_log:
-    msg: "{{ task_name }}"
-
-- name: "{{ task_name }}"
-  cisco.nd.nd_vrf:
-    state: query
-    config:
-    - fabric: "{{ fabric_1 }}"
-      vrf_name: vrf1
-  register: result_2a
-  until:
-    - "result_2a.response[0].DATA.vrfStatus is search('NA')"
-  retries: 30
-  delay: 2
-
-- name: TEST.2b - MERGED - [debug] print result_2
-  ansible.builtin.debug:
-    var: result_2
-
-- assert:
-    that:
-    - result_2.changed == true
-    - result_2.diff[0].vrf_name == "vrf1"
-    - result_2.response[0].RETURN_CODE == 200
-
-- name: Set task name
-  ansible.builtin.set_fact:
-    task_name: "TEST.2c - MERGED - [merged] conf2 - Idempotence"
-
-- name: Log task
-  cisco.nd.nd_log:
-    msg: "{{ task_name }}"
-
-- name: "{{ task_name }}"
-  cisco.nd.nd_vrf: *conf2
-  register: result_2c
-
-- name: TEST.2d - MERGED - [debug] print result_2c
-  ansible.builtin.debug:
-    var: result_2c
-
-- assert:
-    that:
-    - result_2c.changed == false
-    - result_2c.response|length == 0
-
 - name: Set task name
   ansible.builtin.set_fact:
     task_name: "TEST.2e - MERGED - [deleted] Delete all VRFs"
@@ -218,13 +146,14 @@
 
 - name: Set task name
   ansible.builtin.set_fact:
-    task_name: "TEST.3 - MERGED - [merged] Create VRF with user provided VLAN"
+    task_name: "TEST.3 - MERGED - [merged] Create two VRFs"
 
 - name: Log task
   cisco.nd.nd_log:
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
+  register: result_3
   cisco.nd.nd_vrf: &conf3
     state: merged
     config:
@@ -233,8 +162,11 @@
       vrf_id: 9008011
       vrf_template: Default_VRF_Universal
       vrf_extension_template: Default_VRF_Extension_Universal
-      vlan_id: 500
-  register: result_3
+    - fabric: "{{ fabric_1 }}"
+      vrf_name: vrf2
+      vrf_id: 9008012
+      vrf_template: Default_VRF_Universal
+      vrf_extension_template: Default_VRF_Extension_Universal
 
 - name: Set task name
   ansible.builtin.set_fact:
@@ -245,14 +177,26 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
+  register: result_3a
   cisco.nd.nd_vrf:
     state: query
     config:
     - fabric: "{{ fabric_1 }}"
       vrf_name: vrf1
-  register: result_3a
   until:
     - "result_3a.response[0].DATA.vrfStatus is search('NA')"
+  retries: 30
+  delay: 2
+
+- name: "{{ task_name }}"
+  register: result_3b
+  cisco.nd.nd_vrf:
+    state: query
+    config:
+    - fabric: "{{ fabric_1 }}"
+      vrf_name: vrf2
+  until:
+    - "result_3b.response[0].DATA.vrfStatus is search('NA')"
   retries: 30
   delay: 2
 
@@ -264,6 +208,7 @@
     that:
     - result_3.changed == true
     - result_3.diff[0].vrf_name == "vrf1"
+    - result_3.diff[1].vrf_name == "vrf2"
     - result_3.response[0].METHOD == "POST"
     - result_3.response[0].RETURN_CODE == 200
 
@@ -311,6 +256,8 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
+  register: result_4
+  ignore_errors: yes
   cisco.nd.nd_vrf:
     state: merged
     config:
@@ -319,8 +266,6 @@
         vrf_id: 9008012
         vrf_template: Default_VRF_Universal
         vrf_extension_template: Default_VRF_Extension_Universal
-  register: result_4
-  ignore_errors: yes
 
 - name: TEST.4a - MERGED - [debug] print result_4
   ansible.builtin.debug:
