@@ -50,19 +50,19 @@ class VrfApi:
     def _extract_vrf_data_for_cache(self, response_data: dict[str, Any]) -> dict[str, Any]:
         """
         Extract VRF data from response for cache storage.
-        
+
         The controller response includes metadata (MESSAGE, RETURN_CODE, etc.)
         but cache should only store the actual VRF data.
-        
+
         Args:
             response_data: Full controller response
-            
+
         Returns:
             VRF data suitable for cache storage
         """
         # For POST responses, the VRF data might be directly in the response
         # (after field name transformation) or in a DATA field
-        
+
         if "DATA" in response_data:
             # Query-style response with DATA field
             return response_data["DATA"]
@@ -70,11 +70,11 @@ class VrfApi:
             # POST response - extract VRF fields, exclude controller metadata
             vrf_data = {}
             controller_fields = {"MESSAGE", "METHOD", "REQUEST_PATH", "RETURN_CODE", "ERROR"}
-            
+
             for key, value in response_data.items():
                 if key not in controller_fields:
                     vrf_data[key] = value
-                    
+
             return vrf_data
 
     def _execute_request(self, verb: str, path: str, payload: Optional[dict[str, Any]] = None) -> tuple[bool, dict[str, Any]]:
@@ -162,7 +162,7 @@ class VrfApi:
             # Update cache after successful creation
             if response.get("result", {}).get("response"):
                 response_data = response["result"]["response"]
-                
+
                 # Extract VRF data for cache (excluding controller metadata)
                 vrf_data = self._extract_vrf_data_for_cache(response_data)
                 self._cached_service.update_cache_after_create(vrf_payload.fabric, vrf_payload.vrf_name, vrf_data)
@@ -197,7 +197,7 @@ class VrfApi:
             # Update cache after successful update
             if response.get("result", {}).get("response"):
                 response_data = response["result"]["response"]
-                
+
                 # Extract VRF data for cache (excluding controller metadata)
                 vrf_data = self._extract_vrf_data_for_cache(response_data)
                 self._cached_service.update_cache_after_update(vrf_payload.fabric, vrf_payload.vrf_name, vrf_data)
@@ -222,28 +222,32 @@ class VrfApi:
             }
         return {"message": "Cache statistics not available"}
 
-    # Query methods that return full controller responses
-    def query_vrf(self, fabric: str, vrf_name: str) -> tuple[bool, dict[str, Any]]:
-        """Query a specific VRF and return full controller response."""
-        path = f"{self.base_path}/{fabric}/vrfs/{vrf_name}"
-        success, response = self._execute_request("GET", path)
-        
-        if success:
-            # Return the raw controller response for query operations
-            return True, response.get("response", response)
-        else:
-            return False, response
+    # Query methods that return VRF data arrays (with vrfStatus field)
+    def query_vrf(self, fabric: str, vrf_name: str) -> tuple[bool, list[dict[str, Any]]]:
+        """Query a specific VRF and return array with single VRF (includes vrfStatus)."""
+        # Always query all VRFs to ensure vrfStatus field is present (controller bug workaround)
+        success, all_vrfs = self.query_all_vrfs(fabric)
+        if not success:
+            return False, []
 
-    def query_all_vrfs(self, fabric: str) -> tuple[bool, dict[str, Any]]:
-        """Query all VRFs for a fabric and return full controller response."""
+        # Filter to specific VRF
+        matching_vrfs = [vrf for vrf in all_vrfs if vrf.get("vrfName") == vrf_name]
+        return True, matching_vrfs
+
+    def query_all_vrfs(self, fabric: str) -> tuple[bool, list[dict[str, Any]]]:
+        """Query all VRFs for a fabric and return array of VRF data (includes vrfStatus)."""
         path = f"{self.base_path}/{fabric}/vrfs"
         success, response = self._execute_request("GET", path)
-        
+
         if success:
-            # Return the raw controller response for query operations
-            return True, response.get("response", response)
-        else:
-            return False, response
+            # Extract just the VRF data array, no controller metadata wrapping
+            response_data = response.get("response", response)
+            vrf_data = response_data.get("DATA", [])
+            # Ensure we return a list even if controller returns single VRF as dict
+            if isinstance(vrf_data, dict):
+                return True, [vrf_data]
+            return True, vrf_data if isinstance(vrf_data, list) else []
+        return False, []
 
     # Legacy methods for backward compatibility
     def get_vrf(self, fabric: str, vrf_name: str) -> tuple[bool, dict[str, Any]]:
