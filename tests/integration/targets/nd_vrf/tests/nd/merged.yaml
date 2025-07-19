@@ -80,13 +80,24 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
+  register: result_tmp
   cisco.nd.nd_vrf:
     state: query
     config:
     - fabric: "{{ fabric_1 }}"
       vrf_name: vrf1
 
+- name: TEST.1tmp - MERGED - [debug] print result_tmp
+  ansible.builtin.debug:
+    var: result_tmp
+
+- name: "{{ task_name }}"
   register: result_1a
+  cisco.nd.nd_vrf:
+    state: query
+    config:
+    - fabric: "{{ fabric_1 }}"
+      vrf_name: vrf1
   until:
     - "result_1a.response[0].DATA[0].vrfStatus is search('NA')"
   retries: 30
