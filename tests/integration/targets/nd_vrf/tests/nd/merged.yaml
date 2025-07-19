@@ -29,10 +29,11 @@
     - result.response.DATA != None
 
 - name: SETUP.2 - MERGED - [deleted] Delete all VRFs
-  cisco.nd.nd_vrf:
-    fabric: "{{ fabric_1 }}"
-    state: deleted
   register: result_setup_2
+  cisco.nd.nd_vrf:
+    state: deleted
+    config:
+    - fabric: "{{ fabric_1 }}"
 
 
 ###############################################
@@ -72,8 +73,11 @@
 
 - name: "{{ task_name }}"
   cisco.nd.nd_vrf:
-    fabric: "{{ fabric_1 }}"
     state: query
+    config:
+    - fabric: "{{ fabric_1 }}"
+      vrf_name: vrf1
+
   register: result_1a
   until:
     - "result_1a.response[0].DATA.vrfStatus is search('NA')"
@@ -122,8 +126,9 @@
 
 - name: "{{ task_name }}"
   cisco.nd.nd_vrf:
-    fabric: "{{ fabric_1 }}"
     state: deleted
+    config:
+    - fabric: "{{ fabric_1 }}"
   register: result_1e
 
 
@@ -136,15 +141,15 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
+  register: result_2
   cisco.nd.nd_vrf: &conf2
-    fabric: "{{ fabric_1 }}"
     state: merged
     config:
-    - vrf_name: vrf1
+    - fabric: "{{ fabric_1 }}"
+      vrf_name: vrf1
       vrf_id: 9008011
       vrf_template: Default_VRF_Universal
       vrf_extension_template: Default_VRF_Extension_Universal
-  register: result_2
 
 - name: Set task name
   ansible.builtin.set_fact:
@@ -156,8 +161,10 @@
 
 - name: "{{ task_name }}"
   cisco.nd.nd_vrf:
-    fabric: "{{ fabric_1 }}"
     state: query
+    config:
+    - fabric: "{{ fabric_1 }}"
+      vrf_name: vrf1
   register: result_2a
   until:
     - "result_2a.response[0].DATA.vrfStatus is search('NA')"
@@ -205,9 +212,9 @@
 
 - name: "{{ task_name }}"
   cisco.nd.nd_vrf:
-    fabric: "{{ fabric_1 }}"
     state: deleted
-
+    config:
+    - fabric: "{{ fabric_1 }}"
 
 - name: Set task name
   ansible.builtin.set_fact:
@@ -219,10 +226,10 @@
 
 - name: "{{ task_name }}"
   cisco.nd.nd_vrf: &conf3
-    fabric: "{{ fabric_1 }}"
     state: merged
     config:
-    - vrf_name: vrf1
+    - fabric: "{{ fabric_1 }}"
+      vrf_name: vrf1
       vrf_id: 9008011
       vrf_template: Default_VRF_Universal
       vrf_extension_template: Default_VRF_Extension_Universal
@@ -239,8 +246,10 @@
 
 - name: "{{ task_name }}"
   cisco.nd.nd_vrf:
-    fabric: "{{ fabric_1 }}"
     state: query
+    config:
+    - fabric: "{{ fabric_1 }}"
+      vrf_name: vrf1
   register: result_3a
   until:
     - "result_3a.response[0].DATA.vrfStatus is search('NA')"
@@ -289,10 +298,9 @@
 
 - name: "{{ task_name }}"
   cisco.nd.nd_vrf:
-    fabric: "{{ fabric_1 }}"
     state: deleted
-
-
+    config:
+    - fabric: "{{ fabric_1 }}"
 
 - name: Set task name
   ansible.builtin.set_fact:
@@ -304,10 +312,10 @@
 
 - name: "{{ task_name }}"
   cisco.nd.nd_vrf:
-    fabric: "{{ fabric_1 }}"
     state: merged
     config:
-      - vrf_name: vrf1
+      - fabric: "{{ fabric_1 }}"
+        vrf_name: vrf1
         vrf_id: 9008012
         vrf_template: Default_VRF_Universal
         vrf_extension_template: Default_VRF_Extension_Universal
@@ -336,16 +344,16 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
-  cisco.nd.nd_vrf:
-    fabric: "{{ fabric_1 }}"
-    state: merged
-    config:
-      - vrf_name: vrf1
-        vrf_id: 9008012000000000
-        vrf_template: Default_VRF_Universal
-        vrf_extension_template: Default_VRF_Extension_Universal
   register: result_5
   ignore_errors: yes
+  cisco.nd.nd_vrf:
+    state: merged
+    config:
+    - fabric: "{{ fabric_1 }}"
+      vrf_name: vrf1
+      vrf_id: 9008012000000000
+      vrf_template: Default_VRF_Universal
+      vrf_extension_template: Default_VRF_Extension_Universal
 
 - name: TEST.5a - MERGED - [debug] print result_5
   ansible.builtin.debug:
@@ -378,6 +386,7 @@
 
 - name: "{{ task_name }}"
   cisco.nd.nd_vrf:
-    fabric: "{{ fabric_1 }}"
     state: deleted
+    config:
+      - fabric: "{{ fabric_1 }}"
 
