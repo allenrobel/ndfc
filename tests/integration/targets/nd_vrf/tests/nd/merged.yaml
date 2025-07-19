@@ -109,7 +109,8 @@
 - assert:
     that:
     - result_1.changed == true
-    - result_1.diff[0].vrf_name == "vrf1"
+    - result_3.response[0].DATA.vrfName == "vrf1"
+    - result_3.response[0].DATA.vrfId == 9008011
     - result_1.response[0].METHOD == "POST"
     - result_1.response[0].RETURN_CODE == 200
 
@@ -240,8 +241,8 @@
 - assert:
     that:
     - result_3.changed == true
-    - result_3.diff[0].vrf_name == "vrf1"
-    - result_3.diff[1].vrf_name == "vrf2"
+    - result_3.response[0].DATA.vrfName == "vrf1"
+    - result_3.response[0].DATA.vrfId == 9008011
     - result_3.response[0].METHOD == "POST"
     - result_3.response[0].RETURN_CODE == 200
 
