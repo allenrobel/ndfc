@@ -5,6 +5,7 @@ VRF API client for DCNM/NDFC operations.
 This module provides the VrfApi class that handles all VRF-related API operations
 including creation, deletion, updates, and querying with caching support.
 """
+import copy
 from typing import Any, Optional
 from ansible.module_utils.basic import AnsibleModule
 from ...common.classes.rest_send_v2 import RestSend
@@ -77,6 +78,47 @@ class VrfApi:
 
             return vrf_data
 
+    def _transform_vrf_field_names(self, vrf_data: dict[str, Any]) -> dict[str, Any]:
+        """
+        Transform VRF field names from controller format to standard format for cache consistency.
+
+        Args:
+            vrf_data: VRF data with controller field names
+
+        Returns:
+            VRF data with transformed field names
+        """
+        # Create a copy to avoid modifying the original
+        transformed_data = copy.deepcopy(vrf_data)
+
+        # Field name mappings from controller format to standard format
+        field_mappings = {
+            "VRF Id": "vrfId",
+            "VRF Name": "vrfName"
+        }
+
+        # Handle both direct VRF data and DATA-wrapped responses
+        if "DATA" in transformed_data:
+            # Response has DATA wrapper
+            data_field = transformed_data["DATA"]
+            if isinstance(data_field, dict):
+                self._apply_field_mappings(data_field, field_mappings)
+            elif isinstance(data_field, list):
+                for item in data_field:
+                    if isinstance(item, dict):
+                        self._apply_field_mappings(item, field_mappings)
+        else:
+            # Direct VRF data
+            self._apply_field_mappings(transformed_data, field_mappings)
+
+        return transformed_data
+
+    def _apply_field_mappings(self, vrf_dict: dict[str, Any], field_mappings: dict[str, str]) -> None:
+        """Apply field name mappings to a VRF dictionary in place."""
+        for old_field, new_field in field_mappings.items():
+            if old_field in vrf_dict:
+                vrf_dict[new_field] = vrf_dict.pop(old_field)
+
     def _execute_request(self, verb: str, path: str, payload: Optional[dict[str, Any]] = None) -> tuple[bool, dict[str, Any]]:
         """Execute a REST request using RestSend."""
         try:
@@ -109,8 +151,9 @@ class VrfApi:
         success, response = self._execute_request("GET", path)
 
         if success and response.get("result", {}).get("response"):
-            # Return raw controller response to preserve original field names and structure
-            return response["result"]["response"]
+            raw_response = response["result"]["response"]
+            # Transform field names for cache consistency
+            return self._transform_vrf_field_names(raw_response)
         return None
 
     def _fetch_all_vrfs(self, fabric: str) -> dict[str, dict[str, Any]]:
@@ -124,15 +167,19 @@ class VrfApi:
 
             if isinstance(response_data, list):
                 for vrf_data in response_data:
-                    vrf_name = vrf_data.get("vrfName")
+                    # Transform field names for cache consistency
+                    transformed_vrf = self._transform_vrf_field_names(vrf_data)
+                    # Get VRF name (try both transformed and original field names)
+                    vrf_name = transformed_vrf.get("vrfName") or transformed_vrf.get("VRF Name")
                     if vrf_name:
-                        # Return raw controller response to preserve original field names and structure
-                        result[vrf_name] = vrf_data
+                        result[vrf_name] = transformed_vrf
             else:
-                vrf_name = response_data.get("vrfName")
+                # Transform field names for cache consistency
+                transformed_vrf = self._transform_vrf_field_names(response_data)
+                # Get VRF name (try both transformed and original field names)
+                vrf_name = transformed_vrf.get("vrfName") or transformed_vrf.get("VRF Name")
                 if vrf_name:
-                    # Return raw controller response to preserve original field names and structure
-                    result[vrf_name] = response_data
+                    result[vrf_name] = transformed_vrf
 
         return result
 
