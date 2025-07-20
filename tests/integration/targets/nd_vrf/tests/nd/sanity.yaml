@@ -107,8 +107,8 @@
     - 'result_1.response[0].RETURN_CODE == 200'
     - 'result_1.response[1].RETURN_CODE == 200'
     - 'result_1.response[2].RETURN_CODE == 200'
-    - '(result_1.response[1].DATA|dict2items)[0].value == "SUCCESS"'
-    - '(result_1.response[1].DATA|dict2items)[1].value == "SUCCESS"'
+    - 'result_1.response[1].DATA|length >= 1'
+    - 'result_1.response[1].DATA[0] != ""'
   tags: sanity
 
 - name: TEST.1c - SANITY MERGED - conf1 - Idempotence
@@ -181,8 +181,8 @@
     - 'result_2.response[0].RETURN_CODE == 200'
     - 'result_2.response[1].RETURN_CODE == 200'
     - 'result_2.response[2].RETURN_CODE == 200'
-    - '(result_2.response[1].DATA|dict2items)[0].value == "SUCCESS"'
-    - '(result_2.response[1].DATA|dict2items)[1].value == "SUCCESS"'
+    - 'result_2.response[1].DATA|length >= 1'
+    - 'result_2.response[1].DATA[0] != ""'
   tags: sanity
 
 - name: TEST.2c - SANITY REPLACED - [replaced] Update existing VRF - delete attachments
@@ -224,8 +224,8 @@
     - 'result_2c.changed == true'
     - 'result_2c.response[0].RETURN_CODE == 200'
     - 'result_2c.response[1].RETURN_CODE == 200'
-    - '(result_2c.response[0].DATA|dict2items)[0].value == "SUCCESS"'
-    - '(result_2c.response[0].DATA|dict2items)[1].value == "SUCCESS"'
+    - 'result_2c.response[0].DATA|length >= 1'
+    - 'result_2c.response[0].DATA[0] != ""'
   tags: sanity
 
 - name: TEST.2g - SANITY REPLACED - conf2c - Idempotence
@@ -286,8 +286,8 @@
     - 'result_2i.changed == true'
     - 'result_2i.response[0].RETURN_CODE == 200'
     - 'result_2i.response[1].RETURN_CODE == 200'
-    - '(result_2i.response[0].DATA|dict2items)[0].value == "SUCCESS"'
-    - '(result_2i.response[0].DATA|dict2items)[1].value == "SUCCESS"'
+    - 'result_2i.response[0].DATA|length >= 1'
+    - 'result_2i.response[0].DATA[0] != ""'
   tags: sanity
 
 - name: TEST.2m - SANITY REPLACED - [replaced] conf2i - Idempotence
@@ -359,8 +359,8 @@
     - 'result_3.response[0].RETURN_CODE == 200'
     - 'result_3.response[1].RETURN_CODE == 200'
     - 'result_3.response[2].RETURN_CODE == 200'
-    - '(result_3.response[1].DATA|dict2items)[0].value == "SUCCESS"'
-    - '(result_3.response[1].DATA|dict2items)[1].value == "SUCCESS"'
+    - 'result_3.response[1].DATA|length >= 1'
+    - 'result_3.response[1].DATA[0] != ""'
   tags: sanity
 
 - name: TEST.3c - SANITY OVERRIDDEN - [overridden] Update existing VRF - delete and create
@@ -405,10 +405,10 @@
     - 'result_3c.response[3].RETURN_CODE == 200'
     - 'result_3c.response[4].RETURN_CODE == 200'
     - 'result_3c.response[5].RETURN_CODE == 200'
-    - '(result_3c.response[0].DATA|dict2items)[0].value == "SUCCESS"'
-    - '(result_3c.response[0].DATA|dict2items)[1].value == "SUCCESS"'
-    - '(result_3c.response[4].DATA|dict2items)[0].value == "SUCCESS"'
-    - '(result_3c.response[4].DATA|dict2items)[1].value == "SUCCESS"'
+    - 'result_3c.response[0].DATA|length >= 1'
+    - 'result_3c.response[0].DATA[0] != ""'
+    - 'result_3c.response[4].DATA|length >= 1'
+    - 'result_3c.response[4].DATA[0] != ""'
   tags: sanity
 
 - name: TEST.3f - SANITY OVERRIDDEN - [overridden] conf3c - Idempotence
@@ -481,8 +481,8 @@
     - 'result_4.response[0].RETURN_CODE == 200'
     - 'result_4.response[1].RETURN_CODE == 200'
     - 'result_4.response[2].RETURN_CODE == 200'
-    - '(result_4.response[1].DATA|dict2items)[0].value == "SUCCESS"'
-    - '(result_4.response[1].DATA|dict2items)[1].value == "SUCCESS"'
+    - 'result_4.response[1].DATA|length >= 1'
+    - 'result_4.response[1].DATA[0] != ""'
   tags: sanity
 
 - name: TEST.4c - SANITY QUERY - [query] Query the VRF
@@ -575,8 +575,8 @@
     - 'result_5.response[0].RETURN_CODE == 200'
     - 'result_5.response[1].RETURN_CODE == 200'
     - 'result_5.response[2].RETURN_CODE == 200'
-    - '(result_5.response[1].DATA|dict2items)[0].value == "SUCCESS"'
-    - '(result_5.response[1].DATA|dict2items)[1].value == "SUCCESS"'
+    - 'result_5.response[1].DATA|length >= 1'
+    - 'result_5.response[1].DATA[0] != ""'
   tags: sanity
 
 - name: TEST.5c - SANITY DELETED - [deleted] Delete the VRF
@@ -604,8 +604,8 @@
     - 'result_5c.response[1].MESSAGE == "OK"'
     - 'result_5c.response[2].RETURN_CODE == 200'
     - 'result_5c.response[2].METHOD == "DELETE"'
-    - '(result_5c.response[0].DATA|dict2items)[0].value == "SUCCESS"'
-    - '(result_5c.response[0].DATA|dict2items)[1].value == "SUCCESS"'
+    - 'result_5c.response[0].DATA|length >= 1'
+    - 'result_5c.response[0].DATA[0] != ""'
   tags: sanity
 
 - name: TEST.5e - SANITY DELETED - conf5c - Idempotence

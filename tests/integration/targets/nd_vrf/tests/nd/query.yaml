@@ -100,12 +100,12 @@
     msg: "{{ task_name }}"
 
 - name: "{{ task_name }}"
+  register: result_1
   cisco.nd.nd_vrf:
     state: query
     config:
       - fabric: "{{ fabric_1 }}"
         vrf_name: vrf1
-  register: result_1
 
 - name: TEST.1b - QUERY - [debug] print result_1
   debug:
@@ -114,8 +114,8 @@
 - assert:
     that:
     - result_1.changed == false
-    - result_1.response[0].DATA.vrfId == 9008011
-    - result_1.response[0].DATA.vrfName == "vrf1"
+    - result_1.response[0].DATA[0].vrfId == 9008011
+    - result_1.response[0].DATA[0].vrfName == "vrf1"
 
 - name: Set task name
   ansible.builtin.set_fact:
@@ -139,8 +139,8 @@
 - assert:
     that:
     - result_2.changed == false
-    - result_2.response[0].DATA.vrfId == 9008011
-    - result_2.response[0].DATA.vrfName == "vrf1"
+    - result_2.response[0].DATA[0].vrfId == 9008011
+    - result_2.response[0].DATA[0].vrfName == "vrf1"
 
 - name: Set task name
   ansible.builtin.set_fact:
@@ -199,9 +199,9 @@
 - assert:
     that:
     - result_4.changed == false
-    - result_4.response|length == 2
-    - '"vrf1" in (result_4.response | map(attribute="DATA") | map(attribute="vrfName") | list)'
-    - '"vrf2" in (result_4.response | map(attribute="DATA") | map(attribute="vrfName") | list)'
+    - result_4.response[0].DATA|length == 2
+    - '"vrf1" in (result_4.response[0].DATA | map(attribute="vrfName") | list)'
+    - '"vrf2" in (result_4.response[0].DATA | map(attribute="vrfName") | list)'
 
 - name: Set task name
   ansible.builtin.set_fact:
@@ -236,8 +236,8 @@
 - assert:
     that:
     - result_5.changed == false
-    - result_5.response[0].DATA.vrfId == 9008012
-    - result_5.response[0].DATA.vrfName == "vrf2"
+    - result_5.response[0].DATA[0].vrfId == 9008012
+    - result_5.response[0].DATA[0].vrfName == "vrf2"
 
 - name: Set task name
   ansible.builtin.set_fact:
@@ -312,8 +312,8 @@
 - assert:
     that:
     - result_8.changed == false
-    - result_8.response|length == 1
-    - result_8.response[0].DATA.vrfName == "vrf2"
+    - result_8.response[0].DATA|length == 1
+    - result_8.response[0].DATA[0].vrfName == "vrf2"
 
 ###############################################
 ###                 CLEAN-UP                 ##

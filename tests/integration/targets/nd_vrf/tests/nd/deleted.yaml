@@ -107,7 +107,7 @@
       fabric: "{{ fabric_1 }}"
   register: result_setup_4
   until:
-    - "result_setup_4.response[0].DATA.vrfStatus is search('NA')"
+    - "result_setup_4.response[0].DATA[0].vrfStatus is search('NA')"
   retries: 30
   delay: 2
 
@@ -228,8 +228,8 @@
     - fabric: "{{ fabric_1 }}"
   register: result_2a
   until:
-    - "result_2a.response[0].DATA.vrfStatus is search('NA')"
-    - "result_2a.response[1].DATA.vrfStatus is search('NA')"
+    - "result_2a.response[0].DATA[0].vrfStatus is search('NA')"
+    - "result_2a.response[0].DATA[1].vrfStatus is search('NA')"
   retries: 5
   delay: 2
 

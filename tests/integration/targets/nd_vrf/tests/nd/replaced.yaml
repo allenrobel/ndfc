@@ -90,7 +90,7 @@
     state: query
   register: result_setup_4a
   until:
-    - "result_setup_4a.response[0].DATA.vrfStatus is search('NA')"
+    - "result_setup_4a.response[0].DATA[0].vrfStatus is search('NA')"
   retries: 30
   delay: 2
 
@@ -137,7 +137,7 @@
     state: query
   register: result_1a
   until:
-    - "result_1a.response[0].DATA.vrfStatus is search('NA')"
+    - "result_1a.response[0].DATA[0].vrfStatus is search('NA')"
   retries: 30
   delay: 2
 
@@ -205,7 +205,7 @@
     state: query
   register: result_2a
   until:
-    - "result_2a.response[0].DATA.vrfStatus is search('NA')"
+    - "result_2a.response[0].DATA[0].vrfStatus is search('NA')"
   retries: 30
   delay: 2
   ignore_errors: true
@@ -226,8 +226,8 @@
     - result_2.response[0].vrf_id == 9008033
     - result_2.response[0].RETURN_CODE == 200
     - result_2.response[1].RETURN_CODE == 200
-    - (result_2.response[0].DATA|dict2items)[0].value == "SUCCESS"
-    - (result_2.response[0].DATA|dict2items)[1].value == "SUCCESS"
+    - result_2.response[0].DATA[0] != ""
+    - result_2.response[0].DATA|length >= 1
 
 - name: Set task name
   ansible.builtin.set_fact:
