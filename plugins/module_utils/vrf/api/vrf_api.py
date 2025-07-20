@@ -67,16 +67,16 @@ class VrfApi:
         if "DATA" in response_data:
             # Query-style response with DATA field
             return response_data["DATA"]
-        else:
-            # POST response - extract VRF fields, exclude controller metadata
-            vrf_data = {}
-            controller_fields = {"MESSAGE", "METHOD", "REQUEST_PATH", "RETURN_CODE", "ERROR"}
 
-            for key, value in response_data.items():
-                if key not in controller_fields:
-                    vrf_data[key] = value
+        # POST response - extract VRF fields, exclude controller metadata
+        vrf_data = {}
+        controller_fields = {"MESSAGE", "METHOD", "REQUEST_PATH", "RETURN_CODE", "ERROR"}
 
-            return vrf_data
+        for key, value in response_data.items():
+            if key not in controller_fields:
+                vrf_data[key] = value
+
+        return vrf_data
 
     def _transform_vrf_field_names(self, vrf_data: dict[str, Any]) -> dict[str, Any]:
         """
@@ -92,10 +92,7 @@ class VrfApi:
         transformed_data = copy.deepcopy(vrf_data)
 
         # Field name mappings from controller format to standard format
-        field_mappings = {
-            "VRF Id": "vrfId",
-            "VRF Name": "vrfName"
-        }
+        field_mappings = {"VRF Id": "vrfId", "VRF Name": "vrfName"}
 
         # Handle both direct VRF data and DATA-wrapped responses
         if "DATA" in transformed_data:
@@ -137,12 +134,12 @@ class VrfApi:
             if result.get("success", False):
                 # Return both processed result and raw controller response
                 return True, {"result": result, "response": raw_response}
-            else:
-                return False, {"error": result.get("error", "Request failed"), "response": raw_response}
+
+            return False, {"error": result.get("error", "Request failed"), "response": raw_response}
 
         except (TypeError, ValueError) as e:
             return False, {"error": f"Request error: {str(e)}"}
-        except Exception as e:
+        except (AttributeError, KeyError) as e:
             return False, {"error": f"Unexpected error: {str(e)}"}
 
     def _fetch_single_vrf_from_all(self, fabric: str, vrf_name: str) -> Optional[dict[str, Any]]:
@@ -212,11 +209,9 @@ class VrfApi:
             processed_response = self.response_handler.result
             if processed_response and processed_response.get("response"):
                 return True, processed_response["response"]
-            else:
-                # Fallback to raw response if processing failed
-                return True, response.get("response", response)
-        else:
-            return False, response
+            # Fail early if response processing failed
+            raise ValueError(f"VRF creation succeeded but response processing failed. Raw response: {response}")
+        return False, response
 
     def delete_vrf(self, fabric: str, vrf_name: str) -> tuple[bool, dict[str, Any]]:
         """Delete a VRF and update cache."""
@@ -229,8 +224,8 @@ class VrfApi:
             self._cached_service.update_cache_after_delete(fabric, vrf_name)
             # Return the raw controller response with RETURN_CODE for module tests
             return True, response.get("response", response)
-        else:
-            return False, response
+
+        return False, response
 
     def update_vrf(self, vrf_payload: VrfPayload) -> tuple[bool, dict[str, Any]]:
         """Update a VRF and update cache."""
@@ -252,11 +247,9 @@ class VrfApi:
             processed_response = self.response_handler.result
             if processed_response and processed_response.get("response"):
                 return True, processed_response["response"]
-            else:
-                # Fallback to raw response if processing failed
-                return True, response.get("response", response)
-        else:
-            return False, response
+            # Fail early if response processing failed
+            raise ValueError(f"VRF update succeeded but response processing failed. Raw response: {response}")
+        return False, response
 
     def invalidate_fabric_cache(self, fabric: str) -> None:
         """Invalidate all VRF cache for a fabric."""
