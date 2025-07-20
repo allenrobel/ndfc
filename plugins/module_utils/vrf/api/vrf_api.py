@@ -262,17 +262,6 @@ class VrfApi:
         """Invalidate all VRF cache for a fabric."""
         self._cached_service.invalidate_fabric_cache(fabric)
 
-    def get_cache_stats(self) -> dict[str, Any]:
-        """Get cache statistics for VRF resources."""
-        if hasattr(self._cached_service._cache_manager._cache, "get_cache_stats"):
-            all_stats = self._cached_service._cache_manager._cache.get_cache_stats()
-            return {
-                "total_entries": all_stats.get("total_entries", 0),
-                "vrf_entries": all_stats.get("by_resource_type", {}).get("vrf", 0),
-                "fabrics": all_stats.get("by_fabric", {}),
-            }
-        return {"message": "Cache statistics not available"}
-
     # Query methods that return VRF data arrays (with vrfStatus field)
     def query_vrf(self, fabric: str, vrf_name: str) -> tuple[bool, list[dict[str, Any]]]:
         """Query a specific VRF and return array with single VRF (includes vrfStatus)."""

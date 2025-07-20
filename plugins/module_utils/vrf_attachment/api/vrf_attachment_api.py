@@ -208,13 +208,3 @@ class VrfAttachmentApi:
         """Invalidate all VRF attachment cache for a fabric."""
         self._cached_service.invalidate_fabric_cache(fabric)
 
-    def get_cache_stats(self) -> dict[str, Any]:
-        """Get cache statistics for VRF attachment resources."""
-        if hasattr(self._cached_service._cache_manager._cache, "get_cache_stats"):
-            all_stats = self._cached_service._cache_manager._cache.get_cache_stats()
-            return {
-                "total_entries": all_stats.get("total_entries", 0),
-                "vrf_attachment_entries": all_stats.get("by_resource_type", {}).get("vrf_attachment", 0),
-                "fabrics": all_stats.get("by_fabric", {}),
-            }
-        return {"message": "Cache statistics not available"}
