@@ -333,9 +333,9 @@ response:
 try:
     from ansible_collections.cisco.nd.plugins.module_utils.common.enums.ansible_states import AnsibleStates
     from ansible_collections.cisco.nd.plugins.module_utils.common.cache.cache_manager import CacheManager
-    from ansible_collections.cisco.nd.plugins.module_utils.common.cache.cached_resource_service import CachedResourceService
+    from ansible_collections.cisco.nd.plugins.module_utils.vrf.cache.vrf_cache_service import VrfCacheService
     from ansible_collections.cisco.nd.plugins.module_utils.vrf.validators.vrf_validator import VrfValidator
-    from ansible_collections.cisco.nd.plugins.module_utils.vrf.api.vrf_api import VrfApi
+    from ansible_collections.cisco.nd.plugins.module_utils.vrf.api.vrf_api_v2 import VrfApiV2
     from ansible_collections.cisco.nd.plugins.module_utils.vrf.states.state_factory import StateFactory
     from ansible_collections.cisco.nd.plugins.module_utils.common.classes.log_v2 import Log
 
@@ -449,11 +449,11 @@ def main():
         # Create cache manager with 5-minute default TTL for VRF data
         cache_manager = CacheManager(default_ttl_seconds=300)
 
-        # Create cached resource service for VRF resources
-        cached_service = CachedResourceService[dict[str, Any]](cache_manager, "vrf")
+        # Create VRF cache service with Pydantic model support
+        cache_service = VrfCacheService(cache_manager=cache_manager)
 
         # Initialize VRF API with injected caching service
-        api_client = VrfApi(ansible_module=module, check_mode=module.check_mode, cached_service=cached_service)
+        api_client = VrfApiV2(ansible_module=module, check_mode=module.check_mode, cache_service=cache_service)
     except Exception as e:  # pylint: disable=broad-exception-caught
         module.fail_json(msg=f"Failed to initialize API client: {e}")
 
