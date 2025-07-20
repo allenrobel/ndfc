@@ -299,18 +299,3 @@ class VrfApi:
                 return True, [vrf_data]
             return True, vrf_data if isinstance(vrf_data, list) else []
         return False, []
-
-    # Legacy methods for backward compatibility
-    def get_vrf(self, fabric: str, vrf_name: str) -> tuple[bool, dict[str, Any]]:
-        """Get a VRF by name (legacy method)."""
-        vrf_data = self.get_cached(fabric, vrf_name)
-        if vrf_data:
-            return True, {"response": vrf_data}
-        else:
-            return True, {"response": None}
-
-    def get_all_vrfs(self, fabric: str) -> tuple[bool, dict[str, Any]]:
-        """Get all VRFs for a fabric (legacy method)."""
-        all_vrfs = self.get_all_cached(fabric)
-        vrf_list = list(all_vrfs.values())
-        return True, {"response": vrf_list}
