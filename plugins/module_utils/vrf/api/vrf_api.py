@@ -145,16 +145,10 @@ class VrfApi:
         except Exception as e:
             return False, {"error": f"Unexpected error: {str(e)}"}
 
-    def _fetch_single_vrf(self, fabric: str, vrf_name: str) -> Optional[dict[str, Any]]:
-        """Fetch a single VRF from the API (internal method)."""
-        path = f"{self.base_path}/{fabric}/vrfs/{vrf_name}"
-        success, response = self._execute_request("GET", path)
-
-        if success and response.get("result", {}).get("response"):
-            raw_response = response["result"]["response"]
-            # Transform field names for cache consistency
-            return self._transform_vrf_field_names(raw_response)
-        return None
+    def _fetch_single_vrf_from_all(self, fabric: str, vrf_name: str) -> Optional[dict[str, Any]]:
+        """Fetch a single VRF by querying all VRFs (avoids controller bug with missing vrfStatus)."""
+        all_vrfs = self._fetch_all_vrfs(fabric)
+        return all_vrfs.get(vrf_name)
 
     def _fetch_all_vrfs(self, fabric: str) -> dict[str, dict[str, Any]]:
         """Fetch all VRFs for a fabric from the API (internal method)."""
@@ -187,7 +181,7 @@ class VrfApi:
     def get_cached(self, fabric: str, vrf_name: str, ttl_seconds: Optional[int] = None) -> Optional[dict[str, Any]]:
         """Get a single VRF with caching."""
         return self._cached_service.get_cached(
-            fabric=fabric, identifier=vrf_name, fetch_func=lambda: self._fetch_single_vrf(fabric, vrf_name), ttl_seconds=ttl_seconds
+            fabric=fabric, identifier=vrf_name, fetch_func=lambda: self._fetch_single_vrf_from_all(fabric, vrf_name), ttl_seconds=ttl_seconds
         )
 
     def get_all_cached(self, fabric: str, ttl_seconds: Optional[int] = None) -> dict[str, dict[str, Any]]:
@@ -196,7 +190,7 @@ class VrfApi:
 
     def exists_cached(self, fabric: str, vrf_name: str) -> tuple[bool, Optional[dict[str, Any]]]:
         """Check if VRF exists using cache."""
-        return self._cached_service.exists_cached(fabric=fabric, identifier=vrf_name, fetch_func=lambda: self._fetch_single_vrf(fabric, vrf_name))
+        return self._cached_service.exists_cached(fabric=fabric, identifier=vrf_name, fetch_func=lambda: self._fetch_single_vrf_from_all(fabric, vrf_name))
 
     def create_vrf(self, vrf_payload: VrfPayload) -> tuple[bool, dict[str, Any]]:
         """Create a VRF and update cache."""
