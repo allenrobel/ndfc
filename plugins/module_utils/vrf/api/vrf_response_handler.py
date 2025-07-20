@@ -91,13 +91,21 @@ class VrfResponseHandler:
         has_controller_metadata = all(field in raw_response for field in ["MESSAGE", "METHOD", "REQUEST_PATH", "RETURN_CODE"])
 
         if has_controller_metadata:
-            # This is a controller response (create/update/delete)
+            # This is a controller response with metadata
             if self._verb == "DELETE":
                 return VrfResponseBuilder.from_delete_response(raw_response)
+            elif self._verb == "GET":
+                # GET requests with metadata - extract the DATA and treat as query response
+                vrf_data = raw_response.get("DATA", [])
+                method = raw_response.get("METHOD", "GET")
+                request_path = raw_response.get("REQUEST_PATH", self._request_path)
+                return_code = raw_response.get("RETURN_CODE", 200)
+                return VrfResponseBuilder.from_query_response(raw_response=vrf_data, method=method, request_path=request_path, return_code=return_code)
             else:
+                # POST/PUT with metadata
                 return VrfResponseBuilder.from_create_update_response(raw_response)
         else:
-            # This is likely a query response - raw VRF data without metadata
+            # This is raw VRF data without metadata (legacy format)
             return VrfResponseBuilder.from_query_response(raw_response=raw_response, method=self._verb or "GET", request_path=self._request_path)
 
     def get_vrf_data_models(self) -> list[VrfData]:
