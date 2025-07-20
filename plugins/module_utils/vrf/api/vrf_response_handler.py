@@ -35,7 +35,7 @@ class VrfResponseHandler:
         self._result: Optional[Dict[str, Any]] = None
         self._verb: Optional[str] = None
         self._request_path: str = ""
-        self._implements = "response_handler_v2"
+        self._implements = "response_handler_v1"
 
         # Store the processed VrfControllerResponse model
         self._controller_response: Optional[VrfControllerResponse] = None
