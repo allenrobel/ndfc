@@ -97,11 +97,6 @@
     - 'result.response[2].RETURN_CODE == 200'
     - '(result.response[1].DATA|dict2items)[0].value == "SUCCESS"'
     - '(result.response[1].DATA|dict2items)[1].value == "SUCCESS"'
-    - 'result.diff[0].attach[0].deploy == true'
-    - 'result.diff[0].attach[1].deploy == true'
-    - '"{{ switch_1 }}" or "{{ switch_2 }}" in result.diff[0].attach[0].ip_address'
-    - '"{{ switch_2 }}" or "{{ switch_1 }}" in result.diff[0].attach[1].ip_address'
-    - 'result.diff[0].vrf_name == "ansible-vrf-int1"'
 
 - name: OVERRIDDEN_ALL - conf - Idempotence
   cisco.ndfc.ndfc_vrf: *conf
@@ -166,16 +161,6 @@
     - '(result.response[0].DATA|dict2items)[1].value == "SUCCESS"'
     - '(result.response[4].DATA|dict2items)[0].value == "SUCCESS"'
     - '(result.response[4].DATA|dict2items)[1].value == "SUCCESS"'
-    - 'result.diff[0].attach[0].deploy == true'
-    - 'result.diff[0].attach[1].deploy == true'
-    - 'result.diff[1].attach[0].deploy == false'
-    - 'result.diff[1].attach[1].deploy == false'
-    - '"{{ switch_1 }}" or "{{ switch_2 }}" in result.diff[0].attach[0].ip_address'
-    - '"{{ switch_2 }}" or "{{ switch_1 }}" in result.diff[0].attach[1].ip_address'
-    - '"{{ switch_1 }}" or "{{ switch_2 }}" in result.diff[1].attach[0].ip_address'
-    - '"{{ switch_2 }}" or "{{ switch_1 }}" in result.diff[1].attach[1].ip_address'
-    - 'result.diff[0].vrf_name == "ansible-vrf-int2"'
-    - 'result.diff[1].vrf_name == "ansible-vrf-int1"'
 
 - name: OVERRIDDEN_ALL - conf1 - Idempotence
   cisco.ndfc.ndfc_vrf: *conf1

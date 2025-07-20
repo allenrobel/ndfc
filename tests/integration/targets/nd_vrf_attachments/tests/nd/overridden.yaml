@@ -99,7 +99,6 @@
 - assert:
     that:
     - result_setup_3.changed == true
-    - result_setup_3.diff[0].vrf_name == "vrf1"
     - result_setup_3.response[0].RETURN_CODE == 200
     - result_setup_3.response[1].RETURN_CODE == 200
     - result_setup_3.response[2].RETURN_CODE == 200
@@ -156,8 +155,6 @@
 - assert:
     that:
     - result_1.changed == true
-    - result_1.diff[0].vrf_name == "vrf2"
-    - result_1.diff[1].vrf_name == "vrf1"
     - result_1.response[0].METHOD == "POST"
     - result_1.response[1].METHOD == "POST"
     - result_1.response[2].METHOD == "DELETE"
@@ -259,7 +256,6 @@
 - assert:
     that:
     - result_2.changed == true
-    - result_2.diff[0].vrf_name == "vrf2"
     - result_2.response[0].RETURN_CODE == 200
     - result_2.response[1].RETURN_CODE == 200
     - result_2.response[2].RETURN_CODE == 200
@@ -312,7 +308,6 @@
 - assert:
     that:
     - result_3.changed == true
-    - result_3.diff[0].vrf_name == "vrf2"
     - result_3.response[0].RETURN_CODE == 200
     - result_3.response[1].RETURN_CODE == 200
     - result_3.response[1].DATA.status == DEPLOYMENT_OF_VRFS
@@ -384,8 +379,6 @@
 - assert:
     that:
     - result_4.changed == true
-    - result_4.diff[0].vrf_name == "vrf1"
-    - result_4.diff[1].vrf_name == "vrf2"
     - result_4.response[0].METHOD == "POST"
     - result_4.response[1].METHOD == "POST"
     - result_4.response[2].METHOD == "DELETE"

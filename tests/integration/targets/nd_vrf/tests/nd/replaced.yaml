@@ -105,7 +105,6 @@
 - assert:
     that:
     - result_setup_4.changed == true
-    - result_setup_4.diff[0].vrf_name == "vrf1"
     - result_setup_4.response[0].RETURN_CODE == 200
 
 ###############################################
@@ -149,7 +148,6 @@
 - assert:
     that:
     - result_1.changed == true
-    - result_1.diff[0].vrf_name == "vrf1"
     - result_1.response[0].RETURN_CODE == 200
     - result_1.response[1].RETURN_CODE == 200
 

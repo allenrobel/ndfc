@@ -20,4 +20,3 @@ class ModuleResult(BaseModel):
     stdout: str = ""
     stderr: str = ""
     response: Optional[list[dict[str, Any]]] = None
-    diff: Optional[dict[str, Any]] = None

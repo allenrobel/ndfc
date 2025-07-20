@@ -168,9 +168,6 @@
 - assert:
     that:
     - result_1.changed == true
-    - result_1.diff[0].attach[0].deploy == true
-    - result_1.diff[0].attach[1].deploy == true
-    - result_1.diff[0].vrf_name == "ansible-vrf-int1"
     - result_1.response[2].DATA.status == DEPLOYMENT_OF_VRFS
     - result_1.response[0].METHOD == "POST"
     - result_1.response[1].METHOD == "POST"
@@ -180,8 +177,6 @@
     - result_1.response[2].RETURN_CODE == 200
     - (result_1.response[1].DATA|dict2items)[0].value == "SUCCESS"
     - (result_1.response[1].DATA|dict2items)[1].value == "SUCCESS"
-    - switch_1 in result_1.diff[0].attach[0].ip_address
-    - switch_2 in result_1.diff[0].attach[1].ip_address
 
 - name: Set task name
   ansible.builtin.set_fact:

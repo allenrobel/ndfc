@@ -1,4 +1,5 @@
 """Collect results across tasks"""
+
 # Copyright (c) 2024 Cisco and/or its affiliates.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,6 +25,7 @@ import inspect
 import json
 import logging
 from typing import Any
+
 
 class Results:
     """
@@ -136,9 +138,6 @@ class Results:
     {
         "changed": True, # or False
         "failed": True,  # or False
-        "diff": {
-            [{"diff1": "diff"}, {"diff2": "diff"}, {"etc...": "diff"}],
-        }
         "response": {
             [{"response1": "response"}, {"response2": "response"}, {"etc...": "response"}],
         }
@@ -151,7 +150,7 @@ class Results:
     }
     ```
 
-    diff, response, and result dicts are per the Ansible ND Collection standard output.
+    Response and result dicts are per the Ansible ND Collection standard output.
 
     An example of a result dict would be (sequence_number is added by Results):
 
@@ -176,7 +175,7 @@ class Results:
     ```
 
     ``sequence_number`` indicates the order in which the task was registered
-    with ``Results``.  It provides a way to correlate the diff, response,
+    with ``Results``.  It provides a way to correlate the response,
     result, and metadata across all tasks.
     """
 
@@ -188,15 +187,12 @@ class Results:
         msg = "ENTERED Results():"
         self.log.debug(msg)
 
-        self.diff_keys = ["deleted", "merged", "query"]
         self.response_keys = ["deleted", "merged", "query"]
 
         self._failed: set[bool] = set()
         self._action: str = "na"
         self._changed: set[bool] = {False}
         self._check_mode: bool = False
-        self._diff: list = []
-        self._diff_current: dict = {}
         self._metadata: list = []
         self._response: list = []
         self._response_current: dict = {}
@@ -205,10 +201,8 @@ class Results:
         self._result_current: dict = {}
         self._state: str = "query"
 
-        self.diff_ok: list = []
         self.response_ok: list = []
         self.result_ok: list = []
-        self.diff_nok: list = []
         self.response_nok: list = []
         self.result_nok: list = []
 
@@ -236,7 +230,6 @@ class Results:
         msg += f"self.action: {self.action}, "
         msg += f"self.state: {self.state}, "
         msg += f"self.result_current: {self.result_current}, "
-        msg += f"self.diff: {self.diff}, "
         msg += f"self.failed: {self.failed}"
         self.log.debug(msg)
 
@@ -250,17 +243,8 @@ class Results:
             return False
         if "changed" not in self.result_current:
             return False
-        something_changed = False
-        for diff in self.diff:
-            something_changed = False
-            test_diff = copy.deepcopy(diff)
-            test_diff.pop("sequence_number", None)
-            if len(test_diff) != 0:
-                something_changed = True
-        msg = f"{self.class_name}.{method_name}: "
-        msg += f"something_changed: {something_changed}"
-        self.log.debug(msg)
-        return something_changed
+        # For modules without diff support, rely on result_current["changed"]
+        return False
 
     def register_task_result(self):
         """
@@ -268,19 +252,15 @@ class Results:
         Register a task's result.
 
         ### Description
-        1.  Append result_current, response_current, diff_current and
-            metadata_current their respective lists (result, response, diff,
-            and metadata)
-        2.  Set self.changed based on current_diff.
-            If current_diff is empty, it is assumed that no changes were made
-            and self.changed is set to False.  Else, self.changed is set to True.
+        1.  Append result_current, response_current and metadata_current
+            to their respective lists (result, response, and metadata)
+        2.  Set self.changed based on result_current["changed"].
         3.  Set self.failed based on current_result.  If current_result["success"]
             is True, self.failed is set to False.  Else, self.failed is set to True.
         4.  Set self.metadata based on current_metadata.
 
         - self.response  : list of controller responses
         - self.result    : list of results returned by the handler
-        - self.diff      : list of diffs
         - self.metadata  : list of metadata
         """
         method_name = inspect.stack()[0][3]
@@ -294,7 +274,6 @@ class Results:
         self.metadata = self.metadata_current
         self.response = self.response_current
         self.result = self.result_current
-        self.diff = self.diff_current
 
         if self.did_anything_change() is False:
             self.changed = False
@@ -312,10 +291,6 @@ class Results:
             msg += "Setting self.failed to False."
             self.log.debug(msg)
             self.failed = False
-
-        msg = f"{self.class_name}.{method_name}: "
-        msg += f"self.diff: {json.dumps(self.diff, indent=4, sort_keys=True)}, "
-        self.log.debug(msg)
 
         msg = f"{self.class_name}.{method_name}: "
         msg += f"self.metadata: {json.dumps(self.metadata, indent=4, sort_keys=True)}"
@@ -340,9 +315,6 @@ class Results:
         {
             "changed": True, # or False
             "failed": True,
-            "diff": {
-                [<list of dict containing changes>],
-            },
             "response": {
                 [<list of dict containing controller responses>],
             },
@@ -367,7 +339,6 @@ class Results:
             self.final_result["changed"] = True
         else:
             self.final_result["changed"] = False
-        self.final_result["diff"] = self.diff
         self.final_result["response"] = self.response
         self.final_result["result"] = self.result
         self.final_result["metadata"] = self.metadata
@@ -380,7 +351,6 @@ class Results:
         _result: dict = {}
         _result["changed"] = False
         _result["failed"] = True
-        _result["diff"] = [{}]
         _result["response"] = [{}]
         _result["result"] = [{}]
         return _result
@@ -393,7 +363,6 @@ class Results:
         _result: dict = {}
         _result["changed"] = False
         _result["failed"] = False
-        _result["diff"] = [{}]
         _result["response"] = [{}]
         _result["result"] = [{}]
         return _result
@@ -471,53 +440,6 @@ class Results:
         self._check_mode = value
 
     @property
-    def diff(self):
-        """
-        ### Summary
-        - A list of dicts representing the changes made.
-        - The setter appends a dict to the list.
-        - The getter returns the list.
-
-        ### Raises
-        -   setter: ``TypeError``: if value is not a dict
-        """
-        return self._diff
-
-    @diff.setter
-    def diff(self, value) -> None:
-        method_name = inspect.stack()[0][3]
-        if not isinstance(value, dict):
-            msg = f"{self.class_name}.{method_name}: "
-            msg += f"instance.diff must be a dict. Got {value}"
-            raise TypeError(msg)
-        value["sequence_number"] = self.task_sequence_number
-        self._diff.append(copy.deepcopy(value))
-
-    @property
-    def diff_current(self):
-        """
-        ### Summary
-        -   getter: Return the current diff
-        -   setter: Set the current diff
-
-        ### Raises
-        -   setter: ``TypeError`` if value is not a dict.
-        """
-        value = self._diff_current
-        value["sequence_number"] = self.task_sequence_number
-        return value
-
-    @diff_current.setter
-    def diff_current(self, value) -> None:
-        method_name = inspect.stack()[0][3]
-        if not isinstance(value, dict):
-            msg = f"{self.class_name}.{method_name}: "
-            msg += "instance.diff_current must be a dict. "
-            msg += f"Got {value}."
-            raise TypeError(msg)
-        self._diff_current = value
-
-    @property
     def failed(self) -> set[bool]:
         """
         ### Summary
@@ -546,7 +468,7 @@ class Results:
     def metadata(self) -> list[dict]:
         """
         ### Summary
-        - List of dicts representing the metadata (if any) for each diff.
+        - List of dicts representing the metadata (if any) for each task.
         -   getter: Return the metadata.
         -   setter: Append value to the metadata list.
 

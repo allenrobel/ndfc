@@ -109,11 +109,6 @@
     - 'result_1.response[2].RETURN_CODE == 200'
     - '(result_1.response[1].DATA|dict2items)[0].value == "SUCCESS"'
     - '(result_1.response[1].DATA|dict2items)[1].value == "SUCCESS"'
-    - 'result_1.diff[0].attach[0].deploy == true'
-    - 'result_1.diff[0].attach[1].deploy == true'
-    - '"{{ switch_1 }}" in result_1.diff[0].attach[0].ip_address'
-    - '"{{ switch_2 }}" in result_1.diff[0].attach[1].ip_address'
-    - 'result_1.diff[0].vrf_name == "ansible-vrf-int1"'
   tags: sanity
 
 - name: TEST.1c - SANITY MERGED - conf1 - Idempotence
@@ -188,9 +183,6 @@
     - 'result_2.response[2].RETURN_CODE == 200'
     - '(result_2.response[1].DATA|dict2items)[0].value == "SUCCESS"'
     - '(result_2.response[1].DATA|dict2items)[1].value == "SUCCESS"'
-    - 'result_2.diff[0].attach[0].deploy == true'
-    - 'result_2.diff[0].attach[1].deploy == true'
-    - 'result_2.diff[0].vrf_name == "ansible-vrf-int1"'
   tags: sanity
 
 - name: TEST.2c - SANITY REPLACED - [replaced] Update existing VRF - delete attachments
@@ -234,9 +226,6 @@
     - 'result_2c.response[1].RETURN_CODE == 200'
     - '(result_2c.response[0].DATA|dict2items)[0].value == "SUCCESS"'
     - '(result_2c.response[0].DATA|dict2items)[1].value == "SUCCESS"'
-    - 'result_2c.diff[0].attach[0].deploy == false'
-    - 'result_2c.diff[0].attach[1].deploy == false'
-    - 'result_2c.diff[0].vrf_name == "ansible-vrf-int1"'
   tags: sanity
 
 - name: TEST.2g - SANITY REPLACED - conf2c - Idempotence
@@ -299,11 +288,6 @@
     - 'result_2i.response[1].RETURN_CODE == 200'
     - '(result_2i.response[0].DATA|dict2items)[0].value == "SUCCESS"'
     - '(result_2i.response[0].DATA|dict2items)[1].value == "SUCCESS"'
-    - 'result_2i.diff[0].attach[0].deploy == true'
-    - 'result_2i.diff[0].attach[1].deploy == true'
-    - 'result_2i.diff[0].vrf_name == "ansible-vrf-int1"'
-    - 'result_2i.diff[0].attach[0].vlan_id == 500'
-    - 'result_2i.diff[0].attach[1].vlan_id == 500'
   tags: sanity
 
 - name: TEST.2m - SANITY REPLACED - [replaced] conf2i - Idempotence
@@ -377,11 +361,6 @@
     - 'result_3.response[2].RETURN_CODE == 200'
     - '(result_3.response[1].DATA|dict2items)[0].value == "SUCCESS"'
     - '(result_3.response[1].DATA|dict2items)[1].value == "SUCCESS"'
-    - 'result_3.diff[0].attach[0].deploy == true'
-    - 'result_3.diff[0].attach[1].deploy == true'
-    - '"{{ switch_1 }}" in result_3.diff[0].attach[0].ip_address'
-    - '"{{ switch_2 }}" in result_3.diff[0].attach[1].ip_address'
-    - 'result_3.diff[0].vrf_name == "ansible-vrf-int1"'
   tags: sanity
 
 - name: TEST.3c - SANITY OVERRIDDEN - [overridden] Update existing VRF - delete and create
@@ -430,12 +409,6 @@
     - '(result_3c.response[0].DATA|dict2items)[1].value == "SUCCESS"'
     - '(result_3c.response[4].DATA|dict2items)[0].value == "SUCCESS"'
     - '(result_3c.response[4].DATA|dict2items)[1].value == "SUCCESS"'
-    - 'result_3c.diff[0].attach[0].deploy == true'
-    - 'result_3c.diff[0].attach[1].deploy == true'
-    - 'result_3c.diff[0].vrf_name == "ansible-vrf-int2"'
-    - 'result_3c.diff[1].attach[0].deploy == false'
-    - 'result_3c.diff[1].attach[1].deploy == false'
-    - 'result_3c.diff[1].vrf_name == "ansible-vrf-int1"'
   tags: sanity
 
 - name: TEST.3f - SANITY OVERRIDDEN - [overridden] conf3c - Idempotence
@@ -510,11 +483,6 @@
     - 'result_4.response[2].RETURN_CODE == 200'
     - '(result_4.response[1].DATA|dict2items)[0].value == "SUCCESS"'
     - '(result_4.response[1].DATA|dict2items)[1].value == "SUCCESS"'
-    - 'result_4.diff[0].attach[0].deploy == true'
-    - 'result_4.diff[0].attach[1].deploy == true'
-    - '"{{ switch_1 }}" in result_4.diff[0].attach[0].ip_address'
-    - '"{{ switch_2 }}" in result_4.diff[0].attach[1].ip_address'
-    - 'result_4.diff[0].vrf_name == "ansible-vrf-int1"'
   tags: sanity
 
 - name: TEST.4c - SANITY QUERY - [query] Query the VRF
@@ -609,11 +577,6 @@
     - 'result_5.response[2].RETURN_CODE == 200'
     - '(result_5.response[1].DATA|dict2items)[0].value == "SUCCESS"'
     - '(result_5.response[1].DATA|dict2items)[1].value == "SUCCESS"'
-    - 'result_5.diff[0].attach[0].deploy == true'
-    - 'result_5.diff[0].attach[1].deploy == true'
-    - '"{{ switch_1 }}" in result_5.diff[0].attach[0].ip_address'
-    - '"{{ switch_2 }}" in result_5.diff[0].attach[1].ip_address'
-    - 'result_5.diff[0].vrf_name == "ansible-vrf-int1"'
   tags: sanity
 
 - name: TEST.5c - SANITY DELETED - [deleted] Delete the VRF
@@ -643,9 +606,6 @@
     - 'result_5c.response[2].METHOD == "DELETE"'
     - '(result_5c.response[0].DATA|dict2items)[0].value == "SUCCESS"'
     - '(result_5c.response[0].DATA|dict2items)[1].value == "SUCCESS"'
-    - 'result_5c.diff[0].attach[0].deploy == false'
-    - 'result_5c.diff[0].attach[1].deploy == false'
-    - 'result_5c.diff[0].vrf_name == "ansible-vrf-int1"'
   tags: sanity
 
 - name: TEST.5e - SANITY DELETED - conf5c - Idempotence
@@ -662,5 +622,4 @@
     that:
     - 'result_5e.changed == false'
     - 'result_5e.response|length == 0'
-    - 'result_5e.diff|length == 0'
   tags: sanity

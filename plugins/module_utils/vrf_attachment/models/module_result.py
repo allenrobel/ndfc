@@ -18,12 +18,11 @@ class ModuleResult(BaseModel):
     stderr: str = Field(default="")
     stdout_lines: List[str] = Field(default_factory=list)
     stderr_lines: List[str] = Field(default_factory=list)
-    diff: Optional[dict[str, Any]] = Field(default=None)
     response: Optional[List[dict[str, Any]]] = Field(default=None)
 
     def model_post_init(self, __context: Any) -> None:
         """Post-initialization to set stdout_lines and stderr_lines."""
         if self.stdout:
-            self.stdout_lines = self.stdout.splitlines()
+            self.stdout_lines = self.stdout.splitlines()  # pylint: disable=no-member
         if self.stderr:
-            self.stderr_lines = self.stderr.splitlines()
+            self.stderr_lines = self.stderr.splitlines()  # pylint: disable=no-member
