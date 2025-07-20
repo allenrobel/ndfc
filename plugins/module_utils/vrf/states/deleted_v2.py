@@ -1,8 +1,8 @@
-# MARK plugins/module_utils/vrf/states/deleted.py
+# MARK plugins/module_utils/vrf/states/deleted_v2.py
 """
 Deleted state handler for VRF resources with Pydantic model support.
 
-This module provides the Deleted class that handles the 'deleted' Ansible state
+This module provides the DeletedV2 class that handles the 'deleted' Ansible state
 using VrfApiV2 and VrfData models for type safety and consistent responses.
 """
 from typing import List, Set
@@ -11,7 +11,7 @@ from ..models.vrf_config import VrfConfig
 from .base_state_v2 import BaseStateV2
 
 
-class Deleted(BaseStateV2):
+class DeletedV2(BaseStateV2):
     """Handle deleted state for VRF resources with Pydantic model support."""
 
     def execute(self, configs: List[VrfConfig]) -> ModuleResult:

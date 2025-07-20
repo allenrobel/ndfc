@@ -1,8 +1,8 @@
-# MARK plugins/module_utils/vrf/states/merged.py
+# MARK plugins/module_utils/vrf/states/merged_v2.py
 """
 Merged state handler for VRF resources with Pydantic model support.
 
-This module provides the Merged class that handles the 'merged' Ansible state
+This module provides the MergedV2 class that handles the 'merged' Ansible state
 using VrfApiV2 and VrfData models for type safety and consistent responses.
 """
 from typing import List
@@ -11,7 +11,7 @@ from ..models.vrf_config import VrfConfig
 from .base_state_v2 import BaseStateV2
 
 
-class Merged(BaseStateV2):
+class MergedV2(BaseStateV2):
     """Handle merged state for VRF resources with Pydantic model support."""
 
     def execute(self, configs: List[VrfConfig]) -> ModuleResult:

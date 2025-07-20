@@ -1,8 +1,8 @@
-# MARK plugins/module_utils/vrf/states/replaced.py
+# MARK plugins/module_utils/vrf/states/replaced_v2.py
 """
 Replaced state handler for VRF resources with Pydantic model support.
 
-This module provides the Replaced class that handles the 'replaced' Ansible state
+This module provides the ReplacedV2 class that handles the 'replaced' Ansible state
 using VrfApiV2 and VrfData models for type safety and consistent responses.
 """
 from typing import List
@@ -11,7 +11,7 @@ from ..models.vrf_config import VrfConfig
 from .base_state_v2 import BaseStateV2
 
 
-class Replaced(BaseStateV2):
+class ReplacedV2(BaseStateV2):
     """Handle replaced state for VRF resources with Pydantic model support."""
 
     def execute(self, configs: List[VrfConfig]) -> ModuleResult:

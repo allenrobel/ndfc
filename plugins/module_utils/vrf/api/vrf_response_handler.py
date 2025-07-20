@@ -1,39 +1,53 @@
 # MARK plugins/module_utils/vrf/api/vrf_response_handler.py
 """
-VRF response handler for API responses.
+VRF response handler for API responses with Pydantic model support.
 
 This module provides the VrfResponseHandler class that processes HTTP responses
-from DCNM/NDFC for VRF operations.
+from DCNM/NDFC for VRF operations and converts them to standardized Pydantic models.
 """
 import copy
+from typing import Optional, Dict, Any
 
 from ...common.classes.response_handler import ResponseHandler
+from ..models.controller_response import VrfControllerResponse
+from ..models.vrf_data import VrfData
+from ..models.response_builder import VrfResponseBuilder
 
 
 class VrfResponseHandler:
-    """Response handler for VRF operations using composition."""
+    """
+    Response handler for VRF operations using composition with Pydantic model support.
 
-    def __init__(self, response_handler=None):
-        """Initialize VrfResponseHandler with optional injected ResponseHandler.
+    Converts all VRF controller responses to standardized VrfControllerResponse models
+    with consistent DATA field format and proper field name transformations.
+    """
+
+    def __init__(self, response_handler: Optional[ResponseHandler] = None):
+        """
+        Initialize VrfResponseHandler with optional injected ResponseHandler.
 
         Args:
             response_handler: Optional ResponseHandler instance to inject.
                             If None, creates a default ResponseHandler.
         """
         self._response_handler = response_handler or ResponseHandler()
-        self._response = None
-        self._result = None
-        self._verb = None
-        self._implements = "response_handler_v1"
+        self._response: Optional[Dict[str, Any]] = None
+        self._result: Optional[Dict[str, Any]] = None
+        self._verb: Optional[str] = None
+        self._request_path: str = ""
+        self._implements = "response_handler_v2"
+
+        # Store the processed VrfControllerResponse model
+        self._controller_response: Optional[VrfControllerResponse] = None
 
     def commit(self):
         """
-        Process VRF response and set result.
+        Process VRF response and convert to standardized Pydantic models.
 
-        Delegates basic processing to the composed ResponseHandler,
-        then adds VRF-specific processing including field name conversion.
+        Processes the raw controller response, converts it to a VrfControllerResponse
+        model with consistent formatting, and sets the result for downstream use.
         """
-        # Delegate basic processing to the composed handler
+        # Delegate basic processing to the composed handler for compatibility
         self._response_handler.response = self._response
         self._response_handler.verb = self._verb
         self._response_handler.commit()
@@ -41,55 +55,74 @@ class VrfResponseHandler:
         # Get the base result from the composed handler
         base_result = self._response_handler.result or {}
 
-        # Add VRF-specific processing to the existing result
         try:
-            if self._response and self._response.get("RETURN_CODE", 0) in (200, 201):
-                # Convert controller field names to standard format
-                transformed_response = self._transform_controller_response(self._response)
-                base_result["response"] = transformed_response
+            if self._response:
+                # Convert to standardized VrfControllerResponse model
+                self._controller_response = self._convert_to_controller_response(self._response)
+
+                # Update result with Pydantic model data
+                base_result["response"] = self._controller_response.model_dump()
+                base_result["success"] = self._controller_response.RETURN_CODE in (200, 201)
+
             self._result = base_result
 
-        except (TypeError, ValueError, KeyError) as e:
-            # If something goes wrong, update the result with error info
-            self._result = {
-                "success": False,
-                "changed": False,
-                "error": f"VRF processing error: {str(e)}"
-            }
+        except Exception as e:
+            # If conversion fails, create error response
+            error_response = VrfResponseBuilder.build_error_response(
+                error_message=f"Response processing error: {str(e)}", method=self._verb or "UNKNOWN", request_path=self._request_path, return_code=500
+            )
 
-    def _transform_controller_response(self, response):
+            self._result = {"success": False, "changed": False, "error": str(e), "response": error_response.model_dump()}
+
+    def _convert_to_controller_response(self, raw_response: Dict[str, Any]) -> VrfControllerResponse:
         """
-        Transform controller response field names to match Pydantic model aliases.
+        Convert raw controller response to standardized VrfControllerResponse.
 
-        Converts controller field names to standard format:
-        - "VRF Id" -> "vrfId"
-        - "VRF Name" -> "vrfName"
+        Handles different response types (query, create, update, delete) and ensures
+        consistent format with DATA as list of dictionaries.
 
         Args:
-            response: Controller response dict
+            raw_response: Raw response from controller
 
         Returns:
-            Transformed response dict with standardized field names
+            Standardized VrfControllerResponse model
         """
-        # Create a deep copy to avoid modifying the original response
-        transformed_response = copy.deepcopy(response)
+        # Check if this is already a controller response with metadata
+        has_controller_metadata = all(field in raw_response for field in ["MESSAGE", "METHOD", "REQUEST_PATH", "RETURN_CODE"])
 
-        # Transform DATA field if present (where controller VRF data typically resides)
-        if "DATA" in transformed_response:
-            data = transformed_response["DATA"]
+        if has_controller_metadata:
+            # This is a controller response (create/update/delete)
+            if self._verb == "DELETE":
+                return VrfResponseBuilder.from_delete_response(raw_response)
+            else:
+                return VrfResponseBuilder.from_create_update_response(raw_response)
+        else:
+            # This is likely a query response - raw VRF data without metadata
+            return VrfResponseBuilder.from_query_response(raw_response=raw_response, method=self._verb or "GET", request_path=self._request_path)
 
-            # Handle single dict or list of dicts
-            if isinstance(data, dict):
-                self._transform_vrf_fields(data)
-            elif isinstance(data, list):
-                for item in data:
-                    if isinstance(item, dict):
-                        self._transform_vrf_fields(item)
+    def get_vrf_data_models(self) -> list[VrfData]:
+        """
+        Extract validated VrfData models from the processed response.
 
-        return transformed_response
+        Returns:
+            List of VrfData Pydantic models
+        """
+        if not self._controller_response:
+            return []
+
+        return VrfResponseBuilder.validate_and_extract_vrf_data(self._controller_response)
+
+    def get_controller_response(self) -> Optional[VrfControllerResponse]:
+        """
+        Get the processed VrfControllerResponse model.
+
+        Returns:
+            VrfControllerResponse model or None if not processed
+        """
+        return self._controller_response
 
     @property
-    def implements(self):
+    def implements(self) -> str:
         """
         The interface implemented by this class.
 
@@ -99,44 +132,36 @@ class VrfResponseHandler:
         return self._implements
 
     @property
-    def response(self):
-        """Get the controller response."""
+    def response(self) -> Optional[Dict[str, Any]]:
+        """Get the raw controller response."""
         return self._response
 
     @response.setter
-    def response(self, value):
-        """Set the controller response."""
+    def response(self, value: Dict[str, Any]):
+        """Set the raw controller response."""
         self._response = value
 
     @property
-    def result(self):
+    def result(self) -> Optional[Dict[str, Any]]:
         """Get the processed result."""
         return self._result
 
     @property
-    def verb(self):
+    def verb(self) -> Optional[str]:
         """Get the request verb."""
         return self._verb
 
     @verb.setter
-    def verb(self, value):
+    def verb(self, value: str):
         """Set the request verb."""
         self._verb = value
 
-    def _transform_vrf_fields(self, vrf_dict):
-        """
-        Transform VRF field names in a single VRF dictionary.
+    @property
+    def request_path(self) -> str:
+        """Get the request path."""
+        return self._request_path
 
-        Args:
-            vrf_dict: Dictionary containing VRF data to transform (modified in place)
-        """
-        # Field name mappings from controller format to standard format
-        field_mappings = {
-            "VRF Id": "vrfId",
-            "VRF Name": "vrfName"
-        }
-
-        # Transform field names
-        for old_field, new_field in field_mappings.items():
-            if old_field in vrf_dict:
-                vrf_dict[new_field] = vrf_dict.pop(old_field)
+    @request_path.setter
+    def request_path(self, value: str):
+        """Set the request path for building controller responses."""
+        self._request_path = value

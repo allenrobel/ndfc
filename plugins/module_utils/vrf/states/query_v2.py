@@ -1,8 +1,8 @@
-# MARK plugins/module_utils/vrf/states/query.py
+# MARK plugins/module_utils/vrf/states/query_v2.py
 """
 Query state handler for VRF resources with Pydantic model support.
 
-This module provides the Query class that handles the 'query' Ansible state
+This module provides the QueryV2 class that handles the 'query' Ansible state
 using VrfApiV2 and VrfData models for type safety and consistent responses.
 """
 from typing import List, Dict, Any
@@ -11,7 +11,7 @@ from ..models.vrf_config import VrfConfig
 from .base_state_v2 import BaseStateV2
 
 
-class Query(BaseStateV2):
+class QueryV2(BaseStateV2):
     """Handle query state for VRF resources with Pydantic model support."""
 
     def execute(self, configs: List[VrfConfig]) -> ModuleResult:

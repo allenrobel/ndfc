@@ -1,20 +1,20 @@
-# MARK plugins/module_utils/vrf/states/state_factory.py
+# MARK plugins/module_utils/vrf/states/state_factory_v2.py
 """
 State factory for VRF operations with Pydantic model support.
 
-This module provides the StateFactory class that creates appropriate state handlers
+This module provides the StateFactoryV2 class that creates appropriate state handlers
 using VrfApiV2 and Pydantic models for type safety and consistent responses.
 """
 from ...common.enums.ansible_states import AnsibleStates
 from ..api.vrf_api_v2 import VrfApiV2
-from .merged import Merged
-from .deleted import Deleted
-from .query import Query
-from .replaced import Replaced
-from .overridden import Overridden
+from .merged_v2 import MergedV2
+from .deleted_v2 import DeletedV2
+from .query_v2 import QueryV2
+from .replaced_v2 import ReplacedV2
+from .overridden_v2 import OverriddenV2
 
 
-class StateFactory:
+class StateFactoryV2:
     """
     Factory class for creating VRF state handlers with Pydantic model support.
 
@@ -22,13 +22,13 @@ class StateFactory:
     all using VrfApiV2 for type-safe operations with VrfData models.
     """
 
-    # Mapping of Ansible states to their corresponding handler classes
+    # Mapping of Ansible states to their corresponding V2 handler classes
     _STATE_CLASSES = {
-        AnsibleStates.MERGED: Merged,
-        AnsibleStates.DELETED: Deleted,
-        AnsibleStates.QUERY: Query,
-        AnsibleStates.REPLACED: Replaced,
-        AnsibleStates.OVERRIDDEN: Overridden,
+        AnsibleStates.MERGED: MergedV2,
+        AnsibleStates.DELETED: DeletedV2,
+        AnsibleStates.QUERY: QueryV2,
+        AnsibleStates.REPLACED: ReplacedV2,
+        AnsibleStates.OVERRIDDEN: OverriddenV2,
     }
 
     @classmethod

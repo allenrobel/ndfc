@@ -1,8 +1,8 @@
-# MARK plugins/module_utils/vrf/states/base_state.py
+# MARK plugins/module_utils/vrf/states/base_state_v2.py
 """
 Base state class for VRF state handlers with Pydantic model support.
 
-This module provides the BaseState abstract base class that uses the new
+This module provides the BaseStateV2 abstract base class that uses the new
 VrfApiV2 and works exclusively with Pydantic models for type safety.
 """
 from abc import ABC, abstractmethod
@@ -14,7 +14,7 @@ from ..models.controller_response import VrfControllerResponse
 from ..api.vrf_api_v2 import VrfApiV2
 
 
-class BaseState(ABC):
+class BaseStateV2(ABC):
     """
     Base class for all VRF states using Pydantic models and VrfApiV2.
 
