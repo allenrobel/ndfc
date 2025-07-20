@@ -263,7 +263,8 @@
 - assert:
     that:
     - result_6.changed == false
-    - result_6.response is none
+    - result_6.response[0].DATA|length == 0
+    - result_6.response[0].RETURN_CODE == 200
 
 - name: Set task name
   ansible.builtin.set_fact:
